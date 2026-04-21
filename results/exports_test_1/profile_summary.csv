@@ -1,0 +1,8 @@
+case_id,profile_id,model,subtask1,subtask2,subtask3,subtask4,st3_word_overlap
+,P0_neutral,,,,,,0.2073019573019573
+,P1_highPDI_highUAI,,,,,,0.2397190020892101
+,P2_lowPDI_highIDV,,,,,,0.20521510085894348
+,P3_highPDI_lowIDV,,,,,,0.25241129785247435
+,P4_highUAI_lowIVR,,,,,,0.21137039843158484
+,P5_highMAS_lowUAI,,,,,,0.2237994875609554
+,P6_highLTO_medHighUAI,,,,,,0.24745882611101377

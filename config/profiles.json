@@ -1,0 +1,86 @@
+[
+  {
+    "profile_id": "P0_neutral",
+    "name": "Neutral baseline",
+    "hofstede": {
+      "PDI": 0.5,
+      "IDV": 0.5,
+      "UAI": 0.5,
+      "MAS": 0.5,
+      "LTO": 0.5,
+      "IVR": 0.5
+    }
+  },
+  {
+    "profile_id": "P1_highPDI_highUAI",
+    "name": "Authority-trusting & uncertainty-averse",
+    "hofstede": {
+      "PDI": 1.0,
+      "IDV": 0.5,
+      "UAI": 1.0,
+      "MAS": 0.5,
+      "LTO": 0.5,
+      "IVR": 0.0
+    }
+  },
+  {
+    "profile_id": "P2_lowPDI_highIDV",
+    "name": "Autonomy-seeking & participatory",
+    "hofstede": {
+      "PDI": 0.0,
+      "IDV": 1.0,
+      "UAI": 0.5,
+      "MAS": 0.5,
+      "LTO": 0.5,
+      "IVR": 0.5
+    }
+  },
+  {
+    "profile_id": "P3_highPDI_lowIDV",
+    "name": "Family-oriented & hierarchy-aligned",
+    "hofstede": {
+      "PDI": 1.0,
+      "IDV": 0.0,
+      "UAI": 0.5,
+      "MAS": 0.5,
+      "LTO": 1.0,
+      "IVR": 0.0
+    }
+  },
+  {
+    "profile_id": "P4_highUAI_lowIVR",
+    "name": "Risk-averse & restraint-oriented",
+    "hofstede": {
+      "PDI": 0.5,
+      "IDV": 0.5,
+      "UAI": 1.0,
+      "MAS": 0.5,
+      "LTO": 0.5,
+      "IVR": 0.0
+    }
+  },
+  {
+    "profile_id": "P5_highMAS_lowUAI",
+    "name": "Action-driven & ambiguity-tolerant",
+    "hofstede": {
+      "PDI": 0.25,
+      "IDV": 1.0,
+      "UAI": 0.0,
+      "MAS": 1.0,
+      "LTO": 0.5,
+      "IVR": 1.0
+    }
+  },
+  {
+    "profile_id": "P6_highLTO_medHighUAI",
+    "name": "Long-term planner",
+    "hofstede": {
+      "PDI": 0.5,
+      "IDV": 0.5,
+      "UAI": 0.75,
+      "MAS": 0.5,
+      "LTO": 1.0,
+      "IVR": 0.25
+    }
+  }
+]

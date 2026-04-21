@@ -1,0 +1,2 @@
+case_id,profile_id,model,subtask1,subtask2,subtask3,subtask4,st1_question_overlap,st2_precision,st2_recall,st2_f1,st3_word_overlap,st4_precision,st4_recall,st4_f1
+,,llama3.1:8b,,,,,0.14814814814814814,0.6666666666666666,0.5,0.5714285714285715,0.4230769230769231,0.0,0.0,0.0

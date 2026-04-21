@@ -1,0 +1,137 @@
+{
+  "24": {
+    "P0_neutral": {
+      "llama3.1:8b": {
+        "subtask3": "The decision to intubate was based on concern for increasing work of breathing due to significant hypoxia [4]. The patient's oxygen saturation levels were 91-92% on 100% NRB with desaturation to 86% with minimal exertion, indicating severe respiratory distress [2]. Intubation is a standard approach in such cases to ensure adequate oxygenation and prevent further complications. However, the clinical note excerpt does not provide information on whether intubation was specifically indicated for pneumonia or end-stage sarcoidosis.",
+        "metrics": {
+          "st3_bleu": 0.0009090403225396542,
+          "st3_rouge": 0.18055555555555555,
+          "st3_sari": 0.5516145057128664,
+          "st3_bertscore": 0.36206896551724144,
+          "st3_alignscore": 0.36315332899587943,
+          "st3_medcon": 0.3076923076923077,
+          "st3_bleu_pct": 0.09090403225396543,
+          "st3_rouge_pct": 18.055555555555554,
+          "st3_sari_pct": 55.16145057128664,
+          "st3_bertscore_pct": 36.20689655172414,
+          "st3_alignscore_pct": 36.31533289958794,
+          "st3_medcon_pct": 30.76923076923077
+        }
+      }
+    },
+    "P1_highPDI_highUAI": {
+      "llama3.1:8b": {
+        "subtask3": "Intubation was considered a necessary measure due to the patient's significant hypoxia and tachypnea [4]. The patient's oxygen saturation levels were 91-92% on 100% NRB with desaturation to 86% with minimal exertion, indicating severe respiratory distress [2]. This level of hypoxia can lead to increased work of breathing, which was a concern for the clinical team [4]. Intubation allowed for mechanical ventilation to support the patient's respiratory needs. The decision to intubate was based on clinical judgment and evidence-supported guidelines for managing severe respiratory failure.",
+        "metrics": {
+          "st3_bleu": 0.06265407778405306,
+          "st3_rouge": 0.24516129032258066,
+          "st3_sari": 0.595724701723376,
+          "st3_bertscore": 0.4181818181818182,
+          "st3_alignscore": 0.38162804515745696,
+          "st3_medcon": 0.31999999999999995,
+          "st3_bleu_pct": 6.265407778405306,
+          "st3_rouge_pct": 24.516129032258068,
+          "st3_sari_pct": 59.5724701723376,
+          "st3_bertscore_pct": 41.81818181818182,
+          "st3_alignscore_pct": 38.1628045157457,
+          "st3_medcon_pct": 31.999999999999996
+        }
+      }
+    },
+    "P2_lowPDI_highIDV": {
+      "llama3.1:8b": {
+        "subtask3": "Based on the clinical note excerpt, it appears that intubation was a decision made due to concern for increasing work of breathing in this patient [4]. The patient's significant hypoxia and tachypnea were noted in the ED, which may have contributed to the decision to intubate [3]. However, the note does not provide information on whether intubation is a standard approach for pneumonia in patients of this age.",
+        "metrics": {
+          "st3_bleu": 0.000978340248096934,
+          "st3_rouge": 0.208955223880597,
+          "st3_sari": 0.5210360902853878,
+          "st3_bertscore": 0.32,
+          "st3_alignscore": 0.3038881118881119,
+          "st3_medcon": 0.14634146341463414,
+          "st3_bleu_pct": 0.09783402480969339,
+          "st3_rouge_pct": 20.8955223880597,
+          "st3_sari_pct": 52.10360902853878,
+          "st3_bertscore_pct": 32.0,
+          "st3_alignscore_pct": 30.38881118881119,
+          "st3_medcon_pct": 14.634146341463413
+        }
+      }
+    },
+    "P3_highPDI_lowIDV": {
+      "llama3.1:8b": {
+        "subtask3": "Intubation was considered necessary due to concern for increasing work of breathing [4]. The patient's significant hypoxia and tachypnea in the ED supported this decision [3]. His baseline oxygen saturation levels were already compromised, with desaturation to 86% with minimal exertion [2]. This suggests that intubation was a standard approach to ensure adequate oxygenation. The clinical team's decision is documented as part of his treatment plan.",
+        "metrics": {
+          "st3_bleu": 0.0012226732354632262,
+          "st3_rouge": 0.18045112781954886,
+          "st3_sari": 0.594639113507038,
+          "st3_bertscore": 0.4230769230769231,
+          "st3_alignscore": 0.38990057561486136,
+          "st3_medcon": 0.30434782608695654,
+          "st3_bleu_pct": 0.12226732354632262,
+          "st3_rouge_pct": 18.045112781954884,
+          "st3_sari_pct": 59.4639113507038,
+          "st3_bertscore_pct": 42.30769230769231,
+          "st3_alignscore_pct": 38.99005756148613,
+          "st3_medcon_pct": 30.434782608695656
+        }
+      }
+    },
+    "P4_highUAI_lowIVR": {
+      "llama3.1:8b": {
+        "subtask3": "Intubation was considered a necessary approach for this patient due to significant hypoxia and tachypnea [4]. The patient's oxygen saturation levels were 91-92% on 100% NRB with desaturation to 86% with minimal exertion, indicating severe respiratory distress [2]. Intubation was performed to alleviate the increasing work of breathing [4]. This decision is supported by the clinical note excerpt. However, the specific guidelines for intubation in pneumonia cases are not explicitly stated in this record.",
+        "metrics": {
+          "st3_bleu": 0.0009989314321338643,
+          "st3_rouge": 0.22695035460992907,
+          "st3_sari": 0.5679555633789043,
+          "st3_bertscore": 0.3853211009174312,
+          "st3_alignscore": 0.37329792370835346,
+          "st3_medcon": 0.2978723404255319,
+          "st3_bleu_pct": 0.09989314321338642,
+          "st3_rouge_pct": 22.69503546099291,
+          "st3_sari_pct": 56.79555633789043,
+          "st3_bertscore_pct": 38.53211009174312,
+          "st3_alignscore_pct": 37.32979237083535,
+          "st3_medcon_pct": 29.78723404255319
+        }
+      }
+    },
+    "P5_highMAS_lowUAI": {
+      "llama3.1:8b": {
+        "subtask3": "The decision to intubate was made due to concern for increasing work of breathing [4]. The patient's significant hypoxia and tachypnea in the ED were noted as reasons for this decision [3, 4]. Intubation allowed for more effective oxygenation and management of respiratory distress. This approach was taken based on the patient's specific clinical presentation at the time.",
+        "metrics": {
+          "st3_bleu": 0.00102150295614404,
+          "st3_rouge": 0.208,
+          "st3_sari": 0.5364221824686941,
+          "st3_bertscore": 0.34408602150537637,
+          "st3_alignscore": 0.31821631878557877,
+          "st3_medcon": 0.25,
+          "st3_bleu_pct": 0.10215029561440399,
+          "st3_rouge_pct": 20.8,
+          "st3_sari_pct": 53.64221824686941,
+          "st3_bertscore_pct": 34.40860215053764,
+          "st3_alignscore_pct": 31.821631878557877,
+          "st3_medcon_pct": 25.0
+        }
+      }
+    },
+    "P6_highLTO_medHighUAI": {
+      "llama3.1:8b": {
+        "subtask3": "Intubation was considered necessary due to concern for increasing work of breathing [4]. The patient's significant hypoxia and tachypnea in the ED, with oxygen saturation at 96% on 100% NRB, supported this decision [3]. His baseline hypoxia and desaturation with minimal exertion also raised concerns [2]. Intubation allowed for more effective management of his respiratory status. The clinical note does not provide information on whether intubation is a standard approach for pneumonia in patients of this age; further review would be needed to determine this.",
+        "metrics": {
+          "st3_bleu": 0.001006435556469481,
+          "st3_rouge": 0.15894039735099336,
+          "st3_sari": 0.5810488621710129,
+          "st3_bertscore": 0.39316239316239315,
+          "st3_alignscore": 0.3858974358974359,
+          "st3_medcon": 0.2745098039215686,
+          "st3_bleu_pct": 0.10064355564694809,
+          "st3_rouge_pct": 15.894039735099335,
+          "st3_sari_pct": 58.104886217101296,
+          "st3_bertscore_pct": 39.31623931623932,
+          "st3_alignscore_pct": 38.58974358974359,
+          "st3_medcon_pct": 27.45098039215686
+        }
+      }
+    }
+  }
+}

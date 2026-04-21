@@ -1,0 +1,677 @@
+{
+  "21": {
+    "P0_neutral": {
+      "llama3.1:8b": {
+        "subtask3": "The patient's advanced hepatic encephalopathy and decompensated cirrhosis suggest a poor prognosis. The clinical notes indicate that he was not a candidate for transplant and had exceeded medical therapy limits [4]. His creatinine levels were elevated, consistent with hepatorenal syndrome (HRS) [9], which further complicates his condition. The goals of care were transitioned to comfort measures due to refractory disease [6, 12]. Unfortunately, the note excerpt does not provide specific information on predicting lifespan in this context.",
+        "metrics": {
+          "st3_bleu": 0.07351652222518425,
+          "st3_rouge": 0.24516129032258063,
+          "st3_sari": 0.4606153663942609,
+          "st3_bertscore": 0.3225806451612903,
+          "st3_alignscore": 0.3070619006102877,
+          "st3_medcon": 0.27692307692307694,
+          "st3_bleu_pct": 7.351652222518425,
+          "st3_rouge_pct": 24.516129032258064,
+          "st3_sari_pct": 46.06153663942609,
+          "st3_bertscore_pct": 32.25806451612903,
+          "st3_alignscore_pct": 30.70619006102877,
+          "st3_medcon_pct": 27.692307692307693
+        }
+      }
+    },
+    "P1_highPDI_highUAI": {
+      "llama3.1:8b": {
+        "subtask3": "Based on the provided clinical note excerpt, it appears that the patient's prognosis is guarded due to advanced hepatic encephalopathy refractory to traditional treatment [4]. The hepatology team consulted did not think he was a candidate for transplant [15], and his goals of care were transitioned to comfort measures [12]. His renal function continued to decline, with anuric renal failure and hepatorenal syndrome [5, 9]. Hyponatremia was also present, but acute encephalopathy was thought to be unrelated to it [18]. The note does not provide specific information on the patient's lifespan.",
+        "metrics": {
+          "st3_bleu": 0.09501854596433167,
+          "st3_rouge": 0.2823529411764706,
+          "st3_sari": 0.5259872932656047,
+          "st3_bertscore": 0.42519685039370075,
+          "st3_alignscore": 0.3835462038817054,
+          "st3_medcon": 0.41269841269841273,
+          "st3_bleu_pct": 9.501854596433166,
+          "st3_rouge_pct": 28.235294117647058,
+          "st3_sari_pct": 52.598729326560466,
+          "st3_bertscore_pct": 42.519685039370074,
+          "st3_alignscore_pct": 38.35462038817054,
+          "st3_medcon_pct": 41.26984126984127
+        }
+      }
+    },
+    "P2_lowPDI_highIDV": {
+      "llama3.1:8b": {
+        "subtask3": "Based on the provided clinical note excerpt, it appears that the patient's prognosis is guarded due to advanced hepatic encephalopathy refractory to traditional treatment [4]. The hepatology team consulted did not think he was a candidate for transplant [15], and his goals of care were transitioned to comfort measures [12]. His renal function continued to decline, with anuric renal failure and hepatorenal syndrome [5, 9]. While the note does not provide specific information on lifespan prediction, it suggests that the patient's condition is severe and likely terminal.",
+        "metrics": {
+          "st3_bleu": 0.07893557094405852,
+          "st3_rouge": 0.2891566265060241,
+          "st3_sari": 0.5243868811708007,
+          "st3_bertscore": 0.41600000000000004,
+          "st3_alignscore": 0.3654249158249158,
+          "st3_medcon": 0.41269841269841273,
+          "st3_bleu_pct": 7.893557094405852,
+          "st3_rouge_pct": 28.915662650602407,
+          "st3_sari_pct": 52.43868811708007,
+          "st3_bertscore_pct": 41.6,
+          "st3_alignscore_pct": 36.54249158249158,
+          "st3_medcon_pct": 41.26984126984127
+        }
+      }
+    },
+    "P3_highPDI_lowIDV": {
+      "llama3.1:8b": {
+        "subtask3": "Based on the provided clinical note excerpt, it appears that the patient's prognosis is guarded due to advanced hepatic encephalopathy refractory to traditional treatment [4]. The patient was not a candidate for transplant and had exceeded the limits of medical therapy [6]. Hepatology consultation did not recommend transplantation [15]. The patient's renal function continued to decline, and he developed anuric renal failure and hepatorenal syndrome [5 & 9]. These factors suggest a poor prognosis.",
+        "metrics": {
+          "st3_bleu": 0.10197847378661416,
+          "st3_rouge": 0.27631578947368424,
+          "st3_sari": 0.49594547964113184,
+          "st3_bertscore": 0.3652173913043478,
+          "st3_alignscore": 0.3278412361763369,
+          "st3_medcon": 0.33333333333333337,
+          "st3_bleu_pct": 10.197847378661416,
+          "st3_rouge_pct": 27.631578947368425,
+          "st3_sari_pct": 49.59454796411318,
+          "st3_bertscore_pct": 36.52173913043478,
+          "st3_alignscore_pct": 32.78412361763369,
+          "st3_medcon_pct": 33.333333333333336
+        }
+      }
+    },
+    "P4_highUAI_lowIVR": {
+      "llama3.1:8b": {
+        "subtask3": "Based on the provided clinical note excerpt, it appears that the patient's prognosis is guarded due to advanced hepatic encephalopathy refractory to traditional treatment [4]. The patient was not a candidate for transplant and had exceeded the limits of medical therapy [6]. Hepatology consultation did not think he was a candidate for transplant [15]. The patient developed anuric renal failure and hepato-renal syndrome, which further complicates his condition [5 & 9]. Unfortunately, the note does not provide specific information to predict his lifespan.",
+        "metrics": {
+          "st3_bleu": 0.09310666021627344,
+          "st3_rouge": 0.2608695652173913,
+          "st3_sari": 0.48481693014841226,
+          "st3_bertscore": 0.3697478991596639,
+          "st3_alignscore": 0.33181437523463,
+          "st3_medcon": 0.3278688524590164,
+          "st3_bleu_pct": 9.310666021627343,
+          "st3_rouge_pct": 26.08695652173913,
+          "st3_sari_pct": 48.48169301484123,
+          "st3_bertscore_pct": 36.97478991596639,
+          "st3_alignscore_pct": 33.181437523462996,
+          "st3_medcon_pct": 32.786885245901644
+        }
+      }
+    },
+    "P5_highMAS_lowUAI": {
+      "llama3.1:8b": {
+        "subtask3": "Based on the provided clinical note excerpt, it appears that the patient's prognosis is guarded due to advanced hepatic encephalopathy refractory to traditional treatment [4]. The hepatology team consulted did not think he was a candidate for transplant [15], and goals of care were transitioned to comfort measures [12]. The patient's creatinine levels continued to decline, indicating worsening renal function [9]. However, the note does not provide specific information on predicting lifespan.",
+        "metrics": {
+          "st3_bleu": 0.08298264833122829,
+          "st3_rouge": 0.26490066225165565,
+          "st3_sari": 0.5112659698025551,
+          "st3_bertscore": 0.39316239316239315,
+          "st3_alignscore": 0.33831958122615563,
+          "st3_medcon": 0.3934426229508197,
+          "st3_bleu_pct": 8.298264833122829,
+          "st3_rouge_pct": 26.490066225165563,
+          "st3_sari_pct": 51.12659698025551,
+          "st3_bertscore_pct": 39.31623931623932,
+          "st3_alignscore_pct": 33.83195812261556,
+          "st3_medcon_pct": 39.344262295081975
+        }
+      }
+    },
+    "P6_highLTO_medHighUAI": {
+      "llama3.1:8b": {
+        "subtask3": "The patient's advanced hepatic encephalopathy and decompensated cirrhosis suggest a poor prognosis. The clinical notes indicate that he has exceeded the limits of medical therapy and was not considered a candidate for transplant [4, 15]. His creatinine levels have significantly increased, consistent with hepatorenal syndrome (HRS) [9], which is often associated with a high mortality rate. The goals of care were transitioned to comfort measures due to refractory disease [6, 12]. Unfortunately, the note does not provide specific information on his lifespan prediction.",
+        "metrics": {
+          "st3_bleu": 0.001062647131857426,
+          "st3_rouge": 0.2111801242236025,
+          "st3_sari": 0.4776924638733684,
+          "st3_bertscore": 0.3464566929133858,
+          "st3_alignscore": 0.3202485976878308,
+          "st3_medcon": 0.28125,
+          "st3_bleu_pct": 0.1062647131857426,
+          "st3_rouge_pct": 21.11801242236025,
+          "st3_sari_pct": 47.769246387336835,
+          "st3_bertscore_pct": 34.645669291338585,
+          "st3_alignscore_pct": 32.02485976878308,
+          "st3_medcon_pct": 28.125
+        }
+      }
+    }
+  },
+  "22": {
+    "P0_neutral": {
+      "llama3.1:8b": {
+        "subtask3": "The emergency salvage repair was performed because Mr. [**Known lastname **] had a ruptured thoracoabdominal aortic aneurysm, as noted in sentence [1]. This required immediate surgical intervention to prevent further complications, as stated in sentence [2]. The surgery involved using a 34-mm Dacron tube graft with deep hypothermic circulatory arrest. Please see the operative note for more details on the procedure. The clinical note excerpt does not provide specific reasons for choosing this particular approach.",
+        "metrics": {
+          "st3_bleu": 0.0007117940838737629,
+          "st3_rouge": 0.22666666666666666,
+          "st3_sari": 0.5112967158815486,
+          "st3_bertscore": 0.33043478260869563,
+          "st3_alignscore": 0.34709807886754296,
+          "st3_medcon": 0.24000000000000002,
+          "st3_bleu_pct": 0.0711794083873763,
+          "st3_rouge_pct": 22.666666666666664,
+          "st3_sari_pct": 51.12967158815486,
+          "st3_bertscore_pct": 33.04347826086956,
+          "st3_alignscore_pct": 34.7098078867543,
+          "st3_medcon_pct": 24.000000000000004
+        }
+      }
+    },
+    "P1_highPDI_highUAI": {
+      "llama3.1:8b": {
+        "subtask3": "The emergency salvage repair was performed due to a ruptured thoracoabdominal aortic aneurysm [1]. This condition required immediate surgical intervention to prevent further complications [2]. The surgery involved using a 34-mm Dacron tube graft with deep hypothermic circulatory arrest, as noted in the operative note [3]. The patient's postoperative course was complex, requiring monitoring in the intensive care unit and multiple subsequent surgeries for wound closure and nutritional support [4, 6, 7].",
+        "metrics": {
+          "st3_bleu": 0.0007194614984214141,
+          "st3_rouge": 0.21476510067114093,
+          "st3_sari": 0.4777241189977039,
+          "st3_bertscore": 0.29310344827586204,
+          "st3_alignscore": 0.33771177994817625,
+          "st3_medcon": 0.24000000000000002,
+          "st3_bleu_pct": 0.07194614984214141,
+          "st3_rouge_pct": 21.476510067114095,
+          "st3_sari_pct": 47.77241189977039,
+          "st3_bertscore_pct": 29.310344827586203,
+          "st3_alignscore_pct": 33.77117799481763,
+          "st3_medcon_pct": 24.000000000000004
+        }
+      }
+    },
+    "P2_lowPDI_highIDV": {
+      "llama3.1:8b": {
+        "subtask3": "The surgical team performed an emergency salvage repair on you because your thoracoabdominal aortic aneurysm had ruptured [1]. This required immediate attention to prevent further complications [2]. The decision for this type of repair was made based on the severity of your condition and the need for urgent intervention. Unfortunately, the clinical note excerpt does not provide more detailed information about the specific reasons behind this choice.",
+        "metrics": {
+          "st3_bleu": 0.0006815707101007944,
+          "st3_rouge": 0.22535211267605634,
+          "st3_sari": 0.5484414032801129,
+          "st3_bertscore": 0.3207547169811321,
+          "st3_alignscore": 0.27098043755064244,
+          "st3_medcon": 0.2222222222222222,
+          "st3_bleu_pct": 0.06815707101007944,
+          "st3_rouge_pct": 22.535211267605636,
+          "st3_sari_pct": 54.84414032801129,
+          "st3_bertscore_pct": 32.07547169811321,
+          "st3_alignscore_pct": 27.098043755064243,
+          "st3_medcon_pct": 22.22222222222222
+        }
+      }
+    },
+    "P3_highPDI_lowIDV": {
+      "llama3.1:8b": {
+        "subtask3": "The emergency salvage repair was performed due to a ruptured thoracoabdominal aortic aneurysm [1]. This required immediate surgical intervention in the operating room [2]. The procedure involved using a 34-mm Dacron tube graft with deep hypothermic circulatory arrest [2]. The goal was to stabilize the patient's condition and prevent further complications. Unfortunately, the clinical note excerpt does not provide detailed reasons for choosing this specific approach.",
+        "metrics": {
+          "st3_bleu": 0.0007170618444222221,
+          "st3_rouge": 0.23776223776223773,
+          "st3_sari": 0.5053077592403435,
+          "st3_bertscore": 0.3119266055045872,
+          "st3_alignscore": 0.31727644523046317,
+          "st3_medcon": 0.2040816326530612,
+          "st3_bleu_pct": 0.07170618444222221,
+          "st3_rouge_pct": 23.776223776223773,
+          "st3_sari_pct": 50.53077592403435,
+          "st3_bertscore_pct": 31.19266055045872,
+          "st3_alignscore_pct": 31.727644523046315,
+          "st3_medcon_pct": 20.40816326530612
+        }
+      }
+    },
+    "P4_highUAI_lowIVR": {
+      "llama3.1:8b": {
+        "subtask3": "The emergency salvage repair was performed due to a ruptured thoracoabdominal aortic aneurysm [1]. This required immediate surgical intervention to prevent further complications [2]. The surgery involved using a 34-mm Dacron tube graft with deep hypothermic circulatory arrest [2]. Cardiac arrest occurred twice during the procedure, as noted in the operative note [3]. The decision for this type of repair was made based on the patient's critical condition and the need for urgent intervention.",
+        "metrics": {
+          "st3_bleu": 0.0009989314321338643,
+          "st3_rouge": 0.23841059602649006,
+          "st3_sari": 0.5375196271157103,
+          "st3_bertscore": 0.3571428571428571,
+          "st3_alignscore": 0.35156382079459003,
+          "st3_medcon": 0.2727272727272727,
+          "st3_bleu_pct": 0.09989314321338642,
+          "st3_rouge_pct": 23.841059602649008,
+          "st3_sari_pct": 53.75196271157103,
+          "st3_bertscore_pct": 35.71428571428571,
+          "st3_alignscore_pct": 35.156382079459,
+          "st3_medcon_pct": 27.27272727272727
+        }
+      }
+    },
+    "P5_highMAS_lowUAI": {
+      "llama3.1:8b": {
+        "subtask3": "The emergency salvage repair was performed because Mr. [**Known lastname **] had a ruptured thoracoabdominal aortic aneurysm that required immediate attention [1]. He underwent an emergent salvage repair with a 34-mm Dacron tube graft using deep hypothermic circulatory arrest [2]. This procedure is often used in emergency situations where the aneurysm has ruptured and there's no time for a more extensive repair. The clinical note excerpt does not provide further details on why this specific approach was chosen, but it indicates that cardiac arrest occurred twice during the surgery [3].",
+        "metrics": {
+          "st3_bleu": 0.0008649610747963442,
+          "st3_rouge": 0.26506024096385544,
+          "st3_sari": 0.5615187901544724,
+          "st3_bertscore": 0.3937007874015748,
+          "st3_alignscore": 0.4057856898322493,
+          "st3_medcon": 0.25,
+          "st3_bleu_pct": 0.08649610747963442,
+          "st3_rouge_pct": 26.506024096385545,
+          "st3_sari_pct": 56.151879015447236,
+          "st3_bertscore_pct": 39.37007874015748,
+          "st3_alignscore_pct": 40.578568983224926,
+          "st3_medcon_pct": 25.0
+        }
+      }
+    },
+    "P6_highLTO_medHighUAI": {
+      "llama3.1:8b": {
+        "subtask3": "The emergency salvage repair was performed due to a ruptured thoracoabdominal aortic aneurysm [1]. This required immediate surgical intervention in the operating room [2]. The procedure involved using a 34-mm Dacron tube graft with deep hypothermic circulatory arrest [2]. Cardiac arrest occurred twice during the operation, as noted in the operative note [3]. The decision to perform an emergency salvage repair was made due to the life-threatening nature of the aneurysm rupture.",
+        "metrics": {
+          "st3_bleu": 0.06641108323864522,
+          "st3_rouge": 0.24161073825503357,
+          "st3_sari": 0.5088621331845672,
+          "st3_bertscore": 0.339622641509434,
+          "st3_alignscore": 0.3461048732492187,
+          "st3_medcon": 0.28571428571428575,
+          "st3_bleu_pct": 6.641108323864523,
+          "st3_rouge_pct": 24.161073825503358,
+          "st3_sari_pct": 50.88621331845672,
+          "st3_bertscore_pct": 33.9622641509434,
+          "st3_alignscore_pct": 34.61048732492187,
+          "st3_medcon_pct": 28.571428571428577
+        }
+      }
+    }
+  },
+  "23": {
+    "P0_neutral": {
+      "llama3.1:8b": {
+        "subtask3": "The antibiotics were given because you developed pneumonia during your hospital stay [5]. A chest x-ray confirmed this diagnosis, and starting IV antibiotics right away helped improve your condition [6]. This was a necessary treatment to manage the infection and prevent further complications. The clinical team closely monitored your oxygen levels and scans to ensure your safety.",
+        "metrics": {
+          "st3_bleu": 0.08058868461831789,
+          "st3_rouge": 0.24390243902439024,
+          "st3_sari": 0.6249009704892058,
+          "st3_bertscore": 0.5454545454545454,
+          "st3_alignscore": 0.4544250451535219,
+          "st3_medcon": 0.4117647058823529,
+          "st3_bleu_pct": 8.05886846183179,
+          "st3_rouge_pct": 24.390243902439025,
+          "st3_sari_pct": 62.49009704892058,
+          "st3_bertscore_pct": 54.54545454545454,
+          "st3_alignscore_pct": 45.44250451535219,
+          "st3_medcon_pct": 41.17647058823529
+        }
+      }
+    },
+    "P1_highPDI_highUAI": {
+      "llama3.1:8b": {
+        "subtask3": "The antibiotics were necessary due to the development of pneumonia, as indicated by a chest x-ray on [**2174-2-11**] (BM25-Ranked Note Sentences [5]). This was confirmed when your oxygen levels did not improve as expected (BM25-Ranked Note Sentences [5]). IV antibiotics were started right away and you showed improvement (BM25-Ranked Note Sentences [6]). Your care team closely monitored you for signs of worsened swelling or bleeding in the brain, but scans after the fall were relatively stable (BM25-Ranked Note Sentences [4]). This treatment was a standard approach to manage pneumonia.",
+        "metrics": {
+          "st3_bleu": 0.07959505450262194,
+          "st3_rouge": 0.2111801242236025,
+          "st3_sari": 0.5123930653342418,
+          "st3_bertscore": 0.4036697247706422,
+          "st3_alignscore": 0.45150416044378067,
+          "st3_medcon": 0.28571428571428575,
+          "st3_bleu_pct": 7.959505450262194,
+          "st3_rouge_pct": 21.11801242236025,
+          "st3_sari_pct": 51.23930653342418,
+          "st3_bertscore_pct": 40.36697247706422,
+          "st3_alignscore_pct": 45.15041604437807,
+          "st3_medcon_pct": 28.571428571428577
+        }
+      }
+    },
+    "P2_lowPDI_highIDV": {
+      "llama3.1:8b": {
+        "subtask3": "The antibiotics were given because you developed pneumonia during your hospital stay [5]. A chest x-ray confirmed this diagnosis, and starting IV antibiotics right away helped improve your condition [6]. This was a necessary step to manage your infection and prevent further complications. The decision to start antibiotics was based on the results of your chest x-ray and your clinical presentation at that time.",
+        "metrics": {
+          "st3_bleu": 0.08032276872815308,
+          "st3_rouge": 0.24427480916030536,
+          "st3_sari": 0.6054994388327722,
+          "st3_bertscore": 0.5111111111111111,
+          "st3_alignscore": 0.432156862745098,
+          "st3_medcon": 0.4117647058823529,
+          "st3_bleu_pct": 8.032276872815308,
+          "st3_rouge_pct": 24.427480916030536,
+          "st3_sari_pct": 60.54994388327722,
+          "st3_bertscore_pct": 51.11111111111111,
+          "st3_alignscore_pct": 43.2156862745098,
+          "st3_medcon_pct": 41.17647058823529
+        }
+      }
+    },
+    "P3_highPDI_lowIDV": {
+      "llama3.1:8b": {
+        "subtask3": "The antibiotics were necessary due to the development of pneumonia, as indicated by a chest x-ray on [**2174-2-11**]. This was noted when your oxygen levels were not holding high enough, prompting immediate treatment with IV antibiotics. Your condition improved after starting antibiotics. Our primary concern is ensuring you're stable and safe for discharge. The antibiotics were an essential part of managing this complication.",
+        "metrics": {
+          "st3_bleu": 0.10660647707449133,
+          "st3_rouge": 0.25757575757575757,
+          "st3_sari": 0.5094461094461095,
+          "st3_bertscore": 0.4081632653061224,
+          "st3_alignscore": 0.41881100266193433,
+          "st3_medcon": 0.29411764705882354,
+          "st3_bleu_pct": 10.660647707449133,
+          "st3_rouge_pct": 25.757575757575758,
+          "st3_sari_pct": 50.94461094461094,
+          "st3_bertscore_pct": 40.81632653061224,
+          "st3_alignscore_pct": 41.881100266193435,
+          "st3_medcon_pct": 29.411764705882355
+        }
+      }
+    },
+    "P4_highUAI_lowIVR": {
+      "llama3.1:8b": {
+        "subtask3": "The antibiotics were necessary due to the development of pneumonia, as indicated by a chest x-ray on [**2174-2-11**] (BM25-Ranked Note Sentence [5]). This was confirmed when you improved after starting IV antibiotics right away (BM25-Ranked Note Sentence [6]). Your oxygen levels were not holding steady, which is why the pneumonia was identified and treated promptly. The clinical note excerpt does not provide information on whether other factors contributed to the decision to administer antibiotics.",
+        "metrics": {
+          "st3_bleu": 0.09106603279198229,
+          "st3_rouge": 0.23611111111111116,
+          "st3_sari": 0.5317204301075269,
+          "st3_bertscore": 0.411764705882353,
+          "st3_alignscore": 0.3973618538324421,
+          "st3_medcon": 0.27027027027027023,
+          "st3_bleu_pct": 9.106603279198229,
+          "st3_rouge_pct": 23.611111111111114,
+          "st3_sari_pct": 53.17204301075269,
+          "st3_bertscore_pct": 41.1764705882353,
+          "st3_alignscore_pct": 39.73618538324421,
+          "st3_medcon_pct": 27.027027027027025
+        }
+      }
+    },
+    "P5_highMAS_lowUAI": {
+      "llama3.1:8b": {
+        "subtask3": "The antibiotics were given because you developed pneumonia during your hospital stay [5]. A chest x-ray confirmed this diagnosis, and we started IV antibiotics right away to help you recover [6]. This was a necessary step in managing your condition and preventing further complications. Your improvement after starting antibiotics is noted in the medical record. The decision to give antibiotics was based on clinical evidence of pneumonia development.",
+        "metrics": {
+          "st3_bleu": 0.08155798452505643,
+          "st3_rouge": 0.2686567164179105,
+          "st3_sari": 0.6164514267962544,
+          "st3_bertscore": 0.5263157894736843,
+          "st3_alignscore": 0.45249833444370424,
+          "st3_medcon": 0.3783783783783784,
+          "st3_bleu_pct": 8.155798452505643,
+          "st3_rouge_pct": 26.86567164179105,
+          "st3_sari_pct": 61.645142679625444,
+          "st3_bertscore_pct": 52.63157894736843,
+          "st3_alignscore_pct": 45.249833444370424,
+          "st3_medcon_pct": 37.83783783783784
+        }
+      }
+    },
+    "P6_highLTO_medHighUAI": {
+      "llama3.1:8b": {
+        "subtask3": "The antibiotics were necessary due to the development of pneumonia, as indicated by a chest x-ray on [**2174-2-11**] (BM25-Ranked Note Sentence [5]). This was confirmed when your oxygen levels did not improve as expected (BM25-Ranked Note Sentence [5]). IV antibiotics were started right away and you showed improvement (BM25-Ranked Note Sentence [6]). Your care team closely monitored you for signs of worsened brain swelling or bleeding, but scans after the fall were relatively stable (BM25-Ranked Note Sentence [4]).",
+        "metrics": {
+          "st3_bleu": 0.08633629387066016,
+          "st3_rouge": 0.22666666666666668,
+          "st3_sari": 0.5203451448528204,
+          "st3_bertscore": 0.4230769230769231,
+          "st3_alignscore": 0.4646245969599263,
+          "st3_medcon": 0.3125,
+          "st3_bleu_pct": 8.633629387066016,
+          "st3_rouge_pct": 22.666666666666668,
+          "st3_sari_pct": 52.03451448528204,
+          "st3_bertscore_pct": 42.30769230769231,
+          "st3_alignscore_pct": 46.46245969599263,
+          "st3_medcon_pct": 31.25
+        }
+      }
+    }
+  },
+  "24": {
+    "P0_neutral": {
+      "llama3.1:8b": {
+        "subtask3": "The decision to intubate was based on concern for increasing work of breathing due to significant hypoxia [4]. The patient's oxygen saturation levels were 91-92% on 100% NRB with desaturation to 86% with minimal exertion, indicating severe respiratory distress [2]. Intubation is a standard approach in such cases to ensure adequate oxygenation and prevent further complications. However, the clinical note excerpt does not provide information on whether intubation was specifically indicated for pneumonia or end-stage sarcoidosis.",
+        "metrics": {
+          "st3_bleu": 0.0009090403225396542,
+          "st3_rouge": 0.18055555555555555,
+          "st3_sari": 0.5516145057128664,
+          "st3_bertscore": 0.36206896551724144,
+          "st3_alignscore": 0.36315332899587943,
+          "st3_medcon": 0.3076923076923077,
+          "st3_bleu_pct": 0.09090403225396543,
+          "st3_rouge_pct": 18.055555555555554,
+          "st3_sari_pct": 55.16145057128664,
+          "st3_bertscore_pct": 36.20689655172414,
+          "st3_alignscore_pct": 36.31533289958794,
+          "st3_medcon_pct": 30.76923076923077
+        }
+      }
+    },
+    "P1_highPDI_highUAI": {
+      "llama3.1:8b": {
+        "subtask3": "Intubation was considered a necessary measure due to the patient's significant hypoxia and tachypnea [4]. The patient's oxygen saturation levels were 91-92% on 100% NRB with desaturation to 86% with minimal exertion, indicating severe respiratory distress [2]. This level of hypoxia can lead to increased work of breathing, which was a concern for the clinical team [4]. Intubation allowed for mechanical ventilation to support the patient's respiratory needs. The decision to intubate was based on clinical judgment and evidence-supported guidelines for managing severe respiratory failure.",
+        "metrics": {
+          "st3_bleu": 0.06265407778405306,
+          "st3_rouge": 0.24516129032258066,
+          "st3_sari": 0.595724701723376,
+          "st3_bertscore": 0.4181818181818182,
+          "st3_alignscore": 0.38162804515745696,
+          "st3_medcon": 0.31999999999999995,
+          "st3_bleu_pct": 6.265407778405306,
+          "st3_rouge_pct": 24.516129032258068,
+          "st3_sari_pct": 59.5724701723376,
+          "st3_bertscore_pct": 41.81818181818182,
+          "st3_alignscore_pct": 38.1628045157457,
+          "st3_medcon_pct": 31.999999999999996
+        }
+      }
+    },
+    "P2_lowPDI_highIDV": {
+      "llama3.1:8b": {
+        "subtask3": "Based on the clinical note excerpt, it appears that intubation was a decision made due to concern for increasing work of breathing in this patient [4]. The patient's significant hypoxia and tachypnea were noted in the ED, which may have contributed to the decision to intubate [3]. However, the note does not provide information on whether intubation is a standard approach for pneumonia in patients of this age.",
+        "metrics": {
+          "st3_bleu": 0.000978340248096934,
+          "st3_rouge": 0.208955223880597,
+          "st3_sari": 0.5210360902853878,
+          "st3_bertscore": 0.32,
+          "st3_alignscore": 0.3038881118881119,
+          "st3_medcon": 0.14634146341463414,
+          "st3_bleu_pct": 0.09783402480969339,
+          "st3_rouge_pct": 20.8955223880597,
+          "st3_sari_pct": 52.10360902853878,
+          "st3_bertscore_pct": 32.0,
+          "st3_alignscore_pct": 30.38881118881119,
+          "st3_medcon_pct": 14.634146341463413
+        }
+      }
+    },
+    "P3_highPDI_lowIDV": {
+      "llama3.1:8b": {
+        "subtask3": "Intubation was considered necessary due to concern for increasing work of breathing [4]. The patient's significant hypoxia and tachypnea in the ED supported this decision [3]. His baseline oxygen saturation levels were already compromised, with desaturation to 86% with minimal exertion [2]. This suggests that intubation was a standard approach to ensure adequate oxygenation. The clinical team's decision is documented as part of his treatment plan.",
+        "metrics": {
+          "st3_bleu": 0.0012226732354632262,
+          "st3_rouge": 0.18045112781954886,
+          "st3_sari": 0.594639113507038,
+          "st3_bertscore": 0.4230769230769231,
+          "st3_alignscore": 0.38990057561486136,
+          "st3_medcon": 0.30434782608695654,
+          "st3_bleu_pct": 0.12226732354632262,
+          "st3_rouge_pct": 18.045112781954884,
+          "st3_sari_pct": 59.4639113507038,
+          "st3_bertscore_pct": 42.30769230769231,
+          "st3_alignscore_pct": 38.99005756148613,
+          "st3_medcon_pct": 30.434782608695656
+        }
+      }
+    },
+    "P4_highUAI_lowIVR": {
+      "llama3.1:8b": {
+        "subtask3": "Intubation was considered a necessary approach for this patient due to significant hypoxia and tachypnea [4]. The patient's oxygen saturation levels were 91-92% on 100% NRB with desaturation to 86% with minimal exertion, indicating severe respiratory distress [2]. Intubation was performed to alleviate the increasing work of breathing [4]. This decision is supported by the clinical note excerpt. However, the specific guidelines for intubation in pneumonia cases are not explicitly stated in this record.",
+        "metrics": {
+          "st3_bleu": 0.0009989314321338643,
+          "st3_rouge": 0.22695035460992907,
+          "st3_sari": 0.5679555633789043,
+          "st3_bertscore": 0.3853211009174312,
+          "st3_alignscore": 0.37329792370835346,
+          "st3_medcon": 0.2978723404255319,
+          "st3_bleu_pct": 0.09989314321338642,
+          "st3_rouge_pct": 22.69503546099291,
+          "st3_sari_pct": 56.79555633789043,
+          "st3_bertscore_pct": 38.53211009174312,
+          "st3_alignscore_pct": 37.32979237083535,
+          "st3_medcon_pct": 29.78723404255319
+        }
+      }
+    },
+    "P5_highMAS_lowUAI": {
+      "llama3.1:8b": {
+        "subtask3": "The decision to intubate was made due to concern for increasing work of breathing [4]. The patient's significant hypoxia and tachypnea in the ED were noted as reasons for this decision [3, 4]. Intubation allowed for more effective oxygenation and management of respiratory distress. This approach was taken based on the patient's specific clinical presentation at the time.",
+        "metrics": {
+          "st3_bleu": 0.00102150295614404,
+          "st3_rouge": 0.208,
+          "st3_sari": 0.5364221824686941,
+          "st3_bertscore": 0.34408602150537637,
+          "st3_alignscore": 0.31821631878557877,
+          "st3_medcon": 0.25,
+          "st3_bleu_pct": 0.10215029561440399,
+          "st3_rouge_pct": 20.8,
+          "st3_sari_pct": 53.64221824686941,
+          "st3_bertscore_pct": 34.40860215053764,
+          "st3_alignscore_pct": 31.821631878557877,
+          "st3_medcon_pct": 25.0
+        }
+      }
+    },
+    "P6_highLTO_medHighUAI": {
+      "llama3.1:8b": {
+        "subtask3": "Intubation was considered necessary due to concern for increasing work of breathing [4]. The patient's significant hypoxia and tachypnea in the ED, with oxygen saturation at 96% on 100% NRB, supported this decision [3]. His baseline hypoxia and desaturation with minimal exertion also raised concerns [2]. Intubation allowed for more effective management of his respiratory status. The clinical note does not provide information on whether intubation is a standard approach for pneumonia in patients of this age; further review would be needed to determine this.",
+        "metrics": {
+          "st3_bleu": 0.001006435556469481,
+          "st3_rouge": 0.15894039735099336,
+          "st3_sari": 0.5810488621710129,
+          "st3_bertscore": 0.39316239316239315,
+          "st3_alignscore": 0.3858974358974359,
+          "st3_medcon": 0.2745098039215686,
+          "st3_bleu_pct": 0.10064355564694809,
+          "st3_rouge_pct": 15.894039735099335,
+          "st3_sari_pct": 58.104886217101296,
+          "st3_bertscore_pct": 39.31623931623932,
+          "st3_alignscore_pct": 38.58974358974359,
+          "st3_medcon_pct": 27.45098039215686
+        }
+      }
+    }
+  },
+  "25": {
+    "P0_neutral": {
+      "llama3.1:8b": {
+        "subtask3": "The CPAP machine was used to provide supplemental oxygen through a positive-pressure mask while you were in the intensive care unit [3]. This was due to shortness of breath and low oxygen levels caused by an exacerbation of your chronic congestive heart failure [2]. The use of CPAP helped improve your symptoms, which subsequently improved with medications that removed excess fluid from your body [4]. There is no mention in the notes of using CPAP for sleep apnea.",
+        "metrics": {
+          "st3_bleu": 0.14399732920127298,
+          "st3_rouge": 0.28571428571428564,
+          "st3_sari": 0.5832256953414277,
+          "st3_bertscore": 0.5607476635514019,
+          "st3_alignscore": 0.557138253303255,
+          "st3_medcon": 0.4736842105263158,
+          "st3_bleu_pct": 14.399732920127297,
+          "st3_rouge_pct": 28.571428571428566,
+          "st3_sari_pct": 58.322569534142765,
+          "st3_bertscore_pct": 56.07476635514019,
+          "st3_alignscore_pct": 55.71382533032549,
+          "st3_medcon_pct": 47.36842105263158
+        }
+      }
+    },
+    "P1_highPDI_highUAI": {
+      "llama3.1:8b": {
+        "subtask3": "The Continuous Positive Airway Pressure (CPAP) machine was used to provide supplemental oxygen through a positive-pressure mask in the intensive care unit [3]. This was done to help alleviate your shortness of breath and low oxygen levels due to an exacerbation of chronic congestive heart failure [2]. The CPAP machine was not specifically for sleep apnea, as there is no mention of it being used for that purpose. However, its use in this context suggests a focus on maintaining positive airflow during acute respiratory distress.",
+        "metrics": {
+          "st3_bleu": 0.13653632587862238,
+          "st3_rouge": 0.2981366459627329,
+          "st3_sari": 0.5563792109381435,
+          "st3_bertscore": 0.49541284403669733,
+          "st3_alignscore": 0.47139736628596396,
+          "st3_medcon": 0.41860465116279066,
+          "st3_bleu_pct": 13.653632587862239,
+          "st3_rouge_pct": 29.81366459627329,
+          "st3_sari_pct": 55.63792109381435,
+          "st3_bertscore_pct": 49.541284403669735,
+          "st3_alignscore_pct": 47.139736628596395,
+          "st3_medcon_pct": 41.860465116279066
+        }
+      }
+    },
+    "P2_lowPDI_highIDV": {
+      "llama3.1:8b": {
+        "subtask3": "The CPAP machine was used to provide supplemental oxygen through a positive-pressure mask while you were in the intensive care unit [3]. This was due to your shortness of breath and low oxygen levels caused by an exacerbation of your chronic congestive heart failure [2]. The use of CPAP helped improve your symptoms, which subsequently improved with medications that removed excess fluid from your body [4]. There is no mention in the notes of using CPAP for sleep apnea.",
+        "metrics": {
+          "st3_bleu": 0.1421625936969415,
+          "st3_rouge": 0.2838709677419355,
+          "st3_sari": 0.5832256953414277,
+          "st3_bertscore": 0.5607476635514019,
+          "st3_alignscore": 0.557138253303255,
+          "st3_medcon": 0.4736842105263158,
+          "st3_bleu_pct": 14.21625936969415,
+          "st3_rouge_pct": 28.387096774193548,
+          "st3_sari_pct": 58.322569534142765,
+          "st3_bertscore_pct": 56.07476635514019,
+          "st3_alignscore_pct": 55.71382533032549,
+          "st3_medcon_pct": 47.36842105263158
+        }
+      }
+    },
+    "P3_highPDI_lowIDV": {
+      "llama3.1:8b": {
+        "subtask3": "The CPAP machine was used to provide supplemental oxygen through a positive-pressure mask while you were in the intensive care unit [3]. This was done to help improve your shortness of breath and low oxygen levels due to an exacerbation of your chronic congestive heart failure [2]. The use of CPAP was part of your treatment plan to manage your symptoms.",
+        "metrics": {
+          "st3_bleu": 0.14756987966120794,
+          "st3_rouge": 0.3357664233576642,
+          "st3_sari": 0.5989797658503311,
+          "st3_bertscore": 0.6067415730337079,
+          "st3_alignscore": 0.5593205343714058,
+          "st3_medcon": 0.5294117647058824,
+          "st3_bleu_pct": 14.756987966120793,
+          "st3_rouge_pct": 33.57664233576642,
+          "st3_sari_pct": 59.897976585033106,
+          "st3_bertscore_pct": 60.67415730337079,
+          "st3_alignscore_pct": 55.93205343714058,
+          "st3_medcon_pct": 52.94117647058824
+        }
+      }
+    },
+    "P4_highUAI_lowIVR": {
+      "llama3.1:8b": {
+        "subtask3": "The CPAP machine was used to provide supplemental oxygen through a positive-pressure mask while you were in the intensive care unit [3]. This was done to help improve your shortness of breath and low oxygen levels due to an exacerbation of your chronic congestive heart failure [2]. The use of CPAP is not mentioned as being related to sleep apnea. Unfortunately, the clinical note excerpt does not provide further information on the specific purpose or duration of CPAP use beyond this context.",
+        "metrics": {
+          "st3_bleu": 0.1350902260211353,
+          "st3_rouge": 0.2911392405063291,
+          "st3_sari": 0.5441491051572593,
+          "st3_bertscore": 0.49056603773584906,
+          "st3_alignscore": 0.47211740041928724,
+          "st3_medcon": 0.37209302325581395,
+          "st3_bleu_pct": 13.509022602113529,
+          "st3_rouge_pct": 29.11392405063291,
+          "st3_sari_pct": 54.414910515725936,
+          "st3_bertscore_pct": 49.056603773584904,
+          "st3_alignscore_pct": 47.21174004192872,
+          "st3_medcon_pct": 37.2093023255814
+        }
+      }
+    },
+    "P5_highMAS_lowUAI": {
+      "llama3.1:8b": {
+        "subtask3": "The CPAP machine was used to provide supplemental oxygen through a positive-pressure mask while you were in the intensive care unit [3]. This was due to your shortness of breath and low oxygen levels caused by an exacerbation of your chronic congestive heart failure [2]. The use of CPAP helped improve your symptoms, which subsequently improved with medications that removed excess fluid from your body [4]. There is no mention in the notes of using CPAP for sleep apnea.",
+        "metrics": {
+          "st3_bleu": 0.1421625936969415,
+          "st3_rouge": 0.2838709677419355,
+          "st3_sari": 0.5832256953414277,
+          "st3_bertscore": 0.5607476635514019,
+          "st3_alignscore": 0.557138253303255,
+          "st3_medcon": 0.4736842105263158,
+          "st3_bleu_pct": 14.21625936969415,
+          "st3_rouge_pct": 28.387096774193548,
+          "st3_sari_pct": 58.322569534142765,
+          "st3_bertscore_pct": 56.07476635514019,
+          "st3_alignscore_pct": 55.71382533032549,
+          "st3_medcon_pct": 47.36842105263158
+        }
+      }
+    },
+    "P6_highLTO_medHighUAI": {
+      "llama3.1:8b": {
+        "subtask3": "The CPAP machine was used to provide supplemental oxygen through a positive-pressure mask while you were in the intensive care unit [3]. This was done to help improve your shortness of breath and low oxygen levels due to an exacerbation of your chronic congestive heart failure [2]. The use of CPAP is not mentioned as being related to sleep apnea. Unfortunately, the clinical note excerpt does not provide further information on the specific purpose or duration of CPAP use beyond this context.",
+        "metrics": {
+          "st3_bleu": 0.1350902260211353,
+          "st3_rouge": 0.2911392405063291,
+          "st3_sari": 0.5441491051572593,
+          "st3_bertscore": 0.49056603773584906,
+          "st3_alignscore": 0.47211740041928724,
+          "st3_medcon": 0.37209302325581395,
+          "st3_bleu_pct": 13.509022602113529,
+          "st3_rouge_pct": 29.11392405063291,
+          "st3_sari_pct": 54.414910515725936,
+          "st3_bertscore_pct": 49.056603773584904,
+          "st3_alignscore_pct": 47.21174004192872,
+          "st3_medcon_pct": 37.2093023255814
+        }
+      }
+    }
+  }
+}

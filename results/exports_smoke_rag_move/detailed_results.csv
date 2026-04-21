@@ -1,0 +1,6 @@
+case_id,profile_id,model,subtask1,subtask2,subtask3,subtask4,metric_st1_question_overlap,metric_st2_precision,metric_st2_recall,metric_st2_f1,metric_st3_word_overlap,metric_st4_precision,metric_st4_recall,metric_st4_f1
+1,P0_neutral,llama3.1:8b,Can Udiolv medication effectively flush out CBD sludge without needing ERCP? [Note excerpt: not provided],"[""2"", ""4"", ""7""]","The medication, IV Zosyn, was recommended to continue for at least a week post-ERCP due to frank pus draining from the common bile duct [4]. However, ERCP was necessary to facilitate drainage of the biliary obstruction caused by stones and sludge, as the previous stent was acutely obstructed by these issues [7]. The procedure allowed for placement of a new stent to ensure proper drainage.","[
+  {""answer_id"": ""1"", ""evidence_id"": [""4""]},
+  {""answer_id"": ""2"", ""evidence_id"": [""7""]},
+  {""answer_id"": ""3"", ""evidence_id"": [""8""]}
+]",0.14814814814814814,0.6666666666666666,0.5,0.5714285714285715,0.4230769230769231,0.0,0.0,0.0

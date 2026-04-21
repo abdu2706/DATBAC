@@ -1,0 +1,137 @@
+{
+  "22": {
+    "P0_neutral": {
+      "llama3.1:8b": {
+        "subtask3": "The emergency salvage repair was performed because Mr. [**Known lastname **] had a ruptured thoracoabdominal aortic aneurysm, as noted in sentence [1]. This required immediate surgical intervention to prevent further complications, as stated in sentence [2]. The surgery involved using a 34-mm Dacron tube graft with deep hypothermic circulatory arrest. Please see the operative note for more details on the procedure. The clinical note excerpt does not provide specific reasons for choosing this particular approach.",
+        "metrics": {
+          "st3_bleu": 0.0007117940838737629,
+          "st3_rouge": 0.22666666666666666,
+          "st3_sari": 0.5112967158815486,
+          "st3_bertscore": 0.33043478260869563,
+          "st3_alignscore": 0.34709807886754296,
+          "st3_medcon": 0.24000000000000002,
+          "st3_bleu_pct": 0.0711794083873763,
+          "st3_rouge_pct": 22.666666666666664,
+          "st3_sari_pct": 51.12967158815486,
+          "st3_bertscore_pct": 33.04347826086956,
+          "st3_alignscore_pct": 34.7098078867543,
+          "st3_medcon_pct": 24.000000000000004
+        }
+      }
+    },
+    "P1_highPDI_highUAI": {
+      "llama3.1:8b": {
+        "subtask3": "The emergency salvage repair was performed due to a ruptured thoracoabdominal aortic aneurysm [1]. This condition required immediate surgical intervention to prevent further complications [2]. The surgery involved using a 34-mm Dacron tube graft with deep hypothermic circulatory arrest, as noted in the operative note [3]. The patient's postoperative course was complex, requiring monitoring in the intensive care unit and multiple subsequent surgeries for wound closure and nutritional support [4, 6, 7].",
+        "metrics": {
+          "st3_bleu": 0.0007194614984214141,
+          "st3_rouge": 0.21476510067114093,
+          "st3_sari": 0.4777241189977039,
+          "st3_bertscore": 0.29310344827586204,
+          "st3_alignscore": 0.33771177994817625,
+          "st3_medcon": 0.24000000000000002,
+          "st3_bleu_pct": 0.07194614984214141,
+          "st3_rouge_pct": 21.476510067114095,
+          "st3_sari_pct": 47.77241189977039,
+          "st3_bertscore_pct": 29.310344827586203,
+          "st3_alignscore_pct": 33.77117799481763,
+          "st3_medcon_pct": 24.000000000000004
+        }
+      }
+    },
+    "P2_lowPDI_highIDV": {
+      "llama3.1:8b": {
+        "subtask3": "The surgical team performed an emergency salvage repair on you because your thoracoabdominal aortic aneurysm had ruptured [1]. This required immediate attention to prevent further complications [2]. The decision for this type of repair was made based on the severity of your condition and the need for urgent intervention. Unfortunately, the clinical note excerpt does not provide more detailed information about the specific reasons behind this choice.",
+        "metrics": {
+          "st3_bleu": 0.0006815707101007944,
+          "st3_rouge": 0.22535211267605634,
+          "st3_sari": 0.5484414032801129,
+          "st3_bertscore": 0.3207547169811321,
+          "st3_alignscore": 0.27098043755064244,
+          "st3_medcon": 0.2222222222222222,
+          "st3_bleu_pct": 0.06815707101007944,
+          "st3_rouge_pct": 22.535211267605636,
+          "st3_sari_pct": 54.84414032801129,
+          "st3_bertscore_pct": 32.07547169811321,
+          "st3_alignscore_pct": 27.098043755064243,
+          "st3_medcon_pct": 22.22222222222222
+        }
+      }
+    },
+    "P3_highPDI_lowIDV": {
+      "llama3.1:8b": {
+        "subtask3": "The emergency salvage repair was performed due to a ruptured thoracoabdominal aortic aneurysm [1]. This required immediate surgical intervention in the operating room [2]. The procedure involved using a 34-mm Dacron tube graft with deep hypothermic circulatory arrest [2]. The goal was to stabilize the patient's condition and prevent further complications. Unfortunately, the clinical note excerpt does not provide detailed reasons for choosing this specific approach.",
+        "metrics": {
+          "st3_bleu": 0.0007170618444222221,
+          "st3_rouge": 0.23776223776223773,
+          "st3_sari": 0.5053077592403435,
+          "st3_bertscore": 0.3119266055045872,
+          "st3_alignscore": 0.31727644523046317,
+          "st3_medcon": 0.2040816326530612,
+          "st3_bleu_pct": 0.07170618444222221,
+          "st3_rouge_pct": 23.776223776223773,
+          "st3_sari_pct": 50.53077592403435,
+          "st3_bertscore_pct": 31.19266055045872,
+          "st3_alignscore_pct": 31.727644523046315,
+          "st3_medcon_pct": 20.40816326530612
+        }
+      }
+    },
+    "P4_highUAI_lowIVR": {
+      "llama3.1:8b": {
+        "subtask3": "The emergency salvage repair was performed due to a ruptured thoracoabdominal aortic aneurysm [1]. This required immediate surgical intervention to prevent further complications [2]. The surgery involved using a 34-mm Dacron tube graft with deep hypothermic circulatory arrest [2]. Cardiac arrest occurred twice during the procedure, as noted in the operative note [3]. The decision for this type of repair was made based on the patient's critical condition and the need for urgent intervention.",
+        "metrics": {
+          "st3_bleu": 0.0009989314321338643,
+          "st3_rouge": 0.23841059602649006,
+          "st3_sari": 0.5375196271157103,
+          "st3_bertscore": 0.3571428571428571,
+          "st3_alignscore": 0.35156382079459003,
+          "st3_medcon": 0.2727272727272727,
+          "st3_bleu_pct": 0.09989314321338642,
+          "st3_rouge_pct": 23.841059602649008,
+          "st3_sari_pct": 53.75196271157103,
+          "st3_bertscore_pct": 35.71428571428571,
+          "st3_alignscore_pct": 35.156382079459,
+          "st3_medcon_pct": 27.27272727272727
+        }
+      }
+    },
+    "P5_highMAS_lowUAI": {
+      "llama3.1:8b": {
+        "subtask3": "The emergency salvage repair was performed because Mr. [**Known lastname **] had a ruptured thoracoabdominal aortic aneurysm that required immediate attention [1]. He underwent an emergent salvage repair with a 34-mm Dacron tube graft using deep hypothermic circulatory arrest [2]. This procedure is often used in emergency situations where the aneurysm has ruptured and there's no time for a more extensive repair. The clinical note excerpt does not provide further details on why this specific approach was chosen, but it indicates that cardiac arrest occurred twice during the surgery [3].",
+        "metrics": {
+          "st3_bleu": 0.0008649610747963442,
+          "st3_rouge": 0.26506024096385544,
+          "st3_sari": 0.5615187901544724,
+          "st3_bertscore": 0.3937007874015748,
+          "st3_alignscore": 0.4057856898322493,
+          "st3_medcon": 0.25,
+          "st3_bleu_pct": 0.08649610747963442,
+          "st3_rouge_pct": 26.506024096385545,
+          "st3_sari_pct": 56.151879015447236,
+          "st3_bertscore_pct": 39.37007874015748,
+          "st3_alignscore_pct": 40.578568983224926,
+          "st3_medcon_pct": 25.0
+        }
+      }
+    },
+    "P6_highLTO_medHighUAI": {
+      "llama3.1:8b": {
+        "subtask3": "The emergency salvage repair was performed due to a ruptured thoracoabdominal aortic aneurysm [1]. This required immediate surgical intervention in the operating room [2]. The procedure involved using a 34-mm Dacron tube graft with deep hypothermic circulatory arrest [2]. Cardiac arrest occurred twice during the operation, as noted in the operative note [3]. The decision to perform an emergency salvage repair was made due to the life-threatening nature of the aneurysm rupture.",
+        "metrics": {
+          "st3_bleu": 0.06641108323864522,
+          "st3_rouge": 0.24161073825503357,
+          "st3_sari": 0.5088621331845672,
+          "st3_bertscore": 0.339622641509434,
+          "st3_alignscore": 0.3461048732492187,
+          "st3_medcon": 0.28571428571428575,
+          "st3_bleu_pct": 6.641108323864523,
+          "st3_rouge_pct": 24.161073825503358,
+          "st3_sari_pct": 50.88621331845672,
+          "st3_bertscore_pct": 33.9622641509434,
+          "st3_alignscore_pct": 34.61048732492187,
+          "st3_medcon_pct": 28.571428571428577
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,5 @@
+case_id,profile_id,model,subtask1,subtask2,subtask3,subtask4,st3_word_overlap
+,,billylo/medgemma-1.5-4b-vision,,,,,0.24737107416859977
+,,gemma3:latest,,,,,0.18959409901925123
+,,llama3.1:8b,,,,,0.28580531215999194
+,,qwen3:8b,,,,,0.18424441191280802

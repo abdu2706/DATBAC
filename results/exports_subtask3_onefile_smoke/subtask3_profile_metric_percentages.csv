@@ -1,0 +1,2 @@
+case_id,profile_id,model,subtask3,st3_bleu_pct,st3_rouge_pct,st3_sari_pct,st3_bertscore_pct,st3_alignscore_pct,st3_medcon_pct
+,P0_neutral,,,7.05,26.09,50.04,35.77,31.23,31.25
