@@ -1,8 +1,0 @@
-case_id,profile_id,model,subtask3,st3_bleu_pct,st3_rouge_pct,st3_sari_pct,st3_bertscore_pct,st3_alignscore_pct,st3_medcon_pct
-,P0_neutral,,,0.09,18.06,55.16,36.21,36.32,30.77
-,P1_highPDI_highUAI,,,6.27,24.52,59.57,41.82,38.16,32.0
-,P2_lowPDI_highIDV,,,0.1,20.9,52.1,32.0,30.39,14.63
-,P3_highPDI_lowIDV,,,0.12,18.05,59.46,42.31,38.99,30.43
-,P4_highUAI_lowIVR,,,0.1,22.7,56.8,38.53,37.33,29.79
-,P5_highMAS_lowUAI,,,0.1,20.8,53.64,34.41,31.82,25.0
-,P6_highLTO_medHighUAI,,,0.1,15.89,58.1,39.32,38.59,27.45

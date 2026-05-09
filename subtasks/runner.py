@@ -1,13 +1,20 @@
 from __future__ import annotations
 
+import re
+
 from llm_runner import OllamaRunner
-from config.rag_pipeline import RAGPipeline
 from subtasks.subtask3 import build_prompt as build_subtask3_prompt
 
 
+def _limit_words(text: str, max_words: int = 75) -> str:
+    words = re.findall(r"\S+", (text or "").strip())
+    if len(words) <= max_words:
+        return " ".join(words)
+    return " ".join(words[:max_words])
+
+
 class SubtaskRunner:
-    def __init__(self, rag: RAGPipeline, llm: OllamaRunner):
-        self.rag = rag
+    def __init__(self, llm: OllamaRunner):
         self.llm = llm
 
     def run_subtask(
@@ -21,9 +28,7 @@ class SubtaskRunner:
         if subtask != 3:
             raise ValueError("This run configuration supports Subtask 3 only")
 
-        self.rag.index_case(case["case_id"], case["sentences"])
-        query = f"{case.get('patient_question', '')} {case.get('clinician_question', '')}"
-        retrieved = self.rag.retrieve_all_ranked(query, case["case_id"])
-        user_prompt = build_subtask3_prompt(case, retrieved)
+        user_prompt = build_subtask3_prompt(case)
 
-        return self.llm.generate(model, system_prompt, user_prompt)
+        raw = self.llm.generate(model, system_prompt, user_prompt)
+        return _limit_words(raw, 75)

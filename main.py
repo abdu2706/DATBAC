@@ -5,8 +5,13 @@ import json
 import traceback
 from pathlib import Path
 
-from compare import export_subtask3_profile_metric_percentages
+from compare import (
+    export_subtask3_case_profile_metrics,
+    export_subtask3_profile_metric_percentages_compact,
+    export_subtask3_profile_metric_percentages,
+)
 from config import (
+    DATASET_BASE,
     DATASET_SPLIT,
     DEFAULT_SEED,
     DEFAULT_TEMPERATURE,
@@ -18,7 +23,6 @@ from config import (
 from data_loader import load_cases_from_xml, load_gold_answers
 from evaluator import compute_subtask3_metrics
 from llm_runner import OllamaRunner
-from config.rag_pipeline import RAGPipeline
 from subtasks import SubtaskRunner
 
 
@@ -41,6 +45,24 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         default=RESULTS_DIR / "exports",
         help="Output folder for auto-generated CSV files",
+    )
+    parser.add_argument(
+        "--eval-split",
+        type=str,
+        default="",
+        help="Optional split to use for evaluation references (e.g., dev)",
+    )
+    parser.add_argument(
+        "--eval-key-path",
+        type=Path,
+        default=None,
+        help="Optional path to evaluation key JSON (overrides --eval-split)",
+    )
+    parser.add_argument(
+        "--answers-out",
+        type=Path,
+        default=RESULTS_DIR / "answers.json",
+        help="Output answers-only JSON file",
     )
     parser.add_argument(
         "--plot-metric",
@@ -93,6 +115,17 @@ def _save_json_atomic(path: Path, payload: dict) -> None:
     temp_path.replace(path)
 
 
+def _build_answers_only(all_results: dict) -> dict:
+    answers: dict = {}
+    for case_id, profiles in all_results.items():
+        answers[case_id] = {}
+        for profile_id, models in profiles.items():
+            answers[case_id][profile_id] = {
+                model: data.get("subtask3", "") for model, data in models.items()
+            }
+    return answers
+
+
 def run_interactive(
     args: argparse.Namespace,
     cases: dict,
@@ -100,7 +133,6 @@ def run_interactive(
     selected_models: list[str],
     selected_profiles: list[dict],
     runner: SubtaskRunner,
-    rag: RAGPipeline,
 ) -> None:
     if len(selected_models) != 1 or len(selected_profiles) != 1:
         raise ValueError("--interactive requires exactly one --model and one --profile")
@@ -300,11 +332,14 @@ def main():
     print(f"Run settings: split={DATASET_SPLIT} temperature={DEFAULT_TEMPERATURE} seed={DEFAULT_SEED}")
     print("Loading data...")
     cases = load_cases_from_xml()
-    gold = load_gold_answers()
+    eval_split = args.eval_split.strip()
+    eval_key_path = args.eval_key_path
+    if eval_key_path is None and eval_split:
+        eval_key_path = DATASET_BASE / eval_split / "archehr-qa_key.json"
+    gold = load_gold_answers(eval_key_path) if eval_key_path else load_gold_answers()
 
-    rag = RAGPipeline()
     llm = OllamaRunner()
-    runner = SubtaskRunner(rag, llm)
+    runner = SubtaskRunner(llm)
     system_prompts = get_all_system_prompts(HOFSTEDE_PROFILES)
 
     selected_models = MODELS
@@ -330,7 +365,6 @@ def main():
             selected_models,
             selected_profiles,
             runner,
-            rag,
         )
         return
 
@@ -344,10 +378,22 @@ def main():
         runner,
     )
     print(f"\nResults saved to {args.out}")
+    if eval_key_path:
+        print(f"Evaluation reference key: {eval_key_path}")
 
+    answers_only = _build_answers_only(all_results)
+    _save_json_atomic(args.answers_out, answers_only)
+    print(f"Answers saved to {args.answers_out}")
+
+    case_profile_csv_path = export_subtask3_case_profile_metrics(all_results, args.csv_dir)
     summary_csv_path = export_subtask3_profile_metric_percentages(all_results, args.csv_dir)
+    compact_csv_path = export_subtask3_profile_metric_percentages_compact(
+        all_results, args.csv_dir
+    )
     print("CSV export:")
+    print(f"  - subtask3_case_profile_metrics: {case_profile_csv_path}")
     print(f"  - subtask3_profile_metric_percentages: {summary_csv_path}")
+    print(f"  - subtask3_profile_metric_percentages_compact: {compact_csv_path}")
 
 
 if __name__ == "__main__":

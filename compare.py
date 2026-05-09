@@ -154,6 +154,41 @@ def build_subtask3_metric_percentage_table(results: dict) -> list[dict]:
     return rows
 
 
+def build_subtask3_case_profile_metrics_table(results: dict) -> list[dict]:
+    metric_keys = [
+        "st3_bleu",
+        "st3_rouge",
+        "st3_sari",
+        "st3_bertscore",
+        "st3_alignscore",
+        "st3_medcon",
+        "st3_bleu_pct",
+        "st3_rouge_pct",
+        "st3_sari_pct",
+        "st3_bertscore_pct",
+        "st3_alignscore_pct",
+        "st3_medcon_pct",
+    ]
+    rows: list[dict] = []
+
+    for case_id, profiles in sorted(results.items(), key=lambda x: x[0]):
+        for profile_id, models in sorted(profiles.items()):
+            for model, data in sorted(models.items()):
+                metrics = data.get("metrics", {})
+                row = {
+                    "case_id": case_id,
+                    "profile_id": profile_id,
+                    "model": model,
+                }
+                for key in metric_keys:
+                    value = metrics.get(key)
+                    row[key] = value if value is not None else ""
+                row["answer"] = data.get("subtask3", "")
+                rows.append(row)
+
+    return rows
+
+
 def export_subtask3_profile_metric_percentages(results: dict, output_dir: Path) -> Path:
     """Export a single CSV: one row per profile with Subtask 3 metric percentages."""
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -163,6 +198,84 @@ def export_subtask3_profile_metric_percentages(results: dict, output_dir: Path) 
     fieldnames = [
         "case_id",
         "profile_id",
+        "st3_bleu_pct",
+        "st3_rouge_pct",
+        "st3_sari_pct",
+        "st3_bertscore_pct",
+        "st3_alignscore_pct",
+        "st3_medcon_pct",
+        "answer",
+    ]
+    with path.open("w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({k: row.get(k, "") for k in fieldnames})
+    return path
+
+
+def export_subtask3_profile_metric_percentages_compact(results: dict, output_dir: Path) -> Path:
+    """Export a compact CSV with averages appended at the end."""
+    output_dir.mkdir(parents=True, exist_ok=True)
+    rows = build_subtask3_metric_percentage_table(results)
+    path = output_dir / "subtask3_profile_metric_percentages_compact.csv"
+
+    metric_keys = [
+        "st3_bleu_pct",
+        "st3_rouge_pct",
+        "st3_sari_pct",
+        "st3_bertscore_pct",
+        "st3_alignscore_pct",
+        "st3_medcon_pct",
+    ]
+    fieldnames = ["case_id", "profile_id", *metric_keys]
+
+    totals = {key: 0.0 for key in metric_keys}
+    counts = {key: 0 for key in metric_keys}
+    compact_rows: list[dict] = []
+
+    for row in rows:
+        compact = {k: row.get(k, "") for k in fieldnames}
+        compact_rows.append(compact)
+        for key in metric_keys:
+            value = compact.get(key)
+            if isinstance(value, (int, float)):
+                totals[key] += float(value)
+                counts[key] += 1
+
+    avg_row = {"case_id": "AVERAGE", "profile_id": ""}
+    for key in metric_keys:
+        if counts[key]:
+            avg_row[key] = round(totals[key] / counts[key], 2)
+        else:
+            avg_row[key] = 0.0
+
+    with path.open("w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        for row in compact_rows:
+            writer.writerow({k: row.get(k, "") for k in fieldnames})
+        writer.writerow(avg_row)
+
+    return path
+
+
+def export_subtask3_case_profile_metrics(results: dict, output_dir: Path) -> Path:
+    """Export Subtask 3 metrics per case/profile/model (one row per output)."""
+    output_dir.mkdir(parents=True, exist_ok=True)
+    rows = build_subtask3_case_profile_metrics_table(results)
+    path = output_dir / "subtask3_case_profile_metrics.csv"
+
+    fieldnames = [
+        "case_id",
+        "profile_id",
+        "model",
+        "st3_bleu",
+        "st3_rouge",
+        "st3_sari",
+        "st3_bertscore",
+        "st3_alignscore",
+        "st3_medcon",
         "st3_bleu_pct",
         "st3_rouge_pct",
         "st3_sari_pct",
