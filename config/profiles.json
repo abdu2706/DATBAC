@@ -12,19 +12,6 @@
     }
   },
   {
-    "profile_id": "P0_noculture",
-    "name": "Non-culture baseline",
-    "apply_culture_guidelines": false,
-    "hofstede": {
-      "PDI": 0.5,
-      "IDV": 0.5,
-      "UAI": 0.5,
-      "MAS": 0.5,
-      "LTO": 0.5,
-      "IVR": 0.5
-    }
-  },
-  {
     "profile_id": "P1_highPDI_highUAI",
     "name": "Authority-trusting & uncertainty-averse",
     "hofstede": {

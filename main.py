@@ -109,6 +109,7 @@ def _sorted_case_ids(cases: dict) -> list[str]:
 
 
 def _save_json_atomic(path: Path, payload: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
     temp_path = path.with_suffix(f"{path.suffix}.tmp")
     with temp_path.open("w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2, ensure_ascii=False)
@@ -290,8 +291,11 @@ def run_batch(
                     print("      Subtask 3: Answer Generation...")
                     result["subtask3"] = runner.run_subtask(3, case, sys_prompt, model)
                     print(f"      -> {result['subtask3'][:80]}...")
-
-                    if gold_case:
+                    if result["subtask3"].startswith("[ERROR]"):
+                        result["error"] = result["subtask3"]
+                        result["failed_stage"] = stage
+                        print("      [WARN] Model returned error output; metrics skipped")
+                    elif gold_case:
                         gold_answer_text = gold_case.get("clinician_answer", "")
                         metrics = compute_subtask3_metrics(
                             result["subtask3"],

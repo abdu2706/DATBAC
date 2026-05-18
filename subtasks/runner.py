@@ -7,7 +7,10 @@ from subtasks.subtask3 import build_prompt as build_subtask3_prompt
 
 
 def _limit_words(text: str, max_words: int = 75) -> str:
-    words = re.findall(r"\S+", (text or "").strip())
+    cleaned = (text or "").strip()
+    if cleaned.startswith("[ERROR]"):
+        return cleaned
+    words = re.findall(r"\S+", cleaned)
     if len(words) <= max_words:
         return " ".join(words)
     return " ".join(words[:max_words])
