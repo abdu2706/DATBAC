@@ -1,0 +1,714 @@
+{
+  "21": {
+    "P0_neutral": {
+      "llama3.1:8b": {
+        "subtask3": "[ERROR] llama3.1:8b: HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/chat (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+        "checks": [],
+        "error": "[ERROR] llama3.1:8b: HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/chat (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+        "failed_stage": "subtask3"
+      }
+    },
+    "P1_highPDI_highUAI": {
+      "llama3.1:8b": {
+        "subtask3": "[ERROR] llama3.1:8b: HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/chat (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+        "checks": [],
+        "error": "[ERROR] llama3.1:8b: HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/chat (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+        "failed_stage": "subtask3"
+      }
+    },
+    "P2_lowPDI_highIDV": {
+      "llama3.1:8b": {
+        "subtask3": "[ERROR] llama3.1:8b: HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/chat (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+        "checks": [],
+        "error": "[ERROR] llama3.1:8b: HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/chat (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+        "failed_stage": "subtask3"
+      }
+    },
+    "P3_highPDI_lowIDV": {
+      "llama3.1:8b": {
+        "subtask3": "[ERROR] llama3.1:8b: HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/chat (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+        "checks": [],
+        "error": "[ERROR] llama3.1:8b: HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/chat (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+        "failed_stage": "subtask3"
+      }
+    },
+    "P4_highUAI_lowIVR": {
+      "llama3.1:8b": {
+        "subtask3": "[ERROR] llama3.1:8b: HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/chat (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+        "checks": [],
+        "error": "[ERROR] llama3.1:8b: HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/chat (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+        "failed_stage": "subtask3"
+      }
+    },
+    "P5_highMAS_lowUAI": {
+      "llama3.1:8b": {
+        "subtask3": "[ERROR] llama3.1:8b: HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/chat (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+        "checks": [],
+        "error": "[ERROR] llama3.1:8b: HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/chat (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+        "failed_stage": "subtask3"
+      }
+    },
+    "P6_highLTO_medHighUAI": {
+      "llama3.1:8b": {
+        "subtask3": "[ERROR] llama3.1:8b: HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/chat (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+        "checks": [],
+        "error": "[ERROR] llama3.1:8b: HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/chat (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+        "failed_stage": "subtask3"
+      }
+    }
+  },
+  "22": {
+    "P0_neutral": {
+      "llama3.1:8b": {
+        "subtask3": "The emergency salvage repair was performed to repair his ruptured thoracoabdominal aortic aneurysm. This was done because the aneurysm had ruptured, which is a life-threatening condition that requires immediate surgical intervention to prevent further bleeding and death. Follow-up may include ongoing monitoring of the wound and the patient's overall condition to ensure the repair is successful and there are no complications.",
+        "checks": [],
+        "metrics": {
+          "st3_bleu": 0.0008042543460458737,
+          "st3_rouge": 0.302158273381295,
+          "st3_sari": 0.554190920647665,
+          "st3_bertscore": 0.36000000000000004,
+          "st3_alignscore": 0.3128152866242039,
+          "st3_medcon": 0.27906976744186046,
+          "st3_bleu_pct": 0.08042543460458737,
+          "st3_rouge_pct": 30.215827338129497,
+          "st3_sari_pct": 55.419092064766495,
+          "st3_bertscore_pct": 36.00000000000001,
+          "st3_alignscore_pct": 31.28152866242039,
+          "st3_medcon_pct": 27.906976744186046
+        }
+      }
+    },
+    "P1_highPDI_highUAI": {
+      "llama3.1:8b": {
+        "subtask3": "1. Conclusion: The emergency salvage repair was performed due to a ruptured thoracoabdominal aortic aneurysm. 2. Evidence: The clinical note states that Mr. [**Known lastname **] was transferred for \"emergent repair of his ruptured thoracoabdominal aortic aneurysm.\" 3. Next step: Ask your treating team whether any further treatment or follow-up is needed to ensure proper healing of the thoracoabdominal wound.",
+        "checks": [
+          "first sentence not direct answer",
+          "contains numbers not in source text",
+          "possible unsupported causal claim",
+          "regenerated_due_to_validation",
+          "clinical conclusion differs from baseline"
+        ],
+        "metrics": {
+          "st3_bleu": 0.0006228570537774745,
+          "st3_rouge": 0.2074074074074074,
+          "st3_sari": 0.5067853228247822,
+          "st3_bertscore": 0.32,
+          "st3_alignscore": 0.31938853503184716,
+          "st3_medcon": 0.21621621621621623,
+          "st3_bleu_pct": 0.062285705377747455,
+          "st3_rouge_pct": 20.74074074074074,
+          "st3_sari_pct": 50.678532282478216,
+          "st3_bertscore_pct": 32.0,
+          "st3_alignscore_pct": 31.938853503184717,
+          "st3_medcon_pct": 21.62162162162162
+        }
+      }
+    },
+    "P2_lowPDI_highIDV": {
+      "llama3.1:8b": {
+        "subtask3": "The emergency salvage repair was performed to repair his ruptured thoracoabdominal aortic aneurysm. This type of surgery was necessary because the aneurysm had ruptured, which is a life-threatening condition that requires immediate attention. You can ask your treating team whether the use of a 34-mm Dacron tube graft was a standard approach for this type of repair.",
+        "checks": [
+          "standard of care not asked",
+          "missing treating team question",
+          "treating team question not last sentence",
+          "regenerated_due_to_validation"
+        ],
+        "metrics": {
+          "st3_bleu": 0.0009752234502157908,
+          "st3_rouge": 0.2835820895522388,
+          "st3_sari": 0.6086395511921459,
+          "st3_bertscore": 0.45833333333333326,
+          "st3_alignscore": 0.3848039215686274,
+          "st3_medcon": 0.37837837837837834,
+          "st3_bleu_pct": 0.09752234502157908,
+          "st3_rouge_pct": 28.35820895522388,
+          "st3_sari_pct": 60.86395511921459,
+          "st3_bertscore_pct": 45.83333333333333,
+          "st3_alignscore_pct": 38.48039215686274,
+          "st3_medcon_pct": 37.83783783783783
+        }
+      }
+    },
+    "P3_highPDI_lowIDV": {
+      "llama3.1:8b": {
+        "subtask3": "He had a ruptured thoracoabdominal aortic aneurysm, which is a life-threatening condition that requires immediate surgical repair. The emergency salvage repair was performed to prevent further bleeding and to save his life. The treating doctor can clarify the details of the surgery and the reasons behind the decision to perform a salvage repair.",
+        "checks": [
+          "missing required structure marker",
+          "regenerated_due_to_validation",
+          "clinical conclusion differs from baseline"
+        ],
+        "metrics": {
+          "st3_bleu": 0.0006136764511051482,
+          "st3_rouge": 0.17054263565891473,
+          "st3_sari": 0.5441852030947776,
+          "st3_bertscore": 0.37362637362637363,
+          "st3_alignscore": 0.32147312147312146,
+          "st3_medcon": 0.25,
+          "st3_bleu_pct": 0.06136764511051482,
+          "st3_rouge_pct": 17.05426356589147,
+          "st3_sari_pct": 54.418520309477756,
+          "st3_bertscore_pct": 37.362637362637365,
+          "st3_alignscore_pct": 32.14731214731215,
+          "st3_medcon_pct": 25.0
+        }
+      }
+    },
+    "P4_highUAI_lowIVR": {
+      "llama3.1:8b": {
+        "subtask3": "What is known: The patient had a ruptured thoracoabdominal aortic aneurysm, which required an emergency salvage repair with a 34-mm Dacron tube graft. What is uncertain: The long-term outcome of the repair is uncertain due to the patient's complex condition and the fact that he required multiple surgeries. What to do next: Follow-up may include ongoing monitoring of the wound and the patient's overall condition, as well as further surgical interventions as needed. The treating",
+        "checks": [
+          "missing ending punctuation",
+          "possible unsupported causal claim",
+          "missing required structure marker",
+          "regenerated_due_to_validation",
+          "clinical conclusion differs from baseline"
+        ],
+        "metrics": {
+          "st3_bleu": 0.0008353142497913261,
+          "st3_rouge": 0.20645161290322583,
+          "st3_sari": 0.5223135650667273,
+          "st3_bertscore": 0.33644859813084116,
+          "st3_alignscore": 0.3286984271711876,
+          "st3_medcon": 0.24390243902439024,
+          "st3_bleu_pct": 0.0835314249791326,
+          "st3_rouge_pct": 20.645161290322584,
+          "st3_sari_pct": 52.23135650667273,
+          "st3_bertscore_pct": 33.64485981308412,
+          "st3_alignscore_pct": 32.86984271711876,
+          "st3_medcon_pct": 24.390243902439025
+        }
+      }
+    },
+    "P5_highMAS_lowUAI": {
+      "llama3.1:8b": {
+        "subtask3": "Bottom line: The emergency salvage repair was performed to repair his ruptured thoracoabdominal aortic aneurysm. Why it matters: The patient had a ruptured thoracoabdominal aortic aneurysm, which is a life-threatening condition that requires immediate surgical intervention. Intended goal: The goal of the surgery was to repair the aneurysm and prevent further bleeding, which would have been fatal if left untreated.",
+        "checks": [
+          "missing required structure marker",
+          "regenerated_due_to_validation"
+        ],
+        "metrics": {
+          "st3_bleu": 0.0007688790601839098,
+          "st3_rouge": 0.2647058823529412,
+          "st3_sari": 0.5659019163220844,
+          "st3_bertscore": 0.37500000000000006,
+          "st3_alignscore": 0.30866013071895426,
+          "st3_medcon": 0.3076923076923077,
+          "st3_bleu_pct": 0.07688790601839098,
+          "st3_rouge_pct": 26.47058823529412,
+          "st3_sari_pct": 56.590191632208445,
+          "st3_bertscore_pct": 37.50000000000001,
+          "st3_alignscore_pct": 30.866013071895427,
+          "st3_medcon_pct": 30.76923076923077
+        }
+      }
+    },
+    "P6_highLTO_medHighUAI": {
+      "llama3.1:8b": {
+        "subtask3": "The emergency salvage repair was performed to repair his ruptured thoracoabdominal aortic aneurysm. This type of surgery was necessary due to the rupture, which is a life-threatening condition that requires immediate attention. Over time, he will need to continue monitoring his wound, including the small open area, and follow up with his treating team to ensure proper healing and address any potential complications.",
+        "checks": [
+          "possible unsupported causal claim",
+          "regenerated_due_to_validation"
+        ],
+        "metrics": {
+          "st3_bleu": 0.0006858446480262672,
+          "st3_rouge": 0.2014388489208633,
+          "st3_sari": 0.5397194000967587,
+          "st3_bertscore": 0.36190476190476195,
+          "st3_alignscore": 0.340599647266314,
+          "st3_medcon": 0.3333333333333333,
+          "st3_bleu_pct": 0.06858446480262673,
+          "st3_rouge_pct": 20.14388489208633,
+          "st3_sari_pct": 53.97194000967587,
+          "st3_bertscore_pct": 36.1904761904762,
+          "st3_alignscore_pct": 34.0599647266314,
+          "st3_medcon_pct": 33.33333333333333
+        }
+      }
+    }
+  },
+  "23": {
+    "P0_neutral": {
+      "llama3.1:8b": {
+        "subtask3": "The antibiotics were necessary because she developed pneumonia, which was confirmed by a chest x-ray. This was identified on [**2174-2-11**], and treatment with IV antibiotics was started immediately, leading to improvement. Follow-up may include further evaluation of her respiratory health and continued monitoring for any signs of infection.",
+        "checks": [],
+        "metrics": {
+          "st3_bleu": 0.09138904845321155,
+          "st3_rouge": 0.23931623931623933,
+          "st3_sari": 0.5304662971824303,
+          "st3_bertscore": 0.4090909090909091,
+          "st3_alignscore": 0.3620108368452739,
+          "st3_medcon": 0.34285714285714286,
+          "st3_bleu_pct": 9.138904845321155,
+          "st3_rouge_pct": 23.931623931623932,
+          "st3_sari_pct": 53.04662971824303,
+          "st3_bertscore_pct": 40.909090909090914,
+          "st3_alignscore_pct": 36.20108368452739,
+          "st3_medcon_pct": 34.285714285714285
+        }
+      }
+    },
+    "P1_highPDI_highUAI": {
+      "llama3.1:8b": {
+        "subtask3": "1. Conclusion: The antibiotics were necessary due to the development of pneumonia. 2. Evidence: The clinical note states that a chest x-ray indicated pneumonia, and IV antibiotics were started right away, leading to improvement. 3. Next step: Ask your treating team whether any follow-up or continued treatment is needed to ensure the pneumonia does not recur.",
+        "checks": [
+          "first sentence not direct answer",
+          "contains numbers not in source text",
+          "possible unsupported causal claim",
+          "regenerated_due_to_validation",
+          "clinical conclusion differs from baseline"
+        ],
+        "metrics": {
+          "st3_bleu": 0.10981826238194922,
+          "st3_rouge": 0.2601626016260163,
+          "st3_sari": 0.5156216332686921,
+          "st3_bertscore": 0.37777777777777777,
+          "st3_alignscore": 0.33647058823529413,
+          "st3_medcon": 0.3225806451612903,
+          "st3_bleu_pct": 10.981826238194921,
+          "st3_rouge_pct": 26.01626016260163,
+          "st3_sari_pct": 51.56216332686922,
+          "st3_bertscore_pct": 37.77777777777778,
+          "st3_alignscore_pct": 33.64705882352941,
+          "st3_medcon_pct": 32.25806451612903
+        }
+      }
+    },
+    "P2_lowPDI_highIDV": {
+      "llama3.1:8b": {
+        "subtask3": "The antibiotics were necessary because she developed pneumonia, which was confirmed by a chest x-ray. This means that bacteria were causing an infection in her lungs, and the antibiotics were given to help fight off the infection. You can ask your treating team whether the antibiotics were effective in treating the pneumonia.",
+        "checks": [
+          "missing treating team question",
+          "treating team question not last sentence",
+          "regenerated_due_to_validation"
+        ],
+        "metrics": {
+          "st3_bleu": 0.09985050369960646,
+          "st3_rouge": 0.27118644067796616,
+          "st3_sari": 0.5185364281108962,
+          "st3_bertscore": 0.39506172839506176,
+          "st3_alignscore": 0.32592592592592595,
+          "st3_medcon": 0.3703703703703704,
+          "st3_bleu_pct": 9.985050369960646,
+          "st3_rouge_pct": 27.118644067796616,
+          "st3_sari_pct": 51.853642811089614,
+          "st3_bertscore_pct": 39.50617283950618,
+          "st3_alignscore_pct": 32.592592592592595,
+          "st3_medcon_pct": 37.03703703703704
+        }
+      }
+    },
+    "P3_highPDI_lowIDV": {
+      "llama3.1:8b": {
+        "subtask3": "You and your family must have been worried about her health during her hospital stay. The antibiotics were necessary because she developed pneumonia, which was confirmed by a chest x-ray. The treating doctor can clarify the specific type of antibiotics she was given and the duration of treatment.",
+        "checks": [
+          "clinical conclusion differs from baseline"
+        ],
+        "metrics": {
+          "st3_bleu": 0.12565441958667914,
+          "st3_rouge": 0.2456140350877193,
+          "st3_sari": 0.5668659937093117,
+          "st3_bertscore": 0.4691358024691358,
+          "st3_alignscore": 0.37037037037037035,
+          "st3_medcon": 0.3571428571428571,
+          "st3_bleu_pct": 12.565441958667915,
+          "st3_rouge_pct": 24.56140350877193,
+          "st3_sari_pct": 56.68659937093117,
+          "st3_bertscore_pct": 46.913580246913575,
+          "st3_alignscore_pct": 37.03703703703704,
+          "st3_medcon_pct": 35.71428571428571
+        }
+      }
+    },
+    "P4_highUAI_lowIVR": {
+      "llama3.1:8b": {
+        "subtask3": "What is known: The patient was given antibiotics during their hospital stay because they developed pneumonia, which was confirmed by a chest x-ray. What is uncertain: There is no information in the note about whether the antibiotics were necessary for the patient's condition. What to do next: Ask your treating team whether the antibiotics were necessary for your condition and whether any follow-up or continued treatment is needed.",
+        "checks": [
+          "missing required structure marker",
+          "regenerated_due_to_validation"
+        ],
+        "metrics": {
+          "st3_bleu": 0.16992037861891177,
+          "st3_rouge": 0.338235294117647,
+          "st3_sari": 0.5273504273504274,
+          "st3_bertscore": 0.391304347826087,
+          "st3_alignscore": 0.3328471248246844,
+          "st3_medcon": 0.38709677419354843,
+          "st3_bleu_pct": 16.992037861891177,
+          "st3_rouge_pct": 33.8235294117647,
+          "st3_sari_pct": 52.73504273504274,
+          "st3_bertscore_pct": 39.130434782608695,
+          "st3_alignscore_pct": 33.28471248246844,
+          "st3_medcon_pct": 38.70967741935484
+        }
+      }
+    },
+    "P5_highMAS_lowUAI": {
+      "llama3.1:8b": {
+        "subtask3": "Bottom line: The antibiotics were necessary due to the development of pneumonia. Why it matters: The patient developed pneumonia, as indicated by a chest x-ray, which prompted the initiation of IV antibiotics. Intended goal: The goal was to treat the pneumonia and prevent further complications, allowing the patient to recover and regain strength before returning home.",
+        "checks": [
+          "possible unsupported causal claim",
+          "missing required structure marker",
+          "regenerated_due_to_validation"
+        ],
+        "metrics": {
+          "st3_bleu": 0.13933316191979764,
+          "st3_rouge": 0.29508196721311475,
+          "st3_sari": 0.5510976021614319,
+          "st3_bertscore": 0.4337349397590361,
+          "st3_alignscore": 0.358871100841723,
+          "st3_medcon": 0.303030303030303,
+          "st3_bleu_pct": 13.933316191979763,
+          "st3_rouge_pct": 29.508196721311474,
+          "st3_sari_pct": 55.10976021614319,
+          "st3_bertscore_pct": 43.37349397590361,
+          "st3_alignscore_pct": 35.8871100841723,
+          "st3_medcon_pct": 30.303030303030297
+        }
+      }
+    },
+    "P6_highLTO_medHighUAI": {
+      "llama3.1:8b": {
+        "subtask3": "The antibiotics were necessary because you developed pneumonia, which was confirmed by a chest x-ray. This was a complication that arose during your hospital stay, and the antibiotics were started right away to help you recover. Follow-up may include continued monitoring of your lung health and potential adjustments to your treatment plan as needed.",
+        "checks": [],
+        "metrics": {
+          "st3_bleu": 0.10553910813200018,
+          "st3_rouge": 0.23140495867768596,
+          "st3_sari": 0.5651607651607652,
+          "st3_bertscore": 0.45977011494252873,
+          "st3_alignscore": 0.3985287356321839,
+          "st3_medcon": 0.3636363636363636,
+          "st3_bleu_pct": 10.553910813200018,
+          "st3_rouge_pct": 23.140495867768596,
+          "st3_sari_pct": 56.51607651607652,
+          "st3_bertscore_pct": 45.97701149425287,
+          "st3_alignscore_pct": 39.85287356321839,
+          "st3_medcon_pct": 36.36363636363636
+        }
+      }
+    }
+  },
+  "24": {
+    "P0_neutral": {
+      "llama3.1:8b": {
+        "subtask3": "The patient was intubated due to concern for increasing work of breathing. This was done because the patient was significantly hypoxic and tachypnic, with oxygen saturation levels as low as 86% with minimal exertion. Follow-up may include further evaluation of the patient's respiratory status and adjustment of treatment as needed.",
+        "checks": [],
+        "metrics": {
+          "st3_bleu": 0.0012653436539312507,
+          "st3_rouge": 0.23931623931623933,
+          "st3_sari": 0.6087568030330827,
+          "st3_bertscore": 0.45454545454545453,
+          "st3_alignscore": 0.39486467730742536,
+          "st3_medcon": 0.42105263157894735,
+          "st3_bleu_pct": 0.12653436539312507,
+          "st3_rouge_pct": 23.931623931623932,
+          "st3_sari_pct": 60.875680303308265,
+          "st3_bertscore_pct": 45.45454545454545,
+          "st3_alignscore_pct": 39.48646773074253,
+          "st3_medcon_pct": 42.10526315789473
+        }
+      }
+    },
+    "P1_highPDI_highUAI": {
+      "llama3.1:8b": {
+        "subtask3": "1. Conclusion: The patient was intubated due to concern for increasing work of breathing. 2. Evidence: The clinical note states that the patient was \"significantly hypoxic and tachypnic\" and was intubated due to this concern. 3. Next step: Ask your treating team whether the intubation was a standard approach for pneumonia in someone of the patient's age.",
+        "checks": [
+          "first sentence not direct answer",
+          "contains numbers not in source text",
+          "regenerated_due_to_validation",
+          "clinical conclusion differs from baseline"
+        ],
+        "metrics": {
+          "st3_bleu": 0.0010495128868106174,
+          "st3_rouge": 0.22764227642276422,
+          "st3_sari": 0.5113827335499775,
+          "st3_bertscore": 0.3333333333333333,
+          "st3_alignscore": 0.3142857142857143,
+          "st3_medcon": 0.27027027027027023,
+          "st3_bleu_pct": 0.10495128868106174,
+          "st3_rouge_pct": 22.76422764227642,
+          "st3_sari_pct": 51.13827335499776,
+          "st3_bertscore_pct": 33.33333333333333,
+          "st3_alignscore_pct": 31.428571428571427,
+          "st3_medcon_pct": 27.027027027027025
+        }
+      }
+    },
+    "P2_lowPDI_highIDV": {
+      "llama3.1:8b": {
+        "subtask3": "The patient was intubated due to concern for increasing work of breathing. The patient's high respiratory rate and low oxygen saturation levels indicated that he was struggling to breathe, and the medical team decided to intubate him to help him breathe more easily. You can ask your treating team whether the intubation was a standard approach for pneumonia in someone his age.",
+        "checks": [
+          "missing treating team question",
+          "treating team question not last sentence",
+          "regenerated_due_to_validation"
+        ],
+        "metrics": {
+          "st3_bleu": 0.0011162453884546084,
+          "st3_rouge": 0.234375,
+          "st3_sari": 0.6017768780926676,
+          "st3_bertscore": 0.43298969072164945,
+          "st3_alignscore": 0.35122238586156107,
+          "st3_medcon": 0.3076923076923077,
+          "st3_bleu_pct": 0.11162453884546084,
+          "st3_rouge_pct": 23.4375,
+          "st3_sari_pct": 60.17768780926676,
+          "st3_bertscore_pct": 43.298969072164944,
+          "st3_alignscore_pct": 35.12223858615611,
+          "st3_medcon_pct": 30.76923076923077
+        }
+      }
+    },
+    "P3_highPDI_lowIDV": {
+      "llama3.1:8b": {
+        "subtask3": "The patient was intubated due to concern for increasing work of breathing. We understand your concern for Mr. [**Known lastname 52653**]'s treatment. Intubation was necessary to ensure his safety and provide adequate oxygenation. We recommend discussing his treatment plan with the treating doctor to understand the specific reasons for intubation and any further care that may be needed.",
+        "checks": [
+          "does not match required sentence count",
+          "missing required structure marker",
+          "regenerated_due_to_validation"
+        ],
+        "metrics": {
+          "st3_bleu": 0.0008702079862675575,
+          "st3_rouge": 0.22580645161290325,
+          "st3_sari": 0.5295328960445239,
+          "st3_bertscore": 0.3225806451612903,
+          "st3_alignscore": 0.3053130929791271,
+          "st3_medcon": 0.2631578947368421,
+          "st3_bleu_pct": 0.08702079862675575,
+          "st3_rouge_pct": 22.580645161290324,
+          "st3_sari_pct": 52.953289604452394,
+          "st3_bertscore_pct": 32.25806451612903,
+          "st3_alignscore_pct": 30.531309297912713,
+          "st3_medcon_pct": 26.31578947368421
+        }
+      }
+    },
+    "P4_highUAI_lowIVR": {
+      "llama3.1:8b": {
+        "subtask3": "What is known: The patient was intubated due to concern for increasing work of breathing. What is uncertain: The patient's underlying lung function and ability to tolerate non-invasive respiratory support is uncertain. What to do next: Follow-up may include further evaluation of the patient's lung function and respiratory status to determine the best course of treatment.",
+        "checks": [
+          "missing required structure marker",
+          "regenerated_due_to_validation"
+        ],
+        "metrics": {
+          "st3_bleu": 0.0009444624394201762,
+          "st3_rouge": 0.22400000000000003,
+          "st3_sari": 0.4920382567441391,
+          "st3_bertscore": 0.2727272727272727,
+          "st3_alignscore": 0.2552394170714781,
+          "st3_medcon": 0.20512820512820512,
+          "st3_bleu_pct": 0.09444624394201762,
+          "st3_rouge_pct": 22.400000000000002,
+          "st3_sari_pct": 49.203825674413906,
+          "st3_bertscore_pct": 27.27272727272727,
+          "st3_alignscore_pct": 25.523941707147813,
+          "st3_medcon_pct": 20.51282051282051
+        }
+      }
+    },
+    "P5_highMAS_lowUAI": {
+      "llama3.1:8b": {
+        "subtask3": "Bottom line: The patient was intubated due to concern for increasing work of breathing. Why it matters: The patient was significantly hypoxic and tachypnic, with oxygen saturation levels as low as 86% with minimal exertion, which led to the decision to intubate. Intended goal: The clinical goal was to secure the patient's airway and ensure adequate oxygenation, which was compromised due to the patient's severe respiratory distress.",
+        "checks": [
+          "possible unsupported causal claim",
+          "missing required structure marker",
+          "regenerated_due_to_validation"
+        ],
+        "metrics": {
+          "st3_bleu": 0.0013321422333831547,
+          "st3_rouge": 0.2686567164179105,
+          "st3_sari": 0.5931226396342675,
+          "st3_bertscore": 0.42105263157894735,
+          "st3_alignscore": 0.36857360793287564,
+          "st3_medcon": 0.45,
+          "st3_bleu_pct": 0.13321422333831548,
+          "st3_rouge_pct": 26.86567164179105,
+          "st3_sari_pct": 59.312263963426744,
+          "st3_bertscore_pct": 42.10526315789473,
+          "st3_alignscore_pct": 36.85736079328756,
+          "st3_medcon_pct": 45.0
+        }
+      }
+    },
+    "P6_highLTO_medHighUAI": {
+      "llama3.1:8b": {
+        "subtask3": "The patient was intubated due to concern for increasing work of breathing. The patient was experiencing significant hypoxia and tachypnea, with oxygen saturation levels of 91-92% on 100% NRB, and desaturation to 86% with minimal exertion. Follow-up may include monitoring of the patient's respiratory status and adjusting treatment as needed to ensure optimal oxygenation and ventilation.",
+        "checks": [
+          "regenerated_due_to_validation"
+        ],
+        "metrics": {
+          "st3_bleu": 0.0013012644516741645,
+          "st3_rouge": 0.24193548387096775,
+          "st3_sari": 0.5668008433965881,
+          "st3_bertscore": 0.4042553191489362,
+          "st3_alignscore": 0.3885385929492158,
+          "st3_medcon": 0.3902439024390244,
+          "st3_bleu_pct": 0.13012644516741645,
+          "st3_rouge_pct": 24.193548387096776,
+          "st3_sari_pct": 56.68008433965881,
+          "st3_bertscore_pct": 40.42553191489362,
+          "st3_alignscore_pct": 38.85385929492158,
+          "st3_medcon_pct": 39.02439024390244
+        }
+      }
+    }
+  },
+  "25": {
+    "P0_neutral": {
+      "llama3.1:8b": {
+        "subtask3": "The CPAP machine was used to provide supplemental oxygen through a positive-pressure mask to help improve your shortness of breath and low oxygen levels. This was done because your symptoms were believed to be due to an exacerbation of your chronic congestive heart failure, which required additional oxygen to help stabilize your condition. Follow-up may include further monitoring of your heart failure and oxygen levels to ensure that your symptoms do not return.",
+        "checks": [],
+        "metrics": {
+          "st3_bleu": 0.09597468953286935,
+          "st3_rouge": 0.26666666666666666,
+          "st3_sari": 0.4879084967320262,
+          "st3_bertscore": 0.4631578947368421,
+          "st3_alignscore": 0.47037593984962406,
+          "st3_medcon": 0.380952380952381,
+          "st3_bleu_pct": 9.597468953286935,
+          "st3_rouge_pct": 26.666666666666668,
+          "st3_sari_pct": 48.790849673202615,
+          "st3_bertscore_pct": 46.31578947368421,
+          "st3_alignscore_pct": 47.037593984962406,
+          "st3_medcon_pct": 38.0952380952381
+        }
+      }
+    },
+    "P1_highPDI_highUAI": {
+      "llama3.1:8b": {
+        "subtask3": "1. Conclusion: The CPAP machine was used to provide supplemental oxygen through a positive-pressure mask. 2. Evidence: The clinical note states that the patient was given supplemental oxygen through a positive-pressure mask while in the intensive care unit. 3. Next step: Ask your treating team whether any follow-up or continued treatment is needed.",
+        "checks": [
+          "first sentence not direct answer",
+          "contains numbers not in source text",
+          "regenerated_due_to_validation",
+          "medical content differs from baseline profile",
+          "clinical conclusion differs from baseline"
+        ],
+        "metrics": {
+          "st3_bleu": 0.12222925638260122,
+          "st3_rouge": 0.2748091603053436,
+          "st3_sari": 0.5008361080281168,
+          "st3_bertscore": 0.4137931034482759,
+          "st3_alignscore": 0.35067586206896556,
+          "st3_medcon": 0.35294117647058826,
+          "st3_bleu_pct": 12.222925638260122,
+          "st3_rouge_pct": 27.48091603053436,
+          "st3_sari_pct": 50.083610802811684,
+          "st3_bertscore_pct": 41.379310344827594,
+          "st3_alignscore_pct": 35.06758620689656,
+          "st3_medcon_pct": 35.294117647058826
+        }
+      }
+    },
+    "P2_lowPDI_highIDV": {
+      "llama3.1:8b": {
+        "subtask3": "The CPAP machine was used to provide supplemental oxygen through a positive-pressure mask to help improve your shortness of breath and low oxygen levels. This was done to help increase the flow of oxygen to your lungs and improve your breathing, which was compromised due to your congestive heart failure. You can ask your treating team whether the CPAP machine was necessary to continue at home to manage your symptoms.",
+        "checks": [
+          "missing treating team question",
+          "treating team question not last sentence",
+          "regenerated_due_to_validation"
+        ],
+        "metrics": {
+          "st3_bleu": 0.09569640615187336,
+          "st3_rouge": 0.2876712328767123,
+          "st3_sari": 0.5428536474535984,
+          "st3_bertscore": 0.5168539325842697,
+          "st3_alignscore": 0.46129346191276654,
+          "st3_medcon": 0.4864864864864865,
+          "st3_bleu_pct": 9.569640615187335,
+          "st3_rouge_pct": 28.767123287671232,
+          "st3_sari_pct": 54.28536474535984,
+          "st3_bertscore_pct": 51.68539325842697,
+          "st3_alignscore_pct": 46.12934619127665,
+          "st3_medcon_pct": 48.64864864864865
+        }
+      }
+    },
+    "P3_highPDI_lowIDV": {
+      "llama3.1:8b": {
+        "subtask3": "You and your family are concerned about the CPAP machine, and we appreciate that. The CPAP machine was used to provide supplemental oxygen through a positive-pressure mask to help improve your shortness of breath and low oxygen levels due to your exacerbation of chronic congestive heart failure. Ask your treating team whether any follow-up or continued treatment is needed to manage your condition.",
+        "checks": [
+          "clinical conclusion differs from baseline"
+        ],
+        "metrics": {
+          "st3_bleu": 0.08985517405246246,
+          "st3_rouge": 0.24285714285714285,
+          "st3_sari": 0.49401709401709404,
+          "st3_bertscore": 0.45161290322580644,
+          "st3_alignscore": 0.42974636788968235,
+          "st3_medcon": 0.358974358974359,
+          "st3_bleu_pct": 8.985517405246245,
+          "st3_rouge_pct": 24.285714285714285,
+          "st3_sari_pct": 49.401709401709404,
+          "st3_bertscore_pct": 45.16129032258064,
+          "st3_alignscore_pct": 42.97463678896823,
+          "st3_medcon_pct": 35.8974358974359
+        }
+      }
+    },
+    "P4_highUAI_lowIVR": {
+      "llama3.1:8b": {
+        "subtask3": "What is known: The patient was equipped with a CPAP machine to receive supplemental oxygen through a positive-pressure mask due to shortness of breath and low oxygen levels. What is uncertain: There is no information in the note about the patient's sleep apnea. What to do next: Ask your treating team whether any follow-up or continued treatment is needed.",
+        "checks": [
+          "missing required structure marker",
+          "regenerated_due_to_validation"
+        ],
+        "metrics": {
+          "st3_bleu": 0.17832510791391026,
+          "st3_rouge": 0.32116788321167883,
+          "st3_sari": 0.5302467040787601,
+          "st3_bertscore": 0.4782608695652174,
+          "st3_alignscore": 0.4161872909698997,
+          "st3_medcon": 0.411764705882353,
+          "st3_bleu_pct": 17.832510791391027,
+          "st3_rouge_pct": 32.11678832116788,
+          "st3_sari_pct": 53.02467040787601,
+          "st3_bertscore_pct": 47.82608695652174,
+          "st3_alignscore_pct": 41.61872909698997,
+          "st3_medcon_pct": 41.1764705882353
+        }
+      }
+    },
+    "P5_highMAS_lowUAI": {
+      "llama3.1:8b": {
+        "subtask3": "Bottom line: The CPAP machine was used to provide supplemental oxygen through a positive-pressure mask. Why it matters: The note states that the patient was admitted for shortness of breath and low oxygen levels due to an exacerbation of chronic congestive heart failure, and that supplemental oxygen was provided through a positive-pressure mask. Intended goal: The goal was to improve the patient's oxygen levels and alleviate their shortness of breath.",
+        "checks": [
+          "missing required structure marker",
+          "regenerated_due_to_validation"
+        ],
+        "metrics": {
+          "st3_bleu": 0.11773228998674568,
+          "st3_rouge": 0.3648648648648648,
+          "st3_sari": 0.5498188405797101,
+          "st3_bertscore": 0.5517241379310344,
+          "st3_alignscore": 0.4974344827586207,
+          "st3_medcon": 0.4864864864864865,
+          "st3_bleu_pct": 11.773228998674568,
+          "st3_rouge_pct": 36.48648648648648,
+          "st3_sari_pct": 54.98188405797101,
+          "st3_bertscore_pct": 55.17241379310344,
+          "st3_alignscore_pct": 49.743448275862065,
+          "st3_medcon_pct": 48.64864864864865
+        }
+      }
+    },
+    "P6_highLTO_medHighUAI": {
+      "llama3.1:8b": {
+        "subtask3": "The CPAP machine was used to provide supplemental oxygen through a positive-pressure mask to help improve your shortness of breath and low oxygen levels. This was done because your symptoms were believed to be due to an exacerbation of your chronic congestive heart failure, which was causing you to have difficulty breathing. Follow-up may include monitoring your oxygen levels and heart function to ensure that your condition does not worsen.",
+        "checks": [],
+        "metrics": {
+          "st3_bleu": 0.09968229414991998,
+          "st3_rouge": 0.2585034013605442,
+          "st3_sari": 0.4837468271513961,
+          "st3_bertscore": 0.45360824742268047,
+          "st3_alignscore": 0.4677205040091639,
+          "st3_medcon": 0.380952380952381,
+          "st3_bleu_pct": 9.968229414991999,
+          "st3_rouge_pct": 25.850340136054424,
+          "st3_sari_pct": 48.37468271513961,
+          "st3_bertscore_pct": 45.36082474226804,
+          "st3_alignscore_pct": 46.772050400916385,
+          "st3_medcon_pct": 38.0952380952381
+        }
+      }
+    }
+  }
+}

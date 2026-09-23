@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import csv
+import math
+import statistics
 from collections import defaultdict
 from pathlib import Path
 
@@ -74,6 +76,49 @@ def summarize_by_profile(results: dict) -> dict[str, dict]:
             for metric, vals in metrics.items()
         }
     return summary
+
+
+def _mean_ci95(values: list[float]) -> tuple[float, float]:
+    if not values:
+        return 0.0, 0.0
+    if len(values) == 1:
+        return float(values[0]), 0.0
+    mean = statistics.mean(values)
+    std = statistics.stdev(values)
+    margin = 1.96 * (std / math.sqrt(len(values)))
+    return float(mean), float(margin)
+
+
+def build_profile_metric_ci95_table(results: dict) -> list[dict]:
+    metric_keys = [
+        "st3_bleu_pct",
+        "st3_rouge_pct",
+        "st3_sari_pct",
+        "st3_bertscore_pct",
+        "st3_alignscore_pct",
+        "st3_medcon_pct",
+    ]
+    profile_metrics: dict[str, dict[str, list[float]]] = defaultdict(lambda: defaultdict(list))
+
+    for _, profiles in results.items():
+        for profile_id, models in profiles.items():
+            for _, data in models.items():
+                metrics = data.get("metrics", {})
+                for metric in metric_keys:
+                    value = metrics.get(metric)
+                    if isinstance(value, (int, float)):
+                        profile_metrics[profile_id][metric].append(float(value))
+
+    rows: list[dict] = []
+    for profile_id, metrics in sorted(profile_metrics.items()):
+        row = {"profile_id": profile_id}
+        for metric in metric_keys:
+            mean, margin = _mean_ci95(metrics.get(metric, []))
+            row[f"{metric}_avg"] = round(mean, 2)
+            row[f"{metric}_ci95"] = round(margin, 2)
+        rows.append(row)
+
+    return rows
 
 
 def summarize_by_model(results: dict) -> dict[str, dict]:
@@ -256,6 +301,34 @@ def export_subtask3_profile_metric_percentages_compact(results: dict, output_dir
         for row in compact_rows:
             writer.writerow({k: row.get(k, "") for k in fieldnames})
         writer.writerow(avg_row)
+
+    return path
+
+
+def export_profile_metric_ci95(results: dict, output_dir: Path) -> Path:
+    """Export per-profile averages with 95% confidence intervals."""
+    output_dir.mkdir(parents=True, exist_ok=True)
+    rows = build_profile_metric_ci95_table(results)
+    path = output_dir / "profile_metric_ci95.csv"
+
+    metric_keys = [
+        "st3_bleu_pct",
+        "st3_rouge_pct",
+        "st3_sari_pct",
+        "st3_bertscore_pct",
+        "st3_alignscore_pct",
+        "st3_medcon_pct",
+    ]
+    fieldnames = ["profile_id"]
+    for key in metric_keys:
+        fieldnames.append(f"{key}_avg")
+        fieldnames.append(f"{key}_ci95")
+
+    with path.open("w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({k: row.get(k, "") for k in fieldnames})
 
     return path
 

@@ -7,7 +7,7 @@ OLLAMA_BASE_URL = "http://127.0.0.1:11434"
 
 # LLM generation settings for reproducible comparisons.
 DEFAULT_TEMPERATURE = 0.0
-DEFAULT_MAX_TOKENS = 512
+DEFAULT_MAX_TOKENS = 1024
 DEFAULT_SEED = 42
 
 MODELS = [

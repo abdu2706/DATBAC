@@ -1,0 +1,8 @@
+profile_id,st3_bleu_pct_avg,st3_bleu_pct_ci95,st3_rouge_pct_avg,st3_rouge_pct_ci95,st3_sari_pct_avg,st3_sari_pct_ci95,st3_bertscore_pct_avg,st3_bertscore_pct_ci95,st3_alignscore_pct_avg,st3_alignscore_pct_ci95,st3_medcon_pct_avg,st3_medcon_pct_ci95
+P0_neutral,4.74,5.25,26.19,2.92,54.53,4.94,42.17,4.65,38.5,6.48,35.6,5.92
+P1_highPDI_highUAI,5.84,6.54,24.25,3.0,50.87,0.62,36.12,4.2,33.02,1.63,29.05,5.9
+P2_lowPDI_highIDV,4.94,5.48,26.92,2.38,56.8,4.34,45.08,5.01,38.08,5.76,38.57,7.27
+P3_highPDI_lowIDV,5.42,6.22,22.12,3.42,53.37,3.0,40.42,6.71,35.67,5.49,30.73,5.77
+P4_highUAI_lowIVR,8.75,9.81,27.25,6.55,51.8,1.73,36.97,8.54,33.32,6.45,31.2,10.07
+P5_highMAS_lowUAI,6.48,7.26,29.83,4.54,56.5,1.97,44.54,7.37,38.34,7.88,38.68,9.33
+P6_highLTO_medHighUAI,5.18,5.75,23.33,2.35,53.89,3.8,41.99,4.5,39.88,5.14,36.7,2.45

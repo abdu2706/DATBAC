@@ -9,6 +9,7 @@ from compare import (
     export_subtask3_case_profile_metrics,
     export_subtask3_profile_metric_percentages_compact,
     export_subtask3_profile_metric_percentages,
+    export_profile_metric_ci95,
 )
 from config import (
     DATASET_BASE,
@@ -23,7 +24,48 @@ from config import (
 from data_loader import load_cases_from_xml, load_gold_answers
 from evaluator import compute_subtask3_metrics
 from llm_runner import OllamaRunner
+from quality_checks import (
+    all_profiles_identical,
+    collect_answers_by_model,
+    find_profiles_to_regenerate,
+    validate_cross_profile_outputs,
+    validate_single_answer,
+)
 from subtasks import SubtaskRunner
+
+REGEN_INSTRUCTION = (
+    "Your previous answer was too similar to another profile. "
+    "Keep the same medical facts, but follow the required profile-specific structure more clearly."
+)
+
+REGEN_VALIDATION_INSTRUCTION = (
+    "Your previous answer was incomplete or did not follow the rules. "
+    "Regenerate a complete answer. Keep the same clinical facts and profile style, "
+    "but do not refuse and do not add unsupported information. "
+    "The first sentence must directly answer the question, and the answer must end with full "
+    "sentence punctuation."
+)
+
+REGEN_WARNING_KEYS = {
+    "first sentence not direct answer",
+    "missing ending punctuation",
+    "incomplete ending",
+    "mentions sleep apnea not in note",
+    "unsupported treatment continuation",
+    "refusal text",
+    "scoring tools not requested",
+    "standard of care not asked",
+    "contains labels in neutral profile",
+    "known section does not address question",
+    "known section not grounded in note",
+    "uncertainty not grounded",
+    "missing required structure marker",
+    "missing treating team question",
+    "treating team question not last sentence",
+    "does not match required sentence count",
+    "contains meta-text labels",
+    "overconfident follow-up",
+}
 
 
 def parse_args() -> argparse.Namespace:
@@ -238,6 +280,12 @@ def run_interactive(
         print("\n--- Interactive Outputs ---")
         print(f"Subtask3: {out_st3}")
 
+        warnings = validate_single_answer(out_st3, case, profile_id=pid)
+        if warnings:
+            print("\n[Checks]")
+            for warning in warnings:
+                print(f"- {warning}")
+
         if fixed_case_id:
             print("\nType another question for the same case, or 'exit' to stop.")
 
@@ -291,6 +339,25 @@ def run_batch(
                     print("      Subtask 3: Answer Generation...")
                     result["subtask3"] = runner.run_subtask(3, case, sys_prompt, model)
                     print(f"      -> {result['subtask3'][:80]}...")
+                    result["checks"] = validate_single_answer(
+                        result["subtask3"], case, profile_id=pid
+                    )
+                    if any(w in REGEN_WARNING_KEYS for w in result["checks"]):
+                        print("      [INFO] Regenerating due to validation warnings")
+                        regenerated = runner.run_subtask(
+                            3,
+                            case,
+                            sys_prompt,
+                            model,
+                            extra_instructions=REGEN_VALIDATION_INSTRUCTION,
+                        )
+                        result["subtask3"] = regenerated
+                        result["checks"] = validate_single_answer(
+                            regenerated, case, profile_id=pid
+                        )
+                        result["checks"].append("regenerated_due_to_validation")
+                        print(f"      -> {result['subtask3'][:80]}...")
+
                     if result["subtask3"].startswith("[ERROR]"):
                         result["error"] = result["subtask3"]
                         result["failed_stage"] = stage
@@ -322,6 +389,90 @@ def run_batch(
 
                 all_results[case_id][pid][model] = result
                 save_checkpoint()
+
+        answers_by_model = collect_answers_by_model(all_results[case_id])
+        for model, answers in answers_by_model.items():
+            regen_targets, similar_pairs = find_profiles_to_regenerate(answers, threshold=0.90)
+            if similar_pairs:
+                pairs_text = ", ".join(
+                    f"{a}->{b} ({sim:.2f})" for a, b, sim in similar_pairs
+                )
+                print(f"  [WARN] Similar outputs detected for {model}: {pairs_text}")
+            for pid in regen_targets:
+                if pid not in all_results[case_id]:
+                    continue
+                if model not in all_results[case_id][pid]:
+                    continue
+                print(
+                    f"  [INFO] Regenerating profile {pid} for {model} due to similarity"
+                )
+                sys_prompt = system_prompts[pid]
+                regenerated = runner.run_subtask(
+                    3,
+                    case,
+                    sys_prompt,
+                    model,
+                    extra_instructions=REGEN_INSTRUCTION,
+                )
+                result = all_results[case_id][pid][model]
+                result["subtask3"] = regenerated
+                result["checks"] = validate_single_answer(
+                    regenerated, case, profile_id=pid
+                )
+                result["checks"].append("regenerated_due_to_similarity")
+                if any(w in REGEN_WARNING_KEYS for w in result["checks"]):
+                    regenerated = runner.run_subtask(
+                        3,
+                        case,
+                        sys_prompt,
+                        model,
+                        extra_instructions=REGEN_VALIDATION_INSTRUCTION,
+                    )
+                    result["subtask3"] = regenerated
+                    result["checks"] = validate_single_answer(
+                        regenerated, case, profile_id=pid
+                    )
+                    result["checks"].append("regenerated_due_to_validation")
+                if regenerated.startswith("[ERROR]"):
+                    result["error"] = regenerated
+                    result["failed_stage"] = "subtask3"
+                elif gold_case:
+                    gold_answer_text = gold_case.get("clinician_answer", "")
+                    metrics = compute_subtask3_metrics(
+                        regenerated,
+                        gold_answer_text,
+                        case.get("patient_question", ""),
+                        case.get("clinician_question", ""),
+                        case.get("note_excerpt", ""),
+                    )
+                    result["metrics"] = metrics
+                save_checkpoint()
+
+        answers_by_model = collect_answers_by_model(all_results[case_id])
+        for model, answers in answers_by_model.items():
+            if all_profiles_identical(answers):
+                print(f"  [WARN] All profile outputs identical for {model} in case {case_id}")
+                for pid in answers.keys():
+                    existing = all_results[case_id][pid][model].get("checks", [])
+                    existing.append("all profiles identical")
+                    all_results[case_id][pid][model]["checks"] = list(
+                        dict.fromkeys(existing)
+                    )
+
+        cross_checks = validate_cross_profile_outputs(all_results[case_id], case, case_id=case_id)
+        if cross_checks:
+            for pid, model_map in cross_checks.items():
+                if pid not in all_results[case_id]:
+                    continue
+                for model, warnings in model_map.items():
+                    if model not in all_results[case_id][pid]:
+                        continue
+                    existing = all_results[case_id][pid][model].get("checks", [])
+                    combined = existing + warnings
+                    all_results[case_id][pid][model]["checks"] = list(
+                        dict.fromkeys(combined)
+                    )
+            save_checkpoint()
 
     save_checkpoint()
     return all_results
@@ -394,10 +545,12 @@ def main():
     compact_csv_path = export_subtask3_profile_metric_percentages_compact(
         all_results, args.csv_dir
     )
+    ci95_csv_path = export_profile_metric_ci95(all_results, args.csv_dir)
     print("CSV export:")
     print(f"  - subtask3_case_profile_metrics: {case_profile_csv_path}")
     print(f"  - subtask3_profile_metric_percentages: {summary_csv_path}")
     print(f"  - subtask3_profile_metric_percentages_compact: {compact_csv_path}")
+    print(f"  - profile_metric_ci95: {ci95_csv_path}")
 
 
 if __name__ == "__main__":
