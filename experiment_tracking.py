@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import ntpath
 import os
 import platform
 import re
@@ -41,8 +42,9 @@ class RunArchive:
         # All output overrides are scoped to this run; old files cannot be overwritten.
         paths = {}
         for key, default in [("out", "results.json"), ("answers_out", "answers.json"), ("csv_dir", "exports")]:
-            relative = Path(getattr(args, key) or default)
-            if relative.is_absolute() or relative.anchor or ".." in relative.parts:
+            raw_path = getattr(args, key) or default
+            relative = Path(raw_path)
+            if ntpath.isabs(raw_path) or relative.is_absolute() or relative.anchor or ".." in relative.parts:
                 raise ValueError(f"--{key.replace('_', '-')} must be a relative path within the new run folder")
             paths[key] = self.directory / relative
         reserved = [self.directory / name for name in ("manifest.json", "attempts.jsonl", "source_snapshot")]

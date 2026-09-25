@@ -123,7 +123,14 @@ class ExperimentTests(unittest.TestCase):
             self.assertEqual(second.manifest["status"], "interrupted_or_failed")
 
     def test_reject_unsafe_or_conflicting_output_paths(self):
-        for output in ("../old.json", "/tmp/old.json", "manifest.json", "answers.json"):
+        for output in (
+            "../old.json",
+            "/tmp/old.json",
+            r"C:\tmp\old.json",
+            r"\\server\share\old.json",
+            "manifest.json",
+            "answers.json",
+        ):
             args = self.args()
             args.out = Path(output)
             with self.assertRaises(ValueError):
