@@ -27,16 +27,10 @@ from llm_runner import OllamaRunner
 from quality_checks import (
     all_profiles_identical,
     collect_answers_by_model,
-    find_profiles_to_regenerate,
     validate_cross_profile_outputs,
     validate_single_answer,
 )
 from subtasks import SubtaskRunner
-
-REGEN_INSTRUCTION = (
-    "Your previous answer was too similar to another profile. "
-    "Keep the same medical facts, but follow the required profile-specific structure more clearly."
-)
 
 REGEN_VALIDATION_INSTRUCTION = (
     "Your previous answer was incomplete or did not follow the rules. "
@@ -46,30 +40,14 @@ REGEN_VALIDATION_INSTRUCTION = (
     "sentence punctuation."
 )
 
-REGEN_WARNING_KEYS = {
-    "first sentence not direct answer",
-    "missing ending punctuation",
-    "incomplete ending",
-    "mentions sleep apnea not in note",
-    "unsupported treatment continuation",
-    "refusal text",
-    "scoring tools not requested",
-    "standard of care not asked",
-    "contains labels in neutral profile",
-    "known section does not address question",
-    "known section not grounded in note",
-    "uncertainty not grounded",
-    "missing required structure marker",
-    "missing treating team question",
-    "treating team question not last sentence",
-    "does not match required sentence count",
-    "contains meta-text labels",
-    "overconfident follow-up",
-}
-
-
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run archehr profile x model comparison")
+    parser.add_argument("--experiment-name", default="experiment")
+    parser.add_argument("--quality-mode", choices=["off", "observe", "enforce"], default="observe")
+    parser.add_argument("--processing", choices=["none", "legacy"], default="none",
+                        help="Independent of quality checks; legacy removes profile sentences and truncates")
+    parser.add_argument("--max-retries", type=int, default=1,
+                        help="Maximum validation retries per answer in enforce mode")
     parser.add_argument(
         "--max-cases",
         type=int,
@@ -79,13 +57,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--out",
         type=Path,
-        default=RESULTS_DIR / "results.json",
+        default=None,
         help="Output results file",
     )
     parser.add_argument(
         "--csv-dir",
         type=Path,
-        default=RESULTS_DIR / "exports",
+        default=None,
         help="Output folder for auto-generated CSV files",
     )
     parser.add_argument(
@@ -103,7 +81,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--answers-out",
         type=Path,
-        default=RESULTS_DIR / "answers.json",
+        default=None,
         help="Output answers-only JSON file",
     )
     parser.add_argument(
@@ -275,12 +253,18 @@ def run_interactive(
         )
 
         sys_prompt = system_prompts[pid]
+        runner.context = {"profile_id": pid, "mode": "interactive"}
         out_st3 = runner.run_subtask(3, case, sys_prompt, model)
 
         print("\n--- Interactive Outputs ---")
         print(f"Subtask3: {out_st3}")
 
-        warnings = validate_single_answer(out_st3, case, profile_id=pid)
+        warnings = (validate_single_answer(out_st3, case, profile_id=pid)
+                    if args.quality_mode != "off" else [])
+        if runner.attempt_sink and args.quality_mode != "off":
+            runner.attempt_sink({"event": "interactive_validation",
+                                 "case_id": interactive_case_id, "profile_id": pid,
+                                 "model": model, "checks": warnings})
         if warnings:
             print("\n[Checks]")
             for warning in warnings:
@@ -301,185 +285,94 @@ def run_batch(
     selected_profiles: list[dict],
     runner: SubtaskRunner,
 ) -> dict:
+    if args.max_retries < 0:
+        raise ValueError("--max-retries must be nonnegative")
     all_results: dict = {}
-
-    def save_checkpoint() -> None:
-        _save_json_atomic(args.out, all_results)
-
     ordered_case_ids = _sorted_case_ids(cases)
     if args.case_id:
         if args.case_id not in cases:
             raise ValueError(f"Case id '{args.case_id}' not found in split {DATASET_SPLIT}")
         ordered_case_ids = [args.case_id]
     if args.max_cases > 0:
-        ordered_case_ids = ordered_case_ids[: args.max_cases]
+        ordered_case_ids = ordered_case_ids[:args.max_cases]
+
+    def checkpoint():
+        _save_json_atomic(args.out, all_results)
+        _save_json_atomic(args.answers_out, _build_answers_only(all_results))
 
     for case_id in ordered_case_ids:
-        print(f"\n{'=' * 60}")
-        print(f"CASE {case_id}: {cases[case_id]['clinical_specialty']}")
-        print(f"{'=' * 60}")
-
         case = cases[case_id]
         gold_case = gold.get(case_id)
         all_results[case_id] = {}
-
         for profile in selected_profiles:
             pid = profile["profile_id"]
-            sys_prompt = system_prompts[pid]
             all_results[case_id][pid] = {}
-
-            print(f"\n  Profile: {profile['name']}")
-
             for model in selected_models:
-                print(f"\n    Model: {model}")
-                result: dict = {}
-                stage = "init"
-                try:
-                    stage = "subtask3"
-                    print("      Subtask 3: Answer Generation...")
-                    result["subtask3"] = runner.run_subtask(3, case, sys_prompt, model)
-                    print(f"      -> {result['subtask3'][:80]}...")
-                    result["checks"] = validate_single_answer(
-                        result["subtask3"], case, profile_id=pid
-                    )
-                    if any(w in REGEN_WARNING_KEYS for w in result["checks"]):
-                        print("      [INFO] Regenerating due to validation warnings")
-                        regenerated = runner.run_subtask(
-                            3,
-                            case,
-                            sys_prompt,
-                            model,
-                            extra_instructions=REGEN_VALIDATION_INSTRUCTION,
-                        )
-                        result["subtask3"] = regenerated
-                        result["checks"] = validate_single_answer(
-                            regenerated, case, profile_id=pid
-                        )
-                        result["checks"].append("regenerated_due_to_validation")
-                        print(f"      -> {result['subtask3'][:80]}...")
-
-                    if result["subtask3"].startswith("[ERROR]"):
-                        result["error"] = result["subtask3"]
-                        result["failed_stage"] = stage
-                        print("      [WARN] Model returned error output; metrics skipped")
-                    elif gold_case:
-                        gold_answer_text = gold_case.get("clinician_answer", "")
-                        metrics = compute_subtask3_metrics(
-                            result["subtask3"],
-                            gold_answer_text,
-                            case.get("patient_question", ""),
-                            case.get("clinician_question", ""),
-                            case.get("note_excerpt", ""),
-                        )
-                        result["metrics"] = metrics
-                        print(
-                            "      Metrics: "
-                            f"BLEU={metrics['st3_bleu']:.3f} "
-                            f"ROUGE={metrics['st3_rouge']:.3f} "
-                            f"SARI={metrics['st3_sari']:.3f} "
-                            f"BERTScore={metrics['st3_bertscore']:.3f} "
-                            f"AlignScore={metrics['st3_alignscore']:.3f} "
-                            f"MEDCON={metrics['st3_medcon']:.3f}"
-                        )
-                except Exception as e:
-                    result["error"] = str(e)
-                    result["failed_stage"] = stage
-                    result["traceback"] = traceback.format_exc()
-                    print(f"      [WARN] Model run failed at {stage} and was skipped: {e}")
-
+                result = {"attempts": [], "checks": [], "quality_mode": args.quality_mode}
                 all_results[case_id][pid][model] = result
-                save_checkpoint()
-
-        answers_by_model = collect_answers_by_model(all_results[case_id])
-        for model, answers in answers_by_model.items():
-            regen_targets, similar_pairs = find_profiles_to_regenerate(answers, threshold=0.90)
-            if similar_pairs:
-                pairs_text = ", ".join(
-                    f"{a}->{b} ({sim:.2f})" for a, b, sim in similar_pairs
-                )
-                print(f"  [WARN] Similar outputs detected for {model}: {pairs_text}")
-            for pid in regen_targets:
-                if pid not in all_results[case_id]:
-                    continue
-                if model not in all_results[case_id][pid]:
-                    continue
-                print(
-                    f"  [INFO] Regenerating profile {pid} for {model} due to similarity"
-                )
-                sys_prompt = system_prompts[pid]
-                regenerated = runner.run_subtask(
-                    3,
-                    case,
-                    sys_prompt,
-                    model,
-                    extra_instructions=REGEN_INSTRUCTION,
-                )
-                result = all_results[case_id][pid][model]
-                result["subtask3"] = regenerated
-                result["checks"] = validate_single_answer(
-                    regenerated, case, profile_id=pid
-                )
-                result["checks"].append("regenerated_due_to_similarity")
-                if any(w in REGEN_WARNING_KEYS for w in result["checks"]):
-                    regenerated = runner.run_subtask(
-                        3,
-                        case,
-                        sys_prompt,
-                        model,
-                        extra_instructions=REGEN_VALIDATION_INSTRUCTION,
-                    )
-                    result["subtask3"] = regenerated
-                    result["checks"] = validate_single_answer(
-                        regenerated, case, profile_id=pid
-                    )
-                    result["checks"].append("regenerated_due_to_validation")
-                if regenerated.startswith("[ERROR]"):
-                    result["error"] = regenerated
-                    result["failed_stage"] = "subtask3"
-                elif gold_case:
-                    gold_answer_text = gold_case.get("clinician_answer", "")
-                    metrics = compute_subtask3_metrics(
-                        regenerated,
-                        gold_answer_text,
-                        case.get("patient_question", ""),
-                        case.get("clinician_question", ""),
-                        case.get("note_excerpt", ""),
-                    )
-                    result["metrics"] = metrics
-                save_checkpoint()
-
-        answers_by_model = collect_answers_by_model(all_results[case_id])
-        for model, answers in answers_by_model.items():
-            if all_profiles_identical(answers):
-                print(f"  [WARN] All profile outputs identical for {model} in case {case_id}")
-                for pid in answers.keys():
-                    existing = all_results[case_id][pid][model].get("checks", [])
-                    existing.append("all profiles identical")
-                    all_results[case_id][pid][model]["checks"] = list(
-                        dict.fromkeys(existing)
-                    )
-
-        cross_checks = validate_cross_profile_outputs(all_results[case_id], case, case_id=case_id)
-        if cross_checks:
-            for pid, model_map in cross_checks.items():
-                if pid not in all_results[case_id]:
-                    continue
-                for model, warnings in model_map.items():
-                    if model not in all_results[case_id][pid]:
-                        continue
-                    existing = all_results[case_id][pid][model].get("checks", [])
-                    combined = existing + warnings
-                    all_results[case_id][pid][model]["checks"] = list(
-                        dict.fromkeys(combined)
-                    )
-            save_checkpoint()
-
-    save_checkpoint()
+                budget = args.max_retries if args.quality_mode == "enforce" else 0
+                try:
+                    for attempt_index in range(budget + 1):
+                        runner.context = {"profile_id": pid, "attempt_index": attempt_index,
+                                          "reason": "validation_retry" if attempt_index else "initial"}
+                        answer = runner.run_subtask(
+                            3, case, system_prompts[pid], model,
+                            extra_instructions=REGEN_VALIDATION_INSTRUCTION if attempt_index else None,
+                        )
+                        attempt = dict(runner.last_attempt)
+                        attempt.update(profile_id=pid, attempt_index=attempt_index,
+                                       reason="validation_retry" if attempt_index else "initial")
+                        result["attempts"].append(attempt)
+                        result["subtask3"] = answer
+                        result["selected_attempt"] = attempt_index
+                        checkpoint()
+                        if answer.startswith("[ERROR]"):
+                            result["error"] = answer
+                            result["failed_stage"] = "subtask3"
+                            checkpoint()
+                            break
+                        warnings = (validate_single_answer(answer, case, profile_id=pid)
+                                    if args.quality_mode != "off" else [])
+                        attempt["checks"] = warnings
+                        result["checks"] = warnings
+                        checkpoint()
+                        if not warnings:
+                            break
+                    if "error" not in result and gold_case:
+                        result["metrics"] = compute_subtask3_metrics(
+                            result["subtask3"], gold_case.get("clinician_answer", ""),
+                            case.get("patient_question", ""),
+                            case.get("clinician_question", ""), case.get("note_excerpt", ""),
+                        )
+                except Exception as exc:
+                    result["error"] = str(exc)
+                    result["failed_stage"] = "generation_validation_or_scoring"
+                    result["traceback"] = traceback.format_exc()
+                checkpoint()
+                print(f"Case {case_id} / {pid} / {model}: {len(result['attempts'])} attempt(s)")
+        if args.quality_mode != "off":
+            # Similarity is an observation, never a reason to force a different answer.
+            cross = validate_cross_profile_outputs(all_results[case_id], case, case_id=case_id)
+            for pid, models in cross.items():
+                for model, warnings in models.items():
+                    result = all_results[case_id].get(pid, {}).get(model)
+                    if result is not None:
+                        result["checks"] = list(dict.fromkeys(result["checks"] + warnings))
+            for model, answers in collect_answers_by_model(all_results[case_id]).items():
+                if len(answers) > 1 and all_profiles_identical(answers):
+                    for pid in answers:
+                        all_results[case_id][pid][model]["checks"].append("all profiles identical")
+            checkpoint()
+    checkpoint()
     return all_results
 
 
 def main():
     args = parse_args()
+    from experiment_tracking import RunArchive
+    archive = RunArchive(args)
+    import atexit
+    atexit.register(archive.mark_interrupted)
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.csv_dir.mkdir(parents=True, exist_ok=True)
@@ -494,7 +387,7 @@ def main():
     gold = load_gold_answers(eval_key_path) if eval_key_path else load_gold_answers()
 
     llm = OllamaRunner()
-    runner = SubtaskRunner(llm)
+    runner = SubtaskRunner(llm, processing=args.processing, attempt_sink=archive.record_attempt)
     system_prompts = get_all_system_prompts(HOFSTEDE_PROFILES)
 
     selected_models = MODELS
@@ -512,7 +405,11 @@ def main():
             )
         selected_profiles = [profiles_by_id[args.profile]]
 
+    archive.record_configuration(cases, system_prompts, selected_models, selected_profiles,
+                                 eval_key_path)
     if args.interactive:
+        if args.quality_mode == "enforce":
+            raise ValueError("Interactive mode supports off/observe; use batch for enforce retries")
         run_interactive(
             args,
             cases,
@@ -521,6 +418,7 @@ def main():
             selected_profiles,
             runner,
         )
+        archive.finish()
         return
 
     all_results = run_batch(
@@ -551,6 +449,9 @@ def main():
     print(f"  - subtask3_profile_metric_percentages: {summary_csv_path}")
     print(f"  - subtask3_profile_metric_percentages_compact: {compact_csv_path}")
     print(f"  - profile_metric_ci95: {ci95_csv_path}")
+    failures = sum("error" in result for profiles in all_results.values()
+                   for models in profiles.values() for result in models.values())
+    archive.finish(failures)
 
 
 if __name__ == "__main__":
