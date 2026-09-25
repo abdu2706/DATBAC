@@ -60,8 +60,11 @@ def _strip_profile_mentions(text: str) -> str:
 
 
 class SubtaskRunner:
-    def __init__(self, llm: OllamaRunner):
+    def __init__(self, llm: OllamaRunner, processing: str = "legacy", attempt_sink=None):
         self.llm = llm
+        self.processing = processing
+        self.attempt_sink = attempt_sink
+        self.last_attempt = None
 
     def run_subtask(
         self,
@@ -79,6 +82,21 @@ class SubtaskRunner:
         if extra_instructions:
             user_prompt = f"{extra_instructions}\n\n{user_prompt}"
 
+        self.last_attempt = None
         raw = self.llm.generate(model, system_prompt, user_prompt)
-        cleaned = _strip_profile_mentions(raw)
-        return _limit_words(cleaned, 75)
+        cleaned = (_limit_words(_strip_profile_mentions(raw), 75)
+                   if self.processing == "legacy" else raw)
+        self.last_attempt = {
+            **getattr(self, "context", {}),
+            "model": model, "case_id": case.get("case_id"),
+            "system_prompt": system_prompt, "user_prompt": user_prompt,
+            "extra_instructions": extra_instructions,
+            "raw_response": raw, "processed_response": cleaned,
+            "raw_word_count": len(raw.split()),
+            "processed_word_count": len(cleaned.split()),
+            "processing": self.processing,
+        }
+        # Persist before validation/scoring so a later failure cannot discard output.
+        if self.attempt_sink:
+            self.attempt_sink(self.last_attempt)
+        return cleaned

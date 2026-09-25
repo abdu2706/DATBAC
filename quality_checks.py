@@ -521,8 +521,12 @@ def validate_profile_structure(profile_id: str, answer: str, case: dict) -> list
 def validate_single_answer(answer: str, case: dict, profile_id: str | None = None) -> list[str]:
     warnings: list[str] = []
     cleaned = (answer or "").strip()
-    if not cleaned or cleaned.startswith("[ERROR]"):
+    if not cleaned:
+        return ["empty answer"]
+    if cleaned.startswith("[ERROR]"):
         return warnings
+    if len(cleaned.split()) > 75:
+        warnings.append("exceeds 75 words")
 
     if _has_profile_mentions(cleaned):
         warnings.append("mentions cultural profile terms")
