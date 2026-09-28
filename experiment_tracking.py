@@ -47,7 +47,7 @@ class RunArchive:
             if ntpath.isabs(raw_path) or relative.is_absolute() or relative.anchor or ".." in relative.parts:
                 raise ValueError(f"--{key.replace('_', '-')} must be a relative path within the new run folder")
             paths[key] = self.directory / relative
-        reserved = [self.directory / name for name in ("manifest.json", "attempts.jsonl", "source_snapshot")]
+        reserved = [self.directory / name for name in ("manifest.json", "attempts.jsonl", "source_snapshot", "profile_prompts.json")]
         all_paths = list(paths.values()) + reserved
         for i, left in enumerate(all_paths):
             for right in all_paths[i+1:]:
@@ -57,7 +57,7 @@ class RunArchive:
         for key, path in paths.items():
             setattr(args, key, path)
         self.manifest = {
-            "schema_version": 2, "run_id": run_id, "started_at": now(), "status": "running",
+            "schema_version": 3, "run_id": run_id, "started_at": now(), "status": "running",
             "arguments": requested, "outputs": paths, "python": platform.python_version(),
             "git_commit": git("rev-parse", "HEAD"), "git_status": git("status", "--porcelain"),
             "generation": {"seed": DEFAULT_SEED, "temperature": DEFAULT_TEMPERATURE,
@@ -101,7 +101,7 @@ class RunArchive:
             dataset_split=DATASET_SPLIT, dataset=fingerprint(XML_PATH),
             evaluation_key=fingerprint(eval_key_path or KEY_PATH),
             case_ids=ids, profiles=profiles, models=models,
-            system_prompts={p["profile_id"]: prompts[p["profile_id"]] for p in profiles},
+            system_prompts_by_model=prompts,
             model_identity_note="Model tags are recorded; immutable Ollama model digests are not captured.",
         )
         self.save()
