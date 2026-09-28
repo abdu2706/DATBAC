@@ -12,9 +12,9 @@ DEFAULT_SEED = 42
 
 MODELS = [
     "llama3.1:8b",
-    "qwen3:8b",
-    "gemma4:12b",
-    "medgemma:4b",
+#    "qwen3:8b",
+#    "gemma4:12b",
+#    "medgemma:4b",
 ]
 
 WORKSPACE_ROOT = Path(__file__).resolve().parent.parent
