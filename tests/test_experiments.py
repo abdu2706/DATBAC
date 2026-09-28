@@ -95,7 +95,7 @@ class ExperimentTests(unittest.TestCase):
              patch("sys.argv", ["main.py", "--quality-mode", "off", "--max-cases", "1"]), \
              patch.object(main, "load_cases_from_xml", return_value={"1": {"case_id": "1"}}), \
              patch.object(main, "load_gold_answers", return_value={"1": {"clinician_answer": "Synthetic answer."}}), \
-             patch.object(main, "OllamaRunner", return_value=FakeLLM(["Synthetic answer."] * len(main.HOFSTEDE_PROFILES))):
+             patch.object(main, "OllamaRunner", return_value=FakeLLM(["Synthetic answer."] * (2 * len(main.HOFSTEDE_PROFILES)))):
             main.main()
             run = next((Path(tmp) / "runs").iterdir())
             manifest = json.loads((run / "manifest.json").read_text())

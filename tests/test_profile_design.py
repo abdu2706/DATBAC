@@ -72,7 +72,7 @@ class DesignTests(unittest.TestCase):
             run = next((Path(tmp)/'runs').iterdir())
             manifest = json.loads((run/'manifest.json').read_text())
             self.assertEqual(manifest['status'], 'completed')
-            self.assertEqual(manifest['schema_version'], 2)
+            self.assertEqual(manifest['schema_version'], 3)
             self.assertEqual(len((run/'attempts.jsonl').read_text().splitlines()), 70)
             self.assertEqual(len(manifest['profiles']), 14)
             for file in (run/'exports').glob('*.csv'):

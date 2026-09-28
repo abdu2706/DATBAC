@@ -24,6 +24,7 @@ from config import (
 from data_loader import load_cases_from_xml, load_gold_answers
 from evaluator import compute_subtask3_metrics
 from llm_runner import OllamaRunner
+from profile_prompt_cache import prepare_profile_prompts, resolve_prompt
 from quality_checks import (
     all_profiles_identical,
     collect_answers_by_model,
@@ -41,6 +42,8 @@ REGEN_VALIDATION_INSTRUCTION = (
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run archehr profile x model comparison")
     parser.add_argument("--experiment-name", default="experiment")
+    parser.add_argument("--profile-prompts", type=Path, default=None,
+                        help="Reuse a previous run profile_prompts.json for the same models and profiles")
     parser.add_argument("--quality-mode", choices=["off", "observe", "enforce"], default="observe")
     parser.add_argument("--processing", choices=["none", "legacy"], default="none",
                         help="Independent of quality checks; legacy removes profile sentences and truncates")
@@ -250,7 +253,7 @@ def run_interactive(
             f"\nMatched case={interactive_case_id} specialty={case.get('clinical_specialty', '').strip()}"
         )
 
-        sys_prompt = system_prompts[pid]
+        sys_prompt = resolve_prompt(system_prompts, model, pid)
         runner.context = {"profile_id": pid, "mode": "interactive"}
         out_st3 = runner.run_subtask(3, case, sys_prompt, model)
 
@@ -314,7 +317,7 @@ def run_batch(
                         runner.context = {"profile_id": pid, "attempt_index": attempt_index,
                                           "reason": "validation_retry" if attempt_index else "initial"}
                         answer = runner.run_subtask(
-                            3, case, system_prompts[pid], model,
+                            3, case, resolve_prompt(system_prompts, model, pid), model,
                             extra_instructions=REGEN_VALIDATION_INSTRUCTION if attempt_index else None,
                         )
                         attempt = dict(runner.last_attempt)
@@ -386,7 +389,6 @@ def main():
 
     llm = OllamaRunner()
     runner = SubtaskRunner(llm, processing=args.processing, attempt_sink=archive.record_attempt)
-    system_prompts = get_all_system_prompts(HOFSTEDE_PROFILES)
 
     selected_models = MODELS
     if args.model:
@@ -403,6 +405,14 @@ def main():
             )
         selected_profiles = [profiles_by_id[args.profile]]
 
+    archive.manifest.update(prompt_strategy="model_generated_two_stage",
+                            profile_prompts_file="profile_prompts.json",
+                            profile_prompt_reuse_source=str(args.profile_prompts) if args.profile_prompts else None)
+    archive.save()
+    system_prompts = prepare_profile_prompts(
+        llm, selected_models, selected_profiles, archive.directory / "profile_prompts.json",
+        reuse_path=args.profile_prompts,
+    )
     archive.record_configuration(cases, system_prompts, selected_models, selected_profiles,
                                  eval_key_path)
     if args.interactive:
