@@ -185,55 +185,6 @@ TREATMENT_TERMS = [
     "intubation",
 ]
 
-PROFILE_STRUCTURE_REQUIREMENTS = {
-    "P0_neutral": {
-        "min_sentences": 2,
-        "max_sentences": 3,
-    },
-    "P2_lowPDI_highIDV": {
-        "min_sentences": 3,
-        "max_sentences": 3,
-        "markers": [
-            r"You can ask your treating team",
-            r"\?",
-        ],
-    },
-    "P3_highPDI_lowIDV": {
-        "min_sentences": 3,
-        "max_sentences": 3,
-        "markers": [
-            r"\byou and your family\b",
-        ],
-    },
-    "P6_highLTO_medHighUAI": {
-        "min_sentences": 3,
-        "max_sentences": 3,
-        "markers": [
-            r"\bover time\b|\bfollow-up\b|\bmonitoring\b",
-        ],
-    },
-    "P1_highPDI_highUAI": {
-        "markers": [
-            r"\b1\.\s*Conclusion:",
-            r"\b2\.\s*Evidence:",
-            r"\b3\.\s*Next step:",
-        ]
-    },
-    "P4_highUAI_lowIVR": {
-        "markers": [
-            r"^What is known:",
-            r"^What is uncertain:",
-            r"^What to do next:",
-        ]
-    },
-    "P5_highMAS_lowUAI": {
-        "markers": [
-            r"^Bottom line:",
-            r"^Why it matters:",
-            r"^Intended goal:",
-        ]
-    },
-}
 
 CONCLUSION_SIMILARITY_MIN = 0.45
 
@@ -383,22 +334,9 @@ def normalized_similarity(text_a: str, text_b: str) -> float:
     return SequenceMatcher(None, a, b).ratio()
 
 
-def _sentence_count(text: str) -> int:
-    parts = re.split(r"(?<=[.!?])\s+", (text or "").strip())
-    return len([p for p in parts if p])
-
-
 def _first_sentence(text: str) -> str:
     parts = re.split(r"(?<=[.!?])\s+", (text or "").strip())
     return parts[0] if parts else ""
-
-
-def _section_line(text: str, heading: str) -> str:
-    for line in (text or "").splitlines():
-        stripped = line.strip()
-        if stripped.lower().startswith(heading.lower()):
-            return stripped
-    return ""
 
 
 def _is_direct_answer_first_sentence(
@@ -435,87 +373,6 @@ def _is_direct_answer_first_sentence(
 
     source_tokens = _token_set(question_text) | _token_set(note_text)
     return bool(_token_set(first) & source_tokens)
-
-
-def validate_profile_structure(profile_id: str, answer: str, case: dict) -> list[str]:
-    warnings: list[str] = []
-    reqs = PROFILE_STRUCTURE_REQUIREMENTS.get(profile_id)
-    if not reqs:
-        return warnings
-
-    if "min_sentences" in reqs:
-        count = _sentence_count(answer)
-        min_s = reqs.get("min_sentences", 0)
-        max_s = reqs.get("max_sentences", 999)
-        if count < min_s or count > max_s:
-            warnings.append("does not match required sentence count")
-
-    markers = reqs.get("markers", [])
-    if profile_id == "P2_lowPDI_highIDV":
-        if not re.search(
-            r"You can ask your treating team(?:\s+whether|:).*\?",
-            answer,
-            flags=re.IGNORECASE,
-        ):
-            warnings.append("missing treating team question")
-        sentences = [s for s in re.split(r"(?<=[.!?])\s+", answer.strip()) if s]
-        if sentences and not sentences[-1].strip().endswith("?"):
-            warnings.append("treating team question not last sentence")
-        question_text = " ".join(
-            [
-                case.get("patient_question", ""),
-                case.get("clinician_question", ""),
-            ]
-        ).strip()
-        if _mentions_scoring_tools_without_prompt(answer, question_text):
-            warnings.append("scoring tools not requested")
-        return warnings
-
-    if profile_id == "P0_neutral":
-        if re.search(r"\bReason:\b|\bCautious follow-up:\b", answer, flags=re.IGNORECASE):
-            warnings.append("contains labels in neutral profile")
-
-    if profile_id == "P4_highUAI_lowIVR":
-        question_text = " ".join(
-            [
-                case.get("patient_question", ""),
-                case.get("clinician_question", ""),
-            ]
-        ).strip()
-        note_text = case.get("note_excerpt", "")
-        question_tokens = _token_set(question_text)
-        note_tokens = _token_set(note_text)
-
-        known_line = _section_line(answer, "What is known:")
-        uncertain_line = _section_line(answer, "What is uncertain:")
-
-        if known_line:
-            known_tokens = _token_set(known_line)
-            if question_tokens and not (known_tokens & question_tokens):
-                warnings.append("known section does not address question")
-            if not (known_tokens & note_tokens):
-                warnings.append("known section not grounded in note")
-
-        if uncertain_line:
-            uncertain_tokens = _token_set(uncertain_line)
-            if not (uncertain_tokens & note_tokens):
-                warnings.append("uncertainty not grounded")
-            if any(phrase in uncertain_line.lower() for phrase in STANDARD_OF_CARE_PHRASES):
-                if not any(phrase in question_text.lower() for phrase in STANDARD_OF_CARE_PHRASES):
-                    warnings.append("standard of care not asked")
-
-    if profile_id == "P6_highLTO_medHighUAI":
-        note_text = case.get("note_excerpt", "").lower()
-        if re.search(r"monitoring will continue|will continue to monitor", answer, flags=re.IGNORECASE):
-            if "monitor" not in note_text:
-                warnings.append("overconfident follow-up")
-
-    for pattern in markers:
-        if not re.search(pattern, answer, flags=re.IGNORECASE | re.MULTILINE):
-            warnings.append("missing required structure marker")
-            break
-
-    return warnings
 
 
 def validate_single_answer(answer: str, case: dict, profile_id: str | None = None) -> list[str]:
@@ -586,8 +443,6 @@ def validate_single_answer(answer: str, case: dict, profile_id: str | None = Non
     if _has_unsupported_causality(cleaned, note_text, question_text):
         warnings.append("possible unsupported causal claim")
 
-    if profile_id:
-        warnings.extend(validate_profile_structure(profile_id, cleaned, case))
 
     return warnings
 

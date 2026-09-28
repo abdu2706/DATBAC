@@ -91,12 +91,12 @@ def _mean_ci95(values: list[float]) -> tuple[float, float]:
 
 def build_profile_metric_ci95_table(results: dict) -> list[dict]:
     metric_keys = [
-        "st3_bleu_pct",
-        "st3_rouge_pct",
-        "st3_sari_pct",
-        "st3_bertscore_pct",
-        "st3_alignscore_pct",
-        "st3_medcon_pct",
+        "st3_bleu_local_pct",
+        "st3_rouge_l_local_pct",
+        "st3_sari_unigram_proxy_pct",
+        "st3_token_overlap_f1_proxy_pct",
+        "st3_weighted_overlap_proxy_pct",
+        "st3_medical_lexical_f1_proxy_pct",
     ]
     profile_metrics: dict[str, dict[str, list[float]]] = defaultdict(lambda: defaultdict(list))
 
@@ -164,12 +164,12 @@ def summarize_profile_model_metric(results: dict, metric: str) -> dict[str, dict
 
 def build_subtask3_metric_percentage_table(results: dict) -> list[dict]:
     metric_keys = [
-        "st3_bleu_pct",
-        "st3_rouge_pct",
-        "st3_sari_pct",
-        "st3_bertscore_pct",
-        "st3_alignscore_pct",
-        "st3_medcon_pct",
+        "st3_bleu_local_pct",
+        "st3_rouge_l_local_pct",
+        "st3_sari_unigram_proxy_pct",
+        "st3_token_overlap_f1_proxy_pct",
+        "st3_weighted_overlap_proxy_pct",
+        "st3_medical_lexical_f1_proxy_pct",
     ]
     rows: list[dict] = []
     for case_id, profiles in sorted(results.items(), key=lambda x: x[0]):
@@ -201,18 +201,18 @@ def build_subtask3_metric_percentage_table(results: dict) -> list[dict]:
 
 def build_subtask3_case_profile_metrics_table(results: dict) -> list[dict]:
     metric_keys = [
-        "st3_bleu",
-        "st3_rouge",
-        "st3_sari",
-        "st3_bertscore",
-        "st3_alignscore",
-        "st3_medcon",
-        "st3_bleu_pct",
-        "st3_rouge_pct",
-        "st3_sari_pct",
-        "st3_bertscore_pct",
-        "st3_alignscore_pct",
-        "st3_medcon_pct",
+        "st3_bleu_local",
+        "st3_rouge_l_local",
+        "st3_sari_unigram_proxy",
+        "st3_token_overlap_f1_proxy",
+        "st3_weighted_overlap_proxy",
+        "st3_medical_lexical_f1_proxy",
+        "st3_bleu_local_pct",
+        "st3_rouge_l_local_pct",
+        "st3_sari_unigram_proxy_pct",
+        "st3_token_overlap_f1_proxy_pct",
+        "st3_weighted_overlap_proxy_pct",
+        "st3_medical_lexical_f1_proxy_pct",
     ]
     rows: list[dict] = []
 
@@ -243,12 +243,12 @@ def export_subtask3_profile_metric_percentages(results: dict, output_dir: Path) 
     fieldnames = [
         "case_id",
         "profile_id",
-        "st3_bleu_pct",
-        "st3_rouge_pct",
-        "st3_sari_pct",
-        "st3_bertscore_pct",
-        "st3_alignscore_pct",
-        "st3_medcon_pct",
+        "st3_bleu_local_pct",
+        "st3_rouge_l_local_pct",
+        "st3_sari_unigram_proxy_pct",
+        "st3_token_overlap_f1_proxy_pct",
+        "st3_weighted_overlap_proxy_pct",
+        "st3_medical_lexical_f1_proxy_pct",
         "answer",
     ]
     with path.open("w", encoding="utf-8", newline="") as f:
@@ -266,12 +266,12 @@ def export_subtask3_profile_metric_percentages_compact(results: dict, output_dir
     path = output_dir / "subtask3_profile_metric_percentages_compact.csv"
 
     metric_keys = [
-        "st3_bleu_pct",
-        "st3_rouge_pct",
-        "st3_sari_pct",
-        "st3_bertscore_pct",
-        "st3_alignscore_pct",
-        "st3_medcon_pct",
+        "st3_bleu_local_pct",
+        "st3_rouge_l_local_pct",
+        "st3_sari_unigram_proxy_pct",
+        "st3_token_overlap_f1_proxy_pct",
+        "st3_weighted_overlap_proxy_pct",
+        "st3_medical_lexical_f1_proxy_pct",
     ]
     fieldnames = ["case_id", "profile_id", *metric_keys]
 
@@ -312,12 +312,12 @@ def export_profile_metric_ci95(results: dict, output_dir: Path) -> Path:
     path = output_dir / "profile_metric_ci95.csv"
 
     metric_keys = [
-        "st3_bleu_pct",
-        "st3_rouge_pct",
-        "st3_sari_pct",
-        "st3_bertscore_pct",
-        "st3_alignscore_pct",
-        "st3_medcon_pct",
+        "st3_bleu_local_pct",
+        "st3_rouge_l_local_pct",
+        "st3_sari_unigram_proxy_pct",
+        "st3_token_overlap_f1_proxy_pct",
+        "st3_weighted_overlap_proxy_pct",
+        "st3_medical_lexical_f1_proxy_pct",
     ]
     fieldnames = ["profile_id"]
     for key in metric_keys:
@@ -343,18 +343,18 @@ def export_subtask3_case_profile_metrics(results: dict, output_dir: Path) -> Pat
         "case_id",
         "profile_id",
         "model",
-        "st3_bleu",
-        "st3_rouge",
-        "st3_sari",
-        "st3_bertscore",
-        "st3_alignscore",
-        "st3_medcon",
-        "st3_bleu_pct",
-        "st3_rouge_pct",
-        "st3_sari_pct",
-        "st3_bertscore_pct",
-        "st3_alignscore_pct",
-        "st3_medcon_pct",
+        "st3_bleu_local",
+        "st3_rouge_l_local",
+        "st3_sari_unigram_proxy",
+        "st3_token_overlap_f1_proxy",
+        "st3_weighted_overlap_proxy",
+        "st3_medical_lexical_f1_proxy",
+        "st3_bleu_local_pct",
+        "st3_rouge_l_local_pct",
+        "st3_sari_unigram_proxy_pct",
+        "st3_token_overlap_f1_proxy_pct",
+        "st3_weighted_overlap_proxy_pct",
+        "st3_medical_lexical_f1_proxy_pct",
         "answer",
     ]
     with path.open("w", encoding="utf-8", newline="") as f:

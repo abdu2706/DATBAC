@@ -57,12 +57,12 @@ class RunArchive:
         for key, path in paths.items():
             setattr(args, key, path)
         self.manifest = {
-            "schema_version": 1, "run_id": run_id, "started_at": now(), "status": "running",
+            "schema_version": 2, "run_id": run_id, "started_at": now(), "status": "running",
             "arguments": requested, "outputs": paths, "python": platform.python_version(),
             "git_commit": git("rev-parse", "HEAD"), "git_status": git("status", "--porcelain"),
             "generation": {"seed": DEFAULT_SEED, "temperature": DEFAULT_TEMPERATURE,
                            "max_tokens": DEFAULT_MAX_TOKENS, "ollama_url": OLLAMA_BASE_URL},
-            "metric_implementation": "custom local scorers; BERTScore/AlignScore are overlap proxies",
+            "metric_implementation": "Exploratory local BLEU/ROUGE-L and unigram SARI, token-overlap, weighted-overlap, medical-lexical proxies; not official ARCHER scores",
             "similarity_retries": False,
         }
         # Capture the actual source, including uncommitted changes, without clinical data.

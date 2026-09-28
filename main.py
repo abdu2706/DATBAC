@@ -33,11 +33,9 @@ from quality_checks import (
 from subtasks import SubtaskRunner
 
 REGEN_VALIDATION_INSTRUCTION = (
-    "Your previous answer was incomplete or did not follow the rules. "
-    "Regenerate a complete answer. Keep the same clinical facts and profile style, "
-    "but do not refuse and do not add unsupported information. "
-    "The first sentence must directly answer the question, and the answer must end with full "
-    "sentence punctuation."
+    "Revise the answer to follow the system rules. Recheck every clinical claim against the note; "
+    "remove unsupported claims and state evidence limitations where needed. "
+    "Return only a complete answer of at most 75 words."
 )
 
 def parse_args() -> argparse.Namespace:
@@ -87,7 +85,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--plot-metric",
         type=str,
-        default="st3_bleu_pct",
+        default="st3_bleu_local_pct",
         help="Metric to visualize in profile-vs-model plot",
     )
     parser.add_argument(
