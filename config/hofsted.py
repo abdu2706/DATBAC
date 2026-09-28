@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+
 HOFSTEDE_DIMENSIONS = {
     "PDI": {
         "name": "Power Distance Index",
@@ -63,74 +65,10 @@ HOFSTEDE_DIMENSIONS = {
     },
 }
 
-PROFILE_TEMPLATES = {
-    "P0_neutral": (
-        "Write 2-3 plain, balanced sentences with no labels.\n"
-        "Sentence 1 must directly answer the question.\n"
-        "Sentence 2 gives a brief reason from the clinical note.\n"
-        "Sentence 3 adds cautious follow-up only if needed, using phrases like "
-        "'Follow-up may include...' or 'The treating doctor can clarify...'."
-    ),
-    "P1_highPDI_highUAI": (
-        "Write in a formal, clinician-like tone with numbered points.\n"
-        "Structure (use numbered points with labels):\n"
-        "1. Conclusion: Direct answer.\n"
-        "2. Evidence: Support from the clinical note.\n"
-        "3. Next step: Cautious follow-up; if uncertain, use 'Ask your treating team whether any follow-up is needed.'.\n"
-        "Use decisive but medically cautious wording. Do not recommend continuing treatment "
-        "unless the note explicitly says so."
-    ),
-    "P2_lowPDI_highIDV": (
-        "Write in a collaborative, autonomy-supporting tone.\n"
-        "Write three sentences with no labels.\n"
-        "Sentence 1 must directly answer the question.\n"
-        "Sentence 2 explains the reasoning in patient-friendly language.\n"
-        "Sentence 3 must be a complete question starting with "
-        "'You can ask your treating team whether ...?'.\n"
-        "For prognosis questions, say the prognosis appears poor if supported and add that the exact time is difficult to predict.\n"
-        "Do not mention prognostic scoring tools unless the question asks for them."
-    ),
-    "P3_highPDI_lowIDV": (
-        "Write in a respectful and family-oriented tone.\n"
-        "Write three sentences with no labels.\n"
-        "Sentence 1 acknowledges concern for the patient/family.\n"
-        "Sentence 2 gives a direct medical answer.\n"
-        "Sentence 3 encourages the patient and family to discuss the plan with the treating doctor.\n"
-        "Use the phrase 'you and your family' once."
-    ),
-    "P4_highUAI_lowIVR": (
-        "Write in a structured, cautious, uncertainty-reducing format.\n"
-        "Use exactly these headings, each on its own line:\n"
-        "What is known: Must directly answer the question using the note.\n"
-        "What is uncertain: Only note clinically relevant uncertainty from the note.\n"
-        "What to do next: Practical, case-tied, and cautious using phrases like "
-        "'Follow-up may include...' or 'The treating doctor can clarify...'."
-    ),
-    "P5_highMAS_lowUAI": (
-        "Write in a direct, practical, outcome-focused style.\n"
-        "Structure (use labels, each on its own line):\n"
-        "Bottom line: Direct answer.\n"
-        "Why it matters: Support from the note.\n"
-        "Intended goal: Describe the clinical goal in plain language based on the note.\n"
-        "Be concise and action-oriented. Do not add follow-up instructions unless supported."
-    ),
-    "P6_highLTO_medHighUAI": (
-        "Write with long-term follow-up orientation.\n"
-        "Write three sentences with no labels.\n"
-        "Sentence 1 must directly answer the question.\n"
-        "Sentence 2 explains the current reason from the note.\n"
-        "Sentence 3 mentions monitoring, recovery, follow-up, or future care only if relevant.\n"
-        "Use cautious phrasing like 'follow-up may include...' or 'over time' when appropriate."
-    ),
-}
-
-
 def build_hofstede_system_prompt(profile: dict) -> str:
-    """Return a system prompt with profile-specific structure and Hofstede values."""
-    profile_id = str(profile.get("profile_id", "")).strip()
+    """Build a prompt that makes the model derive the profile response style."""
     h = profile.get("hofstede", {})
     values = {key: float(h.get(key, 0.5)) for key in HOFSTEDE_DIMENSIONS.keys()}
-    template = PROFILE_TEMPLATES.get(profile_id, PROFILE_TEMPLATES["P0_neutral"])
 
     lines: list[str] = []
     for key, meta in HOFSTEDE_DIMENSIONS.items():
@@ -141,6 +79,7 @@ def build_hofstede_system_prompt(profile: dict) -> str:
         lines.append("")
 
     profile_block = "\n".join(lines).rstrip()
+    profile_record = json.dumps(profile, ensure_ascii=False, sort_keys=True)
 
     return (
         "You are expected to answer the patient's question by interpreting the clinical note excerpt.\n"
@@ -177,11 +116,22 @@ def build_hofstede_system_prompt(profile: dict) -> str:
         "- Do not use instruction labels unless the profile explicitly requires headings "
         "(e.g., 'What is known' or 'Bottom line').\n"
         "\n"
-        "Required response template for this profile (must follow exactly):\n"
-        f"{template}\n"
+        "Before writing the answer, construct an internal response template for this profile. "
+        "Do not show this construction or the template to the user. Follow these steps in order:\n"
+        "1. Read every Hofstede dimension definition below.\n"
+        "2. Read the selected profile record from profiles.json, including all dimension values.\n"
+        "3. Interpret the combined high, medium, and low values to infer the profile's communication "
+        "priorities, tone, level of directness, uncertainty handling, and useful answer structure. "
+        "Do not use a hard-coded profile name or prewritten template.\n"
+        "4. Create a concise internal response template that changes style and structure only; "
+        "it must never change the medical facts supported by the note.\n"
+        "5. Use that internal template to write the final answer and then discard the template.\n"
         "\n"
         "Hofstede definitions and values:\n"
-        f"{profile_block}"
+        f"{profile_block}\n"
+        "\n"
+        "Selected profiles.json record:\n"
+        f"{profile_record}"
     )
 
 
