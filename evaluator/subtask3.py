@@ -1,3 +1,4 @@
+"""Local exploratory metrics, not the official ARCHER evaluation suite."""
 from __future__ import annotations
 
 import math
@@ -41,7 +42,7 @@ def _lcs_length(a: list[str], b: list[str]) -> int:
     return dp[-1][-1]
 
 
-def bleu_score(generated: str, reference: str, max_n: int = 4) -> float:
+def bleu_local(generated: str, reference: str, max_n: int = 4) -> float:
     gen = _tokens(generated)
     ref = _tokens(reference)
     if not gen or not ref:
@@ -63,7 +64,7 @@ def bleu_score(generated: str, reference: str, max_n: int = 4) -> float:
     return max(0.0, min(1.0, bp * math.exp(log_precision)))
 
 
-def rouge_l_f1(generated: str, reference: str) -> float:
+def rouge_l_local(generated: str, reference: str) -> float:
     gen = _tokens(generated)
     ref = _tokens(reference)
     if not gen or not ref:
@@ -76,7 +77,7 @@ def rouge_l_f1(generated: str, reference: str) -> float:
     return 2 * p * r / (p + r)
 
 
-def sari_score(source: str, generated: str, reference: str) -> float:
+def sari_unigram_proxy(source: str, generated: str, reference: str) -> float:
     src = set(_tokens(source))
     pred = set(_tokens(generated))
     ref = set(_tokens(reference))
@@ -96,19 +97,19 @@ def sari_score(source: str, generated: str, reference: str) -> float:
     return max(0.0, min(1.0, (keep_f1 + add_f1 + del_precision) / 3.0))
 
 
-def bertscore_proxy(generated: str, reference: str) -> float:
-    # Proxy based on token overlap F1; replace with embedding-based BERTScore if needed.
+def token_overlap_f1_proxy(generated: str, reference: str) -> float:
+    # Lexical set overlap only; not embedding-based BERTScore.
     return _set_f1(set(_tokens(generated)), set(_tokens(reference)))
 
 
-def alignscore_proxy(generated: str, reference: str, note_excerpt: str) -> float:
+def weighted_overlap_proxy(generated: str, reference: str, note_excerpt: str) -> float:
     # Reward answers that both align with the reference and stay supported by note content.
-    ref_align = bertscore_proxy(generated, reference)
+    ref_align = token_overlap_f1_proxy(generated, reference)
     note_support = _set_f1(set(_tokens(generated)), set(_tokens(note_excerpt)))
     return max(0.0, min(1.0, 0.6 * ref_align + 0.4 * note_support))
 
 
-def medcon_score(generated: str, reference: str) -> float:
+def medical_lexical_f1_proxy(generated: str, reference: str) -> float:
     medical_terms = {
         "pain",
         "fever",
@@ -147,26 +148,26 @@ def compute_subtask3_metrics(
     note_excerpt: str,
 ) -> dict[str, float]:
     source = " ".join([patient_question or "", clinician_question or "", note_excerpt or ""])
-    bleu = bleu_score(generated, reference)
-    rouge = rouge_l_f1(generated, reference)
-    sari = sari_score(source, generated, reference)
-    bert = bertscore_proxy(generated, reference)
-    align = alignscore_proxy(generated, reference, note_excerpt)
-    medcon = medcon_score(generated, reference)
+    bleu = bleu_local(generated, reference)
+    rouge = rouge_l_local(generated, reference)
+    sari = sari_unigram_proxy(source, generated, reference)
+    bert = token_overlap_f1_proxy(generated, reference)
+    align = weighted_overlap_proxy(generated, reference, note_excerpt)
+    medcon = medical_lexical_f1_proxy(generated, reference)
 
     return {
-        "st3_bleu": bleu,
-        "st3_rouge": rouge,
-        "st3_sari": sari,
-        "st3_bertscore": bert,
-        "st3_alignscore": align,
-        "st3_medcon": medcon,
-        "st3_bleu_pct": bleu * 100.0,
-        "st3_rouge_pct": rouge * 100.0,
-        "st3_sari_pct": sari * 100.0,
-        "st3_bertscore_pct": bert * 100.0,
-        "st3_alignscore_pct": align * 100.0,
-        "st3_medcon_pct": medcon * 100.0,
+        "st3_bleu_local": bleu,
+        "st3_rouge_l_local": rouge,
+        "st3_sari_unigram_proxy": sari,
+        "st3_token_overlap_f1_proxy": bert,
+        "st3_weighted_overlap_proxy": align,
+        "st3_medical_lexical_f1_proxy": medcon,
+        "st3_bleu_local_pct": bleu * 100.0,
+        "st3_rouge_l_local_pct": rouge * 100.0,
+        "st3_sari_unigram_proxy_pct": sari * 100.0,
+        "st3_token_overlap_f1_proxy_pct": bert * 100.0,
+        "st3_weighted_overlap_proxy_pct": align * 100.0,
+        "st3_medical_lexical_f1_proxy_pct": medcon * 100.0,
     }
 
 

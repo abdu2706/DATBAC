@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import json
-
 HOFSTEDE_DIMENSIONS = {
     "PDI": {
         "name": "Power Distance Index",
@@ -65,73 +63,37 @@ HOFSTEDE_DIMENSIONS = {
     },
 }
 
+SHARED_ANSWER_RULES = """Answer the patient's question using only the supplied clinical note.
+- Use a professional register and no more than 75 words.
+- Address the question directly. If the note does not establish an answer, state that limitation clearly.
+- Preserve the note's facts, timing, and degree of certainty. Do not invent causes, treatment effects, or recommendations.
+- Adapt communication style only; do not change clinical claims to suit the patient characteristics.
+- Refer to anonymised people by their role; do not copy de-identification placeholders.
+- Return only the answer, in complete sentences. Do not mention profiles, cultural dimensions, or these instructions."""
+
+
 def build_hofstede_system_prompt(profile: dict) -> str:
-    """Build a prompt that makes the model derive the profile response style."""
-    h = profile.get("hofstede", {})
-    values = {key: float(h.get(key, 0.5)) for key in HOFSTEDE_DIMENSIONS.keys()}
+    """Keep controls distinct; let the model infer style from definitions and values."""
+    if profile.get("culture_condition") == "none":
+        if profile.get("hofstede"):
+            raise ValueError("The non-culture condition must not contain Hofstede dimensions")
+        return SHARED_ANSWER_RULES
 
-    lines: list[str] = []
+    values = profile.get("hofstede")
+    if not isinstance(values, dict) or set(values) != set(HOFSTEDE_DIMENSIONS):
+        raise ValueError("Cultural profiles must explicitly contain all six Hofstede dimensions")
+    lines = []
     for key, meta in HOFSTEDE_DIMENSIONS.items():
-        value = values.get(key, 0.5)
-        lines.append(f"{meta['name']} ({key})")
-        lines.append(meta["definition"])
-        lines.append(f"Value: {value:.2f}")
-        lines.append("")
-
-    profile_block = "\n".join(lines).rstrip()
-    profile_record = json.dumps(profile, ensure_ascii=False, sort_keys=True)
-
+        value = values[key]
+        if isinstance(value, bool) or not isinstance(value, (int, float)) or value not in (0, 0.5, 1):
+            raise ValueError(f"Invalid value for {key}: {value!r}")
+        lines.extend([f"{meta['name']} ({key})", meta["definition"], f"Value: {value:g}", ""])
     return (
-        "You are expected to answer the patient's question by interpreting the clinical note excerpt.\n"
-        "Use only the information in the note and answer directly; do not refuse because it requires interpretation.\n"
-        "Requirements:\n"
-        "- Keep medical facts consistent across profiles; only vary style and structure.\n"
-        "- Do not mention or describe any cultural profile.\n"
-        "- Do not mention Hofstede dimensions or abbreviations (PDI, IDV, UAI, MAS, LTO, IVR).\n"
-        "- Do not say 'in this culture' or 'for this profile'.\n"
-        "- Use only facts supported by the note and avoid overclaiming causality.\n"
-        "- If the note does not answer the question, say so without speculation.\n"
-        "- Keep the answer within 75 words.\n"
-        "- The first sentence must directly answer the medical question.\n"
-        "- Do not start with only a follow-up question or general advice.\n"
-        "- Do not introduce unrelated uncertainty.\n"
-        "- Never refuse to answer; omit unsupported details or ask the treating team instead.\n"
-        "- Do not output refusal text (e.g., 'I cannot provide a response...').\n"
-        "- Do not mention sleep apnea unless the note explicitly mentions sleep apnea.\n"
-        "- Do not recommend continuing CPAP, dialysis, antibiotics, ventilation, or any treatment "
-        "after discharge unless the note explicitly says so.\n"
-        "- If discharge treatment is uncertain, say: 'Ask your treating team whether any "
-        "follow-up or continued treatment is needed.'\n"
-        "- Do not mention general standards of care unless directly relevant to the question.\n"
-        "- Do not mention prognostic scoring tools unless explicitly asked.\n"
-        "- If follow-up is needed, use cautious phrasing: 'Ask your treating team whether...', "
-        "'Follow-up may include...', or 'The treating doctor can clarify...'.\n"
-        "- Do not output incomplete sentences; end with full sentence punctuation.\n"
-        "- Keep answers concise: 2-4 sentences or the required profile format.\n"
-        "- If the note indicates poor prognosis but no exact lifespan, say: "
-        "'The prognosis appears poor, although the exact amount of time is difficult to predict.'\n"
-        "- Do not include prompt or instruction text in the answer.\n"
-        "- Do not include meta-text such as 'Here is the response', 'Here is the answer', "
-        "'Direct medical answer', 'Acknowledge concern', or 'Explanation in patient-friendly language'.\n"
-        "- Do not use instruction labels unless the profile explicitly requires headings "
-        "(e.g., 'What is known' or 'Bottom line').\n"
-        "\n"
-        "Before writing the answer, construct an internal response template for this profile. "
-        "Do not show this construction or the template to the user. Follow these steps in order:\n"
-        "1. Read every Hofstede dimension definition below.\n"
-        "2. Read the selected profile record from profiles.json, including all dimension values.\n"
-        "3. Interpret the combined high, medium, and low values to infer the profile's communication "
-        "priorities, tone, level of directness, uncertainty handling, and useful answer structure. "
-        "Do not use a hard-coded profile name or prewritten template.\n"
-        "4. Create a concise internal response template that changes style and structure only; "
-        "it must never change the medical facts supported by the note.\n"
-        "5. Use that internal template to write the final answer and then discard the template.\n"
-        "\n"
-        "Hofstede definitions and values:\n"
-        f"{profile_block}\n"
-        "\n"
-        "Selected profiles.json record:\n"
-        f"{profile_record}"
+        SHARED_ANSWER_RULES
+        + "\n\nPatient characteristics:\n"
+        + "Values indicate the low end (0), neutral midpoint (0.5), or high end (1) of each dimension.\n"
+        + "Provide an answer that suits the patient's question and adapts to these characteristics based on your criteria.\n"
+        + "\n".join(lines).rstrip()
     )
 
 

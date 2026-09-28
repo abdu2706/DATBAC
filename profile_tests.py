@@ -6,18 +6,9 @@ from pathlib import Path
 
 from data_loader import load_cases_from_xml
 from quality_checks import (
-    all_profiles_identical,
-    collect_answers_by_model,
     validate_cross_profile_outputs,
     validate_single_answer,
 )
-
-STRUCTURE_WARNINGS = {
-    "does not match required sentence count",
-    "missing required structure marker",
-    "missing treating team question",
-    "treating team question not last sentence",
-}
 
 PROFILE_MENTION_WARNING = "mentions cultural profile terms"
 META_TEXT_WARNING = "contains meta-text labels"
@@ -61,10 +52,6 @@ def main() -> int:
                 answer = data.get("subtask3", "")
                 warnings = validate_single_answer(answer, case, profile_id=profile_id)
                 for warning in warnings:
-                    if warning in STRUCTURE_WARNINGS:
-                        failures.append(
-                            f"case {case_id} {profile_id} {model}: {warning}"
-                        )
                     if warning == PROFILE_MENTION_WARNING:
                         failures.append(
                             f"case {case_id} {profile_id} {model}: {warning}"
@@ -83,14 +70,6 @@ def main() -> int:
                         failures.append(
                             f"case {case_id} {profile_id} {model}: {warning}"
                         )
-
-        answers_by_model = collect_answers_by_model(case_results)
-        if case_id == "25":
-            for model, answers in answers_by_model.items():
-                if all_profiles_identical(answers):
-                    failures.append(
-                        f"case 25 {model}: outputs identical across profiles"
-                    )
 
         cross = validate_cross_profile_outputs(case_results, case, case_id=case_id)
         for profile_id, model_map in cross.items():

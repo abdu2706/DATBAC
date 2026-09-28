@@ -22,7 +22,7 @@ def plot_profile_vs_model_metric(results: dict, metric: str, out_path: Path):
         matrix.append([grid[profile_id].get(model, 0.0) for model in models])
 
     fig, ax = plt.subplots(figsize=(max(8, len(models) * 1.8), max(5, len(profiles) * 0.8)))
-    im = ax.imshow(matrix, cmap="YlGnBu", aspect="auto", vmin=0.0, vmax=1.0)
+    im = ax.imshow(matrix, cmap="YlGnBu", aspect="auto", vmin=0.0, vmax=100.0 if metric.endswith("_pct") else 1.0)
 
     ax.set_title(f"Profile vs Model score ({metric})")
     ax.set_xlabel("Model")

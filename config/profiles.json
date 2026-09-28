@@ -1,7 +1,7 @@
 [
   {
     "profile_id": "P0_neutral",
-    "name": "Neutral baseline",
+    "name": "Neutral",
     "hofstede": {
       "PDI": 0.5,
       "IDV": 0.5,
@@ -12,23 +12,16 @@
     }
   },
   {
-    "profile_id": "P1_highPDI_highUAI",
-    "name": "Authority-trusting & uncertainty-averse",
-    "hofstede": {
-      "PDI": 1.0,
-      "IDV": 0.5,
-      "UAI": 1.0,
-      "MAS": 0.5,
-      "LTO": 0.5,
-      "IVR": 0.0
-    }
+    "profile_id": "P1_non_culture",
+    "name": "No cultural characteristics",
+    "culture_condition": "none"
   },
   {
-    "profile_id": "P2_lowPDI_highIDV",
-    "name": "Autonomy-seeking & participatory",
+    "profile_id": "P2_PDI_high",
+    "name": "PDI high",
     "hofstede": {
-      "PDI": 0.0,
-      "IDV": 1.0,
+      "PDI": 1,
+      "IDV": 0.5,
       "UAI": 0.5,
       "MAS": 0.5,
       "LTO": 0.5,
@@ -36,51 +29,135 @@
     }
   },
   {
-    "profile_id": "P3_highPDI_lowIDV",
-    "name": "Family-oriented & hierarchy-aligned",
+    "profile_id": "P3_IDV_high",
+    "name": "IDV high",
     "hofstede": {
-      "PDI": 1.0,
-      "IDV": 0.0,
+      "PDI": 0.5,
+      "IDV": 1,
       "UAI": 0.5,
       "MAS": 0.5,
-      "LTO": 1.0,
-      "IVR": 0.0
+      "LTO": 0.5,
+      "IVR": 0.5
     }
   },
   {
-    "profile_id": "P4_highUAI_lowIVR",
-    "name": "Risk-averse & restraint-oriented",
+    "profile_id": "P4_UAI_high",
+    "name": "UAI high",
     "hofstede": {
       "PDI": 0.5,
       "IDV": 0.5,
-      "UAI": 1.0,
+      "UAI": 1,
       "MAS": 0.5,
       "LTO": 0.5,
-      "IVR": 0.0
+      "IVR": 0.5
     }
   },
   {
-    "profile_id": "P5_highMAS_lowUAI",
-    "name": "Action-driven & ambiguity-tolerant",
-    "hofstede": {
-      "PDI": 0.25,
-      "IDV": 1.0,
-      "UAI": 0.0,
-      "MAS": 1.0,
-      "LTO": 0.5,
-      "IVR": 1.0
-    }
-  },
-  {
-    "profile_id": "P6_highLTO_medHighUAI",
-    "name": "Long-term planner",
+    "profile_id": "P5_MAS_high",
+    "name": "MAS high",
     "hofstede": {
       "PDI": 0.5,
       "IDV": 0.5,
-      "UAI": 0.75,
+      "UAI": 0.5,
+      "MAS": 1,
+      "LTO": 0.5,
+      "IVR": 0.5
+    }
+  },
+  {
+    "profile_id": "P6_LTO_high",
+    "name": "LTO high",
+    "hofstede": {
+      "PDI": 0.5,
+      "IDV": 0.5,
+      "UAI": 0.5,
       "MAS": 0.5,
-      "LTO": 1.0,
-      "IVR": 0.25
+      "LTO": 1,
+      "IVR": 0.5
+    }
+  },
+  {
+    "profile_id": "P7_IVR_high",
+    "name": "IVR high",
+    "hofstede": {
+      "PDI": 0.5,
+      "IDV": 0.5,
+      "UAI": 0.5,
+      "MAS": 0.5,
+      "LTO": 0.5,
+      "IVR": 1
+    }
+  },
+  {
+    "profile_id": "P8_PDI_low",
+    "name": "PDI low",
+    "hofstede": {
+      "PDI": 0,
+      "IDV": 0.5,
+      "UAI": 0.5,
+      "MAS": 0.5,
+      "LTO": 0.5,
+      "IVR": 0.5
+    }
+  },
+  {
+    "profile_id": "P9_IDV_low",
+    "name": "IDV low",
+    "hofstede": {
+      "PDI": 0.5,
+      "IDV": 0,
+      "UAI": 0.5,
+      "MAS": 0.5,
+      "LTO": 0.5,
+      "IVR": 0.5
+    }
+  },
+  {
+    "profile_id": "P10_UAI_low",
+    "name": "UAI low",
+    "hofstede": {
+      "PDI": 0.5,
+      "IDV": 0.5,
+      "UAI": 0,
+      "MAS": 0.5,
+      "LTO": 0.5,
+      "IVR": 0.5
+    }
+  },
+  {
+    "profile_id": "P11_MAS_low",
+    "name": "MAS low",
+    "hofstede": {
+      "PDI": 0.5,
+      "IDV": 0.5,
+      "UAI": 0.5,
+      "MAS": 0,
+      "LTO": 0.5,
+      "IVR": 0.5
+    }
+  },
+  {
+    "profile_id": "P12_LTO_low",
+    "name": "LTO low",
+    "hofstede": {
+      "PDI": 0.5,
+      "IDV": 0.5,
+      "UAI": 0.5,
+      "MAS": 0.5,
+      "LTO": 0,
+      "IVR": 0.5
+    }
+  },
+  {
+    "profile_id": "P13_IVR_low",
+    "name": "IVR low",
+    "hofstede": {
+      "PDI": 0.5,
+      "IDV": 0.5,
+      "UAI": 0.5,
+      "MAS": 0.5,
+      "LTO": 0.5,
+      "IVR": 0
     }
   }
 ]
