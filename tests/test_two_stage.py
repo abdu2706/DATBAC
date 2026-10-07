@@ -51,7 +51,7 @@ class TwoStageTests(unittest.TestCase):
 
     def test_failure_is_saved_before_stopping(self):
         class Broken:
-            def generate(self, *args): return '[ERROR] unavailable'
+            def generate(self, *args, **kwargs): return '[ERROR] unavailable'
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp)/'profile_prompts.json'
             with self.assertRaises(ValueError):
@@ -62,7 +62,7 @@ class TwoStageTests(unittest.TestCase):
 
     def test_invalid_prompt_can_use_explicit_fallback(self):
         class Invalid:
-            def generate(self, *args): return '[ERROR] unavailable'
+            def generate(self, *args, **kwargs): return '[ERROR] unavailable'
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / 'profile_prompts.json'
             prompts = prepare_profile_prompts(
@@ -77,7 +77,7 @@ class TwoStageTests(unittest.TestCase):
         class Repairing:
             def __init__(self):
                 self.calls = []
-            def generate(self, model, system, user):
+            def generate(self, model, system, user, **kwargs):
                 self.calls.append(user)
                 return '[ERROR] unavailable' if len(self.calls) == 1 else 'Use concise professional phrasing.'
         with tempfile.TemporaryDirectory() as tmp:
