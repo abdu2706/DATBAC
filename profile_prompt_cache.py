@@ -17,6 +17,12 @@ Do not require particular clinical content, family involvement, follow-up, or re
 Do not repeat the dimension definitions or numerical values. Do not mention culture or dimensions in the eventual patient answer.
 Return only a reusable prompt of at most 250 words, without a preamble or analysis."""
 
+REPAIR_INSTRUCTION = """Your previous response was invalid. Try again and follow these requirements exactly:
+- Return only the reusable communication-style prompt.
+- Do not include analysis, a preamble, quotation marks, or a medical answer.
+- Keep the response between 1 and 250 words.
+- Do not repeat the patient characteristics, dimension names, or numerical values."""
+
 
 def design_input(profile):
     if profile.get('culture_condition') == 'none':
@@ -38,8 +44,10 @@ def write_json(path, value):
 
 
 def prepare_profile_prompts(llm, models, profiles, output_path, reuse_path=None,
-                            allow_fallback=False):
+                            allow_fallback=False, max_retries=2):
     """Freeze prompts for this run; explicitly supplied caches must match all inputs."""
+    if max_retries < 0:
+        raise ValueError("max_retries must be non-negative")
     saved = json.loads(Path(reuse_path).read_text(encoding='utf-8')) if reuse_path else None
     bundle = {'schema_version': 1, 'stage': 'profile_prompt_generation', 'models': {}}
     prompts = {}
@@ -60,10 +68,25 @@ def prepare_profile_prompts(llm, models, profiles, output_path, reuse_path=None,
                 raw = record.get('raw_response', '')
             else:
                 print(f'Creating profile prompt: {model} / {pid}')
-                raw = llm.generate(model, DESIGN_SYSTEM, user)
-            valid = isinstance(raw, str) and bool(raw.strip()) and not raw.lstrip().startswith('[ERROR]')
-            if valid and len(raw.split()) > 250:
-                valid = False
+                raw = ''
+                raw_responses = []
+                for attempt in range(max_retries + 1):
+                    prompt = user if attempt == 0 else user + "\n\n" + REPAIR_INSTRUCTION
+                    raw = llm.generate(model, DESIGN_SYSTEM, prompt)
+                    raw_responses.append(raw)
+                    valid = (isinstance(raw, str) and bool(raw.strip())
+                             and not raw.lstrip().startswith('[ERROR]')
+                             and len(raw.split()) <= 250)
+                    if valid:
+                        break
+                    if attempt < max_retries:
+                        print(f'Warning: invalid profile prompt; retrying ({attempt + 1}/{max_retries}): '
+                              f'{model} / {pid}')
+            if saved is not None:
+                raw_responses = [raw]
+            valid = (isinstance(raw, str) and bool(raw.strip())
+                     and not raw.lstrip().startswith('[ERROR]')
+                     and len(raw.split()) <= 250)
             fallback_reason = None
             if valid:
                 communication = raw.strip()
@@ -82,6 +105,7 @@ def prepare_profile_prompts(llm, models, profiles, output_path, reuse_path=None,
             final = (SHARED_ANSWER_RULES + '\n\nCommunication instructions:\n' + communication
                      + '\n\nThe shared answer rules above take precedence over communication instructions.') if communication else None
             record = dict(request=request, signature=signature, raw_response=raw,
+                          raw_responses=raw_responses,
                           answer_system_prompt=final, status=status,
                           fallback_reason=fallback_reason, reused=bool(saved))
             bundle['models'][model][pid] = record

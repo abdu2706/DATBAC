@@ -46,6 +46,8 @@ def parse_args() -> argparse.Namespace:
                         help="Reuse a previous run profile_prompts.json for the same models and profiles")
     parser.add_argument("--allow-profile-prompt-fallback", action="store_true",
                         help="Continue with a generic prompt when a model returns an invalid profile prompt")
+    parser.add_argument("--profile-prompt-retries", type=int, default=2,
+                        help="Additional attempts when a model returns an invalid profile prompt")
     parser.add_argument("--quality-mode", choices=["off", "observe", "enforce"], default="observe")
     parser.add_argument("--processing", choices=["none", "legacy"], default="none",
                         help="Independent of quality checks; legacy removes profile sentences and truncates")
@@ -415,6 +417,7 @@ def main():
         llm, selected_models, selected_profiles, archive.directory / "profile_prompts.json",
         reuse_path=args.profile_prompts,
         allow_fallback=args.allow_profile_prompt_fallback,
+        max_retries=args.profile_prompt_retries,
     )
     archive.record_configuration(cases, system_prompts, selected_models, selected_profiles,
                                  eval_key_path)
