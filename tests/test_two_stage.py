@@ -59,3 +59,16 @@ class TwoStageTests(unittest.TestCase):
             record = json.loads(path.read_text())['models']['model-a']['P0_neutral']
             self.assertEqual(record['status'], 'failed')
             self.assertIsNone(record['answer_system_prompt'])
+
+    def test_invalid_prompt_can_use_explicit_fallback(self):
+        class Invalid:
+            def generate(self, *args): return '[ERROR] unavailable'
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / 'profile_prompts.json'
+            prompts = prepare_profile_prompts(
+                Invalid(), ['model-a'], HOFSTEDE_PROFILES[:1], path,
+                allow_fallback=True,
+            )
+            record = json.loads(path.read_text())['models']['model-a']['P0_neutral']
+            self.assertEqual(record['status'], 'fallback')
+            self.assertIsNotNone(prompts['model-a']['P0_neutral'])
