@@ -17,11 +17,23 @@ Do not require particular clinical content, family involvement, follow-up, or re
 Do not repeat the dimension definitions or numerical values. Do not mention culture or dimensions in the eventual patient answer.
 Return only a reusable prompt of at most 250 words, without a preamble or analysis."""
 
-REPAIR_INSTRUCTION = """Your previous response was invalid. Try again and follow these requirements exactly:
-- Return only the reusable communication-style prompt.
-- Do not include analysis, a preamble, quotation marks, or a medical answer.
-- Keep the response between 1 and 250 words.
-- Do not repeat the patient characteristics, dimension names, or numerical values."""
+REPAIR_SYSTEM = """You are correcting a failed response.
+Return only a reusable communication-style prompt for a healthcare question-answering assistant.
+Output 1-120 words of plain text. Do not output analysis, a preamble, quotation marks,
+a medical answer, patient characteristics, dimension names, or numerical values.
+Give concrete guidance about tone, framing, emphasis, and organisation.
+Preserve evidence, clinical meaning, and uncertainty. Never invent facts or require
+unsupported reassurance, treatment, follow-up, or family involvement."""
+
+
+def _repair_input(user, raw):
+    return (
+        user
+        + "\n\nThe previous response was invalid. Replace it completely. "
+        "Return only the corrected prompt, with no explanation. "
+        "Previous response (do not copy it):\n"
+        + (raw if isinstance(raw, str) else repr(raw))
+    )
 
 
 def design_input(profile):
@@ -71,8 +83,15 @@ def prepare_profile_prompts(llm, models, profiles, output_path, reuse_path=None,
                 raw = ''
                 raw_responses = []
                 for attempt in range(max_retries + 1):
-                    prompt = user if attempt == 0 else user + "\n\n" + REPAIR_INSTRUCTION
-                    raw = llm.generate(model, DESIGN_SYSTEM, prompt)
+                    if attempt == 0:
+                        raw = llm.generate(model, DESIGN_SYSTEM, user)
+                    else:
+                        raw = llm.generate(
+                            model,
+                            REPAIR_SYSTEM,
+                            _repair_input(user, raw),
+                            max_tokens=256,
+                        )
                     raw_responses.append(raw)
                     valid = (isinstance(raw, str) and bool(raw.strip())
                              and not raw.lstrip().startswith('[ERROR]')
