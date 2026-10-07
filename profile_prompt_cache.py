@@ -37,7 +37,8 @@ def write_json(path, value):
     temporary.replace(path)
 
 
-def prepare_profile_prompts(llm, models, profiles, output_path, reuse_path=None):
+def prepare_profile_prompts(llm, models, profiles, output_path, reuse_path=None,
+                            allow_fallback=False):
     """Freeze prompts for this run; explicitly supplied caches must match all inputs."""
     saved = json.loads(Path(reuse_path).read_text(encoding='utf-8')) if reuse_path else None
     bundle = {'schema_version': 1, 'stage': 'profile_prompt_generation', 'models': {}}
@@ -63,15 +64,32 @@ def prepare_profile_prompts(llm, models, profiles, output_path, reuse_path=None)
             valid = isinstance(raw, str) and bool(raw.strip()) and not raw.lstrip().startswith('[ERROR]')
             if valid and len(raw.split()) > 250:
                 valid = False
-            final = (SHARED_ANSWER_RULES + '\n\nCommunication instructions:\n' + raw.strip()
-                     + '\n\nThe shared answer rules above take precedence over communication instructions.') if valid else None
+            fallback_reason = None
+            if valid:
+                communication = raw.strip()
+                status = 'ready'
+            else:
+                fallback_reason = (
+                    'model returned an error, empty response, or a response over 250 words'
+                )
+                communication = (
+                    'Use clear, concise, professional and respectful phrasing. '
+                    'Organise the answer so the direct response comes first, followed by '
+                    'only the relevant evidence and uncertainty from the clinical note. '
+                    'Do not add information that is not supported by the note.'
+                ) if allow_fallback else None
+                status = 'fallback' if communication else 'failed'
+            final = (SHARED_ANSWER_RULES + '\n\nCommunication instructions:\n' + communication
+                     + '\n\nThe shared answer rules above take precedence over communication instructions.') if communication else None
             record = dict(request=request, signature=signature, raw_response=raw,
-                          answer_system_prompt=final, status='ready' if valid else 'failed',
-                          reused=bool(saved))
+                          answer_system_prompt=final, status=status,
+                          fallback_reason=fallback_reason, reused=bool(saved))
             bundle['models'][model][pid] = record
             write_json(output_path, bundle)  # Persist every generated prompt before proceeding.
             if not valid:
-                raise ValueError(f'Invalid profile prompt: {model} / {pid}; inspect {output_path}')
+                if not allow_fallback:
+                    raise ValueError(f'Invalid profile prompt: {model} / {pid}; inspect {output_path}')
+                print(f'Warning: using fallback profile prompt: {model} / {pid}')
             prompts[model][pid] = final
     return prompts
 

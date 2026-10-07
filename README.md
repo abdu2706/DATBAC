@@ -65,6 +65,10 @@ were identical.
 `--processing legacy` separately enables the old sentence filtering and 75-word cut.
 Quality mode does not change this setting. All original responses remain saved.
 Enforce retries on any single-answer warning; exhausted warnings remain reported.
+Use `--allow-profile-prompt-fallback` only for models that cannot produce a valid
+profile prompt. The run records `status: fallback` and uses a generic communication
+prompt for that model/profile; this means the affected profile is no longer a valid
+test of cultural adaptation.
 Cross-profile checks are observational in observe/enforce; similarity never triggers
 regeneration. Generation errors are retained and not scored. Interactive mode supports
 off/observe only; its output is in the journal, without batch scoring/CSV exports.
@@ -76,6 +80,14 @@ $env:ARCHEHR_SPLIT="dev"
 python main.py --max-cases 5 --experiment-name dev-no-checks --quality-mode off --processing none --skip-plot
 python main.py --max-cases 5 --experiment-name dev-observe --quality-mode observe --processing none --skip-plot
 python main.py --max-cases 5 --experiment-name dev-enforce --quality-mode enforce --processing none --max-retries 1 --skip-plot
+```
+
+Example for completing a multi-model pilot when one model emits invalid profile prompts:
+
+```powershell
+$env:ARCHEHR_SPLIT="test"
+python main.py --experiment-name profiles14-test-5-all-models --max-cases 5 `
+  --quality-mode observe --processing none --allow-profile-prompt-fallback --skip-plot
 ```
 
 Off and observe have the same generation policy; observe additionally measures
