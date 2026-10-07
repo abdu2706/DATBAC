@@ -69,6 +69,8 @@ Use `--allow-profile-prompt-fallback` only for models that cannot produce a vali
 profile prompt. The run records `status: fallback` and uses a generic communication
 prompt for that model/profile; this means the affected profile is no longer a valid
 test of cultural adaptation.
+By default, invalid profile prompts receive two additional repair attempts with an
+explicit correction instruction. Use `--profile-prompt-retries` to change this limit.
 Cross-profile checks are observational in observe/enforce; similarity never triggers
 regeneration. Generation errors are retained and not scored. Interactive mode supports
 off/observe only; its output is in the journal, without batch scoring/CSV exports.
@@ -87,7 +89,8 @@ Example for completing a multi-model pilot when one model emits invalid profile 
 ```powershell
 $env:ARCHEHR_SPLIT="test"
 python main.py --experiment-name profiles14-test-5-all-models --max-cases 5 `
-  --quality-mode observe --processing none --allow-profile-prompt-fallback --skip-plot
+  --quality-mode observe --processing none --profile-prompt-retries 2 `
+  --allow-profile-prompt-fallback --skip-plot
 ```
 
 Off and observe have the same generation policy; observe additionally measures

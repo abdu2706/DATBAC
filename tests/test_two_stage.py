@@ -72,3 +72,22 @@ class TwoStageTests(unittest.TestCase):
             record = json.loads(path.read_text())['models']['model-a']['P0_neutral']
             self.assertEqual(record['status'], 'fallback')
             self.assertIsNotNone(prompts['model-a']['P0_neutral'])
+
+    def test_invalid_prompt_is_repaired_before_fallback(self):
+        class Repairing:
+            def __init__(self):
+                self.calls = []
+            def generate(self, model, system, user):
+                self.calls.append(user)
+                return '[ERROR] unavailable' if len(self.calls) == 1 else 'Use concise professional phrasing.'
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / 'profile_prompts.json'
+            llm = Repairing()
+            prompts = prepare_profile_prompts(
+                llm, ['model-a'], HOFSTEDE_PROFILES[:1], path, max_retries=2,
+            )
+            record = json.loads(path.read_text())['models']['model-a']['P0_neutral']
+            self.assertEqual(len(llm.calls), 2)
+            self.assertEqual(record['status'], 'ready')
+            self.assertIn('previous response was invalid', llm.calls[1])
+            self.assertIsNotNone(prompts['model-a']['P0_neutral'])
