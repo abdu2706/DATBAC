@@ -1,9 +1,24 @@
-"""Local exploratory metrics, not the official ARCHER evaluation suite."""
+"""Official metrics plus legacy exploratory proxy metrics for Subtask 3."""
 from __future__ import annotations
 
+import importlib
 import math
+import os
 import re
 from collections import Counter
+from functools import lru_cache
+
+
+OFFICIAL_METRIC_KEYS = (
+    "st3_bleu",
+    "st3_rouge_l",
+    "st3_sari",
+    "st3_bertscore",
+    "st3_alignscore",
+    "st3_medcon",
+)
+
+_LAST_OFFICIAL_STATUS: dict[str, str] = {}
 
 
 def _tokens(text: str) -> list[str]:
@@ -140,6 +155,109 @@ def medical_lexical_f1_proxy(generated: str, reference: str) -> float:
     return _set_f1(gen_med, ref_med)
 
 
+def _unavailable(metric: str, reason: str) -> None:
+    _LAST_OFFICIAL_STATUS[metric] = f"unavailable: {reason}"
+
+
+@lru_cache(maxsize=1)
+def _load_rouge():
+    return importlib.import_module("rouge_score.rouge_scorer").RougeScorer(
+        ["rougeL"], use_stemmer=True
+    )
+
+
+@lru_cache(maxsize=1)
+def _load_bert_scorer():
+    bert_score = importlib.import_module("bert_score")
+    return bert_score.BERTScorer(lang="en", rescale_with_baseline=False)
+
+
+@lru_cache(maxsize=1)
+def _load_alignscore_scorer(ckpt_path: str):
+    alignscore = importlib.import_module("alignscore")
+    return alignscore.AlignScore(
+        model="roberta-large",
+        ckpt_path=ckpt_path,
+        evaluation_mode="nli",
+    )
+
+
+@lru_cache(maxsize=1)
+def _load_medcon_scorer(module_name: str):
+    module = importlib.import_module(module_name)
+    return module.UMLSScorer()
+
+
+def _official_scores(
+    generated: str,
+    reference: str,
+    source: str,
+    note_excerpt: str,
+) -> dict[str, float | None]:
+    _LAST_OFFICIAL_STATUS.clear()
+    scores: dict[str, float | None] = {key: None for key in OFFICIAL_METRIC_KEYS}
+
+    try:
+        sacrebleu = importlib.import_module("sacrebleu")
+        scores["st3_bleu"] = float(
+            sacrebleu.sentence_bleu(generated, [reference]).score / 100.0
+        )
+        _LAST_OFFICIAL_STATUS["st3_bleu"] = "ok"
+    except Exception as exc:
+        _unavailable("st3_bleu", f"{type(exc).__name__}: {exc}")
+
+    try:
+        rouge = _load_rouge().score(reference, generated)["rougeL"].fmeasure
+        scores["st3_rouge_l"] = float(rouge)
+        _LAST_OFFICIAL_STATUS["st3_rouge_l"] = "ok"
+    except Exception as exc:
+        _unavailable("st3_rouge_l", f"{type(exc).__name__}: {exc}")
+
+    try:
+        sari = importlib.import_module("easse.sari")
+        scores["st3_sari"] = float(
+            sari.corpus_sari([source], [generated], [[reference]]) / 100.0
+        )
+        _LAST_OFFICIAL_STATUS["st3_sari"] = "ok"
+    except Exception as exc:
+        _unavailable("st3_sari", f"{type(exc).__name__}: {exc}")
+
+    try:
+        _, _, f1 = _load_bert_scorer().score([generated], [reference])
+        scores["st3_bertscore"] = float(f1[0].item())
+        _LAST_OFFICIAL_STATUS["st3_bertscore"] = "ok"
+    except Exception as exc:
+        _unavailable("st3_bertscore", f"{type(exc).__name__}: {exc}")
+
+    try:
+        ckpt_path = os.environ.get("ALIGNSCORE_CKPT_PATH")
+        if not ckpt_path:
+            raise RuntimeError("set ALIGNSCORE_CKPT_PATH to an AlignScore checkpoint")
+        scorer = _load_alignscore_scorer(ckpt_path)
+        scores["st3_alignscore"] = float(
+            scorer.score(contexts=[note_excerpt], claims=[generated])[0]
+        )
+        _LAST_OFFICIAL_STATUS["st3_alignscore"] = "ok"
+    except Exception as exc:
+        _unavailable("st3_alignscore", f"{type(exc).__name__}: {exc}")
+
+    try:
+        module_name = os.environ.get("MEDCON_SCORER_MODULE", "src.UMLSScorer")
+        scores["st3_medcon"] = float(
+            _load_medcon_scorer(module_name)(generated, reference)
+        )
+        _LAST_OFFICIAL_STATUS["st3_medcon"] = "ok"
+    except Exception as exc:
+        _unavailable("st3_medcon", f"{type(exc).__name__}: {exc}")
+
+    return scores
+
+
+def get_official_metric_status() -> dict[str, str]:
+    """Return statuses from the most recent official metric evaluation."""
+    return dict(_LAST_OFFICIAL_STATUS)
+
+
 def compute_subtask3_metrics(
     generated: str,
     reference: str,
@@ -155,7 +273,7 @@ def compute_subtask3_metrics(
     align = weighted_overlap_proxy(generated, reference, note_excerpt)
     medcon = medical_lexical_f1_proxy(generated, reference)
 
-    return {
+    metrics = {
         "st3_bleu_local": bleu,
         "st3_rouge_l_local": rouge,
         "st3_sari_unigram_proxy": sari,
@@ -169,6 +287,12 @@ def compute_subtask3_metrics(
         "st3_weighted_overlap_proxy_pct": align * 100.0,
         "st3_medical_lexical_f1_proxy_pct": medcon * 100.0,
     }
+    metrics.update(_official_scores(generated, reference, source, note_excerpt))
+    for key in OFFICIAL_METRIC_KEYS:
+        metrics[f"{key}_pct"] = (
+            metrics[key] * 100.0 if metrics[key] is not None else None
+        )
+    return metrics
 
 
 def compute_word_overlap(generated: str, reference: str) -> float:

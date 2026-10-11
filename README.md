@@ -22,12 +22,22 @@ svaret ord for ord og sekvensvis mot gull-svaret, og bruker notat-teksten som
 ekstra signal i AlignScore. Ingen ekstern kunnskap brukes i selve evalueringen.
 
 ## Metrikker (kort forklart)
-- BLEU: N-gram-overlapp mellom generert svar og gull-svar (presisjon).
-- ROUGE-L: Lengste felles delsekvens mellom svar og gull-svar (dekning).
-- SARI: Måler kvalitet i omskriving ved å se hva som beholdes, legges til og fjernes.
-- BERTScore: Semantisk likhet mellom svar og gull-svar (her som token-overlapp-proxy).
-- AlignScore: Kombinerer likhet med gull-svar og støtte i notat-teksten.
-- MedCon: Overlapp av medisinske/tekniske termer mellom svar og gull-svar.
+
+Resultatene inneholder nå både offisielle målinger og de historiske
+`*_proxy`-feltene. De offisielle feltene er:
+
+- `st3_bleu` (BLEU [9]): SacreBLEU sentence score.
+- `st3_rouge_l` (ROUGE [5]): `rouge-score` ROUGE-L F1.
+- `st3_sari` (SARI [10]): EASSE corpus SARI.
+- `st3_bertscore` (BERTScore [6]): BERTScore F1.
+- `st3_alignscore` (AlignScore [7]): AlignScore NLI checkpoint mot notatutdraget.
+- `st3_medcon` (MEDCON [8]): UMLS-baserte medisinske konsepter.
+
+Alle seks har også en `*_pct`-variant. Dersom en offisiell avhengighet,
+modell eller UMLS-konfigurasjon mangler, blir verdien tom/`null` og årsaken
+skrives i `metric_status`; systemet bruker ikke proxyverdien som en falsk
+offisiell score. AlignScore krever `ALIGNSCORE_CKPT_PATH`. MEDCON krever
+`MEDCON_SCORER_MODULE` dersom `src.UMLSScorer` ikke er tilgjengelig.
 
 ## Kjoring (eksempel)
 ```powershell
@@ -107,8 +117,8 @@ checkpoints remain available. `completed_with_errors` means the batch finished b
 some individual results failed. No resume behavior is implemented.
 
 Model tags are recorded, but immutable Ollama model digests are not yet captured.
-Current custom scoring approximations are unchanged; run tracking does not make
-these official BERTScore, AlignScore or MEDCON measurements. New run folders contain
+The legacy custom scoring approximations remain available for comparison; they are
+not official BERTScore, AlignScore or MEDCON measurements. New run folders contain
 clinical inputs/outputs and are excluded from Git by `.gitignore`.
 
 Run synthetic regression checks without a model server:
