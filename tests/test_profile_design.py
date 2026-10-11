@@ -51,17 +51,8 @@ class DesignTests(unittest.TestCase):
 
     def test_metric_names_are_explicit(self):
         metrics = compute_subtask3_metrics('Treatment improved symptoms.', 'Treatment improved symptoms.', '', '', 'Treatment improved symptoms.')
-        self.assertEqual(len(metrics), 24)
-        for key in (
-            "st3_bleu_local",
-            "st3_rouge_l_local",
-            "st3_sari_unigram_proxy",
-            "st3_token_overlap_f1_proxy",
-            "st3_weighted_overlap_proxy",
-            "st3_medical_lexical_f1_proxy",
-        ):
-            self.assertGreaterEqual(metrics[key], 0)
-            self.assertLessEqual(metrics[key], 1)
+        self.assertEqual(len(metrics), 14)
+        self.assertIn("st3_medical_lexical_f1_proxy_pct", metrics)
         for key in OFFICIAL_METRIC_KEYS:
             self.assertIn(key, metrics)
             self.assertIn(f"{key}_pct", metrics)
@@ -86,11 +77,10 @@ class DesignTests(unittest.TestCase):
             self.assertEqual(len(manifest['profiles']), 14)
             for file in (run/'exports').glob('*.csv'):
                 text = file.read_text()
-                self.assertIn('st3_token_overlap_f1_proxy', text)
                 self.assertIn('st3_bertscore', text)
             results = json.loads((run/'results.json').read_text())
             for profiles in results.values():
                 for models in profiles.values():
                     for result in models.values():
                         self.assertEqual(len(result['attempts']), 1)
-                        self.assertEqual(len(result['metrics']), 24)
+                        self.assertEqual(len(result['metrics']), 12)

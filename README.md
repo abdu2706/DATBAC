@@ -23,8 +23,7 @@ ekstra signal i AlignScore. Ingen ekstern kunnskap brukes i selve evalueringen.
 
 ## Metrikker (kort forklart)
 
-Resultatene inneholder nå både offisielle målinger og de historiske
-`*_proxy`-feltene. De offisielle feltene er:
+Resultatene inneholder kun de seks vitenskapelige målingene:
 
 - `st3_bleu` (BLEU [9]): SacreBLEU sentence score.
 - `st3_rouge_l` (ROUGE [5]): `rouge-score` ROUGE-L F1.
@@ -35,15 +34,60 @@ Resultatene inneholder nå både offisielle målinger og de historiske
 
 Alle seks har også en `*_pct`-variant. Dersom en offisiell avhengighet,
 modell eller UMLS-konfigurasjon mangler, blir verdien tom/`null` og årsaken
-skrives i `metric_status`; systemet bruker ikke proxyverdien som en falsk
-offisiell score. AlignScore krever `ALIGNSCORE_CKPT_PATH`. MEDCON krever
+skrives i `metric_status`. AlignScore krever `ALIGNSCORE_CKPT_PATH`. MEDCON krever
 `MEDCON_SCORER_MODULE` dersom `src.UMLSScorer` ikke er tilgjengelig.
+
+CI95-eksporten bruker korte navn for hver metrikk:
+
+```text
+bleu_avg, bleu_ci95
+rouge_l_avg, rouge_l_ci95
+sari_avg, sari_ci95
+bertscore_avg, bertscore_ci95
+alignscore_avg, alignscore_ci95
+medcon_avg, medcon_ci95
+```
+
+I tillegg eksporteres den historiske medisinske ord-overlappen som en
+separat proxy-metrikk:
+
+```text
+medical_lexical_avg, medical_lexical_ci95
+```
+
+Denne er ikke det samme som vitenskapelig MEDCON og skal ikke brukes som
+erstatning for UMLS-baserte konsepter.
+
+BLEU, ROUGE-L, SARI og BERTScore beregnes når pakkene i `requirements.txt`
+er installert. SARI beregnes av prosjektets egen standardimplementasjon, slik
+at resultatene ikke avhenger av den utdaterte `easse`-pakken. AlignScore og
+MEDCON krever fortsatt sine eksterne checkpoint-/UMLS-konfigurasjoner. Slike
+utilgjengelige verdier eksporteres som tomme CSV-felt, ikke som `0.0`.
+
+Hvis `models/AlignScore-large.ckpt` finnes, finner programmet checkpointen
+automatisk. Alternativt kan den angis eksplisitt:
+
+```powershell
+$env:ALIGNSCORE_CKPT_PATH="C:\path\to\AlignScore-large.ckpt"
+```
 
 ## Kjoring (eksempel)
 ```powershell
 $env:ARCHEHR_SPLIT="test"
-python main.py --max-cases 5 --out results_test_5.json --csv-dir exports_test_5 --skip-plot
+.\.venv\Scripts\python.exe main.py --max-cases 5 --out results_test_5.json --csv-dir exports_test_5 --skip-plot
 ```
+
+Kommandoene skal kjøres med prosjektets virtuelle miljø. På Windows kan du
+aktivere det først:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+Hvis terminalen viser et miljønavn som ikke finnes i prosjektet, for eksempel
+`.venv311`, bruk den eksplisitte kommandoen
+`.\.venv\Scripts\python.exe` i stedet. Da unngår du at Windows bruker global
+Python uten prosjektavhengighetene.
 
 
 ## Reproducible experiments
@@ -89,16 +133,16 @@ Example controlled pilot in PowerShell (run from the repository root):
 
 ```powershell
 $env:ARCHEHR_SPLIT="dev"
-python main.py --max-cases 5 --experiment-name dev-no-checks --quality-mode off --processing none --skip-plot
-python main.py --max-cases 5 --experiment-name dev-observe --quality-mode observe --processing none --skip-plot
-python main.py --max-cases 5 --experiment-name dev-enforce --quality-mode enforce --processing none --max-retries 1 --skip-plot
+.\.venv\Scripts\python.exe main.py --max-cases 5 --experiment-name dev-no-checks --quality-mode off --processing none --skip-plot
+.\.venv\Scripts\python.exe main.py --max-cases 5 --experiment-name dev-observe --quality-mode observe --processing none --skip-plot
+.\.venv\Scripts\python.exe main.py --max-cases 5 --experiment-name dev-enforce --quality-mode enforce --processing none --max-retries 1 --skip-plot
 ```
 
 Example for completing a multi-model pilot when one model emits invalid profile prompts:
 
 ```powershell
 $env:ARCHEHR_SPLIT="test"
-python main.py --experiment-name profiles14-test-5-all-models --max-cases 5 `
+.\.venv\Scripts\python.exe main.py --experiment-name profiles14-test-5-all-models --max-cases 5 `
   --quality-mode observe --processing none --profile-prompt-retries 2 `
   --allow-profile-prompt-fallback --skip-plot
 ```

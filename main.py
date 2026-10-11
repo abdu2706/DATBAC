@@ -92,7 +92,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--plot-metric",
         type=str,
-        default="st3_bleu_local_pct",
+        default="st3_bleu_pct",
         help="Metric to visualize in profile-vs-model plot",
     )
     parser.add_argument(

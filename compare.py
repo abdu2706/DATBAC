@@ -10,21 +10,20 @@ from evaluator.subtask3 import OFFICIAL_METRIC_KEYS
 
 OFFICIAL_METRIC_PCT_KEYS = tuple(f"{key}_pct" for key in OFFICIAL_METRIC_KEYS)
 ALL_METRIC_KEYS = (
-    "st3_bleu_local",
-    "st3_rouge_l_local",
-    "st3_sari_unigram_proxy",
-    "st3_token_overlap_f1_proxy",
-    "st3_weighted_overlap_proxy",
-    "st3_medical_lexical_f1_proxy",
     *OFFICIAL_METRIC_KEYS,
-    "st3_bleu_local_pct",
-    "st3_rouge_l_local_pct",
-    "st3_sari_unigram_proxy_pct",
-    "st3_token_overlap_f1_proxy_pct",
-    "st3_weighted_overlap_proxy_pct",
-    "st3_medical_lexical_f1_proxy_pct",
     *OFFICIAL_METRIC_PCT_KEYS,
+    "st3_medical_lexical_f1_proxy",
+    "st3_medical_lexical_f1_proxy_pct",
 )
+EXPORT_NAMES = {
+    "st3_bleu": "bleu",
+    "st3_rouge_l": "rouge_l",
+    "st3_sari": "sari",
+    "st3_bertscore": "bertscore",
+    "st3_alignscore": "alignscore",
+    "st3_medcon": "medcon",
+    "st3_medical_lexical_f1_proxy": "medical_lexical",
+}
 
 
 def build_comparison_table(results: dict) -> list[dict]:
@@ -111,13 +110,8 @@ def _mean_ci95(values: list[float]) -> tuple[float, float]:
 
 def build_profile_metric_ci95_table(results: dict) -> list[dict]:
     metric_keys = [
-        "st3_bleu_local_pct",
-        "st3_rouge_l_local_pct",
-        "st3_sari_unigram_proxy_pct",
-        "st3_token_overlap_f1_proxy_pct",
-        "st3_weighted_overlap_proxy_pct",
-        "st3_medical_lexical_f1_proxy_pct",
         *OFFICIAL_METRIC_PCT_KEYS,
+        "st3_medical_lexical_f1_proxy_pct",
     ]
     profile_metrics: dict[str, dict[str, list[float]]] = defaultdict(lambda: defaultdict(list))
 
@@ -134,9 +128,14 @@ def build_profile_metric_ci95_table(results: dict) -> list[dict]:
     for profile_id, metrics in sorted(profile_metrics.items()):
         row = {"profile_id": profile_id}
         for metric in metric_keys:
-            mean, margin = _mean_ci95(metrics.get(metric, []))
-            row[f"{metric}_avg"] = round(mean, 2)
-            row[f"{metric}_ci95"] = round(margin, 2)
+            values = metrics.get(metric, [])
+            if values:
+                mean, margin = _mean_ci95(values)
+                row[f"{metric}_avg"] = round(mean, 2)
+                row[f"{metric}_ci95"] = round(margin, 2)
+            else:
+                row[f"{metric}_avg"] = ""
+                row[f"{metric}_ci95"] = ""
         rows.append(row)
 
     return rows
@@ -185,13 +184,8 @@ def summarize_profile_model_metric(results: dict, metric: str) -> dict[str, dict
 
 def build_subtask3_metric_percentage_table(results: dict) -> list[dict]:
     metric_keys = [
-        "st3_bleu_local_pct",
-        "st3_rouge_l_local_pct",
-        "st3_sari_unigram_proxy_pct",
-        "st3_token_overlap_f1_proxy_pct",
-        "st3_weighted_overlap_proxy_pct",
-        "st3_medical_lexical_f1_proxy_pct",
         *OFFICIAL_METRIC_PCT_KEYS,
+        "st3_medical_lexical_f1_proxy_pct",
     ]
     rows: list[dict] = []
     for case_id, profiles in sorted(results.items(), key=lambda x: x[0]):
@@ -214,8 +208,7 @@ def build_subtask3_metric_percentage_table(results: dict) -> list[dict]:
             }
             for key in metric_keys:
                 vals = metric_values[key]
-                avg = (sum(vals) / len(vals)) if vals else 0.0
-                row[key] = round(avg, 2)
+                row[key] = round(sum(vals) / len(vals), 2) if vals else ""
             row["answer"] = answer_text
             rows.append(row)
     return rows
@@ -252,20 +245,22 @@ def export_subtask3_profile_metric_percentages(results: dict, output_dir: Path) 
     fieldnames = [
         "case_id",
         "profile_id",
-        "st3_bleu_local_pct",
-        "st3_rouge_l_local_pct",
-        "st3_sari_unigram_proxy_pct",
-        "st3_token_overlap_f1_proxy_pct",
-        "st3_weighted_overlap_proxy_pct",
-        "st3_medical_lexical_f1_proxy_pct",
-        *OFFICIAL_METRIC_PCT_KEYS,
+        *(EXPORT_NAMES[key] for key in (*OFFICIAL_METRIC_KEYS, "st3_medical_lexical_f1_proxy")),
         "answer",
     ]
     with path.open("w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         for row in rows:
-            writer.writerow({k: row.get(k, "") for k in fieldnames})
+            writer.writerow({
+                "case_id": row.get("case_id", ""),
+                "profile_id": row.get("profile_id", ""),
+                **{
+                    EXPORT_NAMES[key]: row.get(f"{key}_pct", "")
+                    for key in (*OFFICIAL_METRIC_KEYS, "st3_medical_lexical_f1_proxy")
+                },
+                "answer": row.get("answer", ""),
+            })
     return path
 
 
@@ -275,26 +270,32 @@ def export_subtask3_profile_metric_percentages_compact(results: dict, output_dir
     rows = build_subtask3_metric_percentage_table(results)
     path = output_dir / "subtask3_profile_metric_percentages_compact.csv"
 
-    metric_keys = [
-        "st3_bleu_local_pct",
-        "st3_rouge_l_local_pct",
-        "st3_sari_unigram_proxy_pct",
-        "st3_token_overlap_f1_proxy_pct",
-        "st3_weighted_overlap_proxy_pct",
-        "st3_medical_lexical_f1_proxy_pct",
-        *OFFICIAL_METRIC_PCT_KEYS,
+    metric_keys = list(OFFICIAL_METRIC_PCT_KEYS)
+    fieldnames = [
+        "case_id",
+        "profile_id",
+        *(
+            EXPORT_NAMES[key]
+            for key in (*OFFICIAL_METRIC_KEYS, "st3_medical_lexical_f1_proxy")
+        ),
     ]
-    fieldnames = ["case_id", "profile_id", *metric_keys]
 
     totals = {key: 0.0 for key in metric_keys}
     counts = {key: 0 for key in metric_keys}
     compact_rows: list[dict] = []
 
     for row in rows:
-        compact = {k: row.get(k, "") for k in fieldnames}
+        compact = {
+            "case_id": row.get("case_id", ""),
+            "profile_id": row.get("profile_id", ""),
+            **{
+                EXPORT_NAMES[key]: row.get(f"{key}_pct", "")
+                for key in (*OFFICIAL_METRIC_KEYS, "st3_medical_lexical_f1_proxy")
+            },
+        }
         compact_rows.append(compact)
         for key in metric_keys:
-            value = compact.get(key)
+            value = row.get(key)
             if isinstance(value, (int, float)):
                 totals[key] += float(value)
                 counts[key] += 1
@@ -302,9 +303,11 @@ def export_subtask3_profile_metric_percentages_compact(results: dict, output_dir
     avg_row = {"case_id": "AVERAGE", "profile_id": ""}
     for key in metric_keys:
         if counts[key]:
-            avg_row[key] = round(totals[key] / counts[key], 2)
+            avg_row[EXPORT_NAMES[key.removesuffix("_pct")]] = round(
+                totals[key] / counts[key], 2
+            )
         else:
-            avg_row[key] = 0.0
+            avg_row[EXPORT_NAMES[key.removesuffix("_pct")]] = ""
 
     with path.open("w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
@@ -323,24 +326,29 @@ def export_profile_metric_ci95(results: dict, output_dir: Path) -> Path:
     path = output_dir / "profile_metric_ci95.csv"
 
     metric_keys = [
-        "st3_bleu_local_pct",
-        "st3_rouge_l_local_pct",
-        "st3_sari_unigram_proxy_pct",
-        "st3_token_overlap_f1_proxy_pct",
-        "st3_weighted_overlap_proxy_pct",
-        "st3_medical_lexical_f1_proxy_pct",
         *OFFICIAL_METRIC_PCT_KEYS,
+        "st3_medical_lexical_f1_proxy_pct",
     ]
     fieldnames = ["profile_id"]
     for key in metric_keys:
-        fieldnames.append(f"{key}_avg")
-        fieldnames.append(f"{key}_ci95")
+        export_name = EXPORT_NAMES[key.removesuffix("_pct")]
+        fieldnames.append(f"{export_name}_avg")
+        fieldnames.append(f"{export_name}_ci95")
 
     with path.open("w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         for row in rows:
-            writer.writerow({k: row.get(k, "") for k in fieldnames})
+            writer.writerow({
+                "profile_id": row.get("profile_id", ""),
+                **{
+                    f"{EXPORT_NAMES[key.removesuffix('_pct')]}_{suffix}": row.get(
+                        f"{key}_{suffix}", ""
+                    )
+                    for key in metric_keys
+                    for suffix in ("avg", "ci95")
+                },
+            })
 
     return path
 
