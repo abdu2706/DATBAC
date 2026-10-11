@@ -33,15 +33,23 @@ offisielle ArchEHR-QA 2026-scoreren.
 CSV-feltene heter nå `st3_bleu_pct`, `st3_rouge_pct`, `st3_sari_pct`,
 `st3_bertscore_pct`, `st3_alignscore_pct` og `st3_medcon_pct`. De er prosentverdier,
 ikke proxyer. De offisielle modellene lastes først når en evaluering faktisk kjøres.
+Metrikkene beregnes på de første 75 ordene av hvert svar, i tråd med den offisielle
+scoreren, selv om `--processing none` brukes. Det originale svaret lagres fortsatt
+i `results.json`.
 
 Installer evalueringsavhengighetene før kjøring. MEDCON krever også en lokalt
 forberedt QuickUMLS-database:
 
 ```powershell
+py -3.11 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip setuptools wheel
 python -m pip install -r requirements.txt
 python -m spacy download en_core_web_sm
 python main.py --quickumls-path quickumls --max-cases 5 --csv-dir exports_test_5 --skip-plot
 ```
+
+Python 3.11 is required for the pinned Torch 1.13.1/AlignScore stack.
 
 Hvis `--quickumls-path` ikke peker på en gyldig QuickUMLS-database, stopper
 evalueringen med en tydelig feil i stedet for å falle tilbake til en proxy.

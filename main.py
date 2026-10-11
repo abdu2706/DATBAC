@@ -168,6 +168,11 @@ def _reference_answer(gold_case: dict) -> str:
     return answer.strip()
 
 
+def _official_prediction(answer: str, max_words: int = 75) -> str:
+    """Match the official scorer, which truncates overlong predictions."""
+    return " ".join((answer or "").split()[:max_words])
+
+
 def run_interactive(
     args: argparse.Namespace,
     cases: dict,
@@ -361,7 +366,8 @@ def run_batch(
                             break
                     if "error" not in result and gold_case:
                         result["metrics"] = compute_subtask3_metrics(
-                            result["subtask3"], _reference_answer(gold_case),
+                            _official_prediction(result["subtask3"]),
+                            _reference_answer(gold_case),
                             case.get("patient_narrative", ""),
                             case.get("clinician_question", ""), case.get("note_excerpt", ""),
                             quickumls_path=str(args.quickumls_path),
