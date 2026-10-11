@@ -6,6 +6,26 @@ import statistics
 from collections import defaultdict
 from pathlib import Path
 
+from evaluator.subtask3 import OFFICIAL_METRIC_KEYS
+
+OFFICIAL_METRIC_PCT_KEYS = tuple(f"{key}_pct" for key in OFFICIAL_METRIC_KEYS)
+ALL_METRIC_KEYS = (
+    "st3_bleu_local",
+    "st3_rouge_l_local",
+    "st3_sari_unigram_proxy",
+    "st3_token_overlap_f1_proxy",
+    "st3_weighted_overlap_proxy",
+    "st3_medical_lexical_f1_proxy",
+    *OFFICIAL_METRIC_KEYS,
+    "st3_bleu_local_pct",
+    "st3_rouge_l_local_pct",
+    "st3_sari_unigram_proxy_pct",
+    "st3_token_overlap_f1_proxy_pct",
+    "st3_weighted_overlap_proxy_pct",
+    "st3_medical_lexical_f1_proxy_pct",
+    *OFFICIAL_METRIC_PCT_KEYS,
+)
+
 
 def build_comparison_table(results: dict) -> list[dict]:
     rows: list[dict] = []
@@ -97,6 +117,7 @@ def build_profile_metric_ci95_table(results: dict) -> list[dict]:
         "st3_token_overlap_f1_proxy_pct",
         "st3_weighted_overlap_proxy_pct",
         "st3_medical_lexical_f1_proxy_pct",
+        *OFFICIAL_METRIC_PCT_KEYS,
     ]
     profile_metrics: dict[str, dict[str, list[float]]] = defaultdict(lambda: defaultdict(list))
 
@@ -170,6 +191,7 @@ def build_subtask3_metric_percentage_table(results: dict) -> list[dict]:
         "st3_token_overlap_f1_proxy_pct",
         "st3_weighted_overlap_proxy_pct",
         "st3_medical_lexical_f1_proxy_pct",
+        *OFFICIAL_METRIC_PCT_KEYS,
     ]
     rows: list[dict] = []
     for case_id, profiles in sorted(results.items(), key=lambda x: x[0]):
@@ -200,20 +222,7 @@ def build_subtask3_metric_percentage_table(results: dict) -> list[dict]:
 
 
 def build_subtask3_case_profile_metrics_table(results: dict) -> list[dict]:
-    metric_keys = [
-        "st3_bleu_local",
-        "st3_rouge_l_local",
-        "st3_sari_unigram_proxy",
-        "st3_token_overlap_f1_proxy",
-        "st3_weighted_overlap_proxy",
-        "st3_medical_lexical_f1_proxy",
-        "st3_bleu_local_pct",
-        "st3_rouge_l_local_pct",
-        "st3_sari_unigram_proxy_pct",
-        "st3_token_overlap_f1_proxy_pct",
-        "st3_weighted_overlap_proxy_pct",
-        "st3_medical_lexical_f1_proxy_pct",
-    ]
+    metric_keys = list(ALL_METRIC_KEYS)
     rows: list[dict] = []
 
     for case_id, profiles in sorted(results.items(), key=lambda x: x[0]):
@@ -249,6 +258,7 @@ def export_subtask3_profile_metric_percentages(results: dict, output_dir: Path) 
         "st3_token_overlap_f1_proxy_pct",
         "st3_weighted_overlap_proxy_pct",
         "st3_medical_lexical_f1_proxy_pct",
+        *OFFICIAL_METRIC_PCT_KEYS,
         "answer",
     ]
     with path.open("w", encoding="utf-8", newline="") as f:
@@ -272,6 +282,7 @@ def export_subtask3_profile_metric_percentages_compact(results: dict, output_dir
         "st3_token_overlap_f1_proxy_pct",
         "st3_weighted_overlap_proxy_pct",
         "st3_medical_lexical_f1_proxy_pct",
+        *OFFICIAL_METRIC_PCT_KEYS,
     ]
     fieldnames = ["case_id", "profile_id", *metric_keys]
 
@@ -318,6 +329,7 @@ def export_profile_metric_ci95(results: dict, output_dir: Path) -> Path:
         "st3_token_overlap_f1_proxy_pct",
         "st3_weighted_overlap_proxy_pct",
         "st3_medical_lexical_f1_proxy_pct",
+        *OFFICIAL_METRIC_PCT_KEYS,
     ]
     fieldnames = ["profile_id"]
     for key in metric_keys:
@@ -339,24 +351,7 @@ def export_subtask3_case_profile_metrics(results: dict, output_dir: Path) -> Pat
     rows = build_subtask3_case_profile_metrics_table(results)
     path = output_dir / "subtask3_case_profile_metrics.csv"
 
-    fieldnames = [
-        "case_id",
-        "profile_id",
-        "model",
-        "st3_bleu_local",
-        "st3_rouge_l_local",
-        "st3_sari_unigram_proxy",
-        "st3_token_overlap_f1_proxy",
-        "st3_weighted_overlap_proxy",
-        "st3_medical_lexical_f1_proxy",
-        "st3_bleu_local_pct",
-        "st3_rouge_l_local_pct",
-        "st3_sari_unigram_proxy_pct",
-        "st3_token_overlap_f1_proxy_pct",
-        "st3_weighted_overlap_proxy_pct",
-        "st3_medical_lexical_f1_proxy_pct",
-        "answer",
-    ]
+    fieldnames = ["case_id", "profile_id", "model", *ALL_METRIC_KEYS, "answer"]
     with path.open("w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()

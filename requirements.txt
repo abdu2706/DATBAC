@@ -1,3 +1,9 @@
 requests
 matplotlib
 rank-bm25
+# Official result metrics. AlignScore still requires ALIGNSCORE_CKPT_PATH.
+sacrebleu
+rouge-score
+easse
+bert-score
+alignscore-SpeedOfMagic

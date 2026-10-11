@@ -57,12 +57,19 @@ class RunArchive:
         for key, path in paths.items():
             setattr(args, key, path)
         self.manifest = {
-            "schema_version": 3, "run_id": run_id, "started_at": now(), "status": "running",
+            "schema_version": 4, "run_id": run_id, "started_at": now(), "status": "running",
             "arguments": requested, "outputs": paths, "python": platform.python_version(),
             "git_commit": git("rev-parse", "HEAD"), "git_status": git("status", "--porcelain"),
             "generation": {"seed": DEFAULT_SEED, "temperature": DEFAULT_TEMPERATURE,
                            "max_tokens": DEFAULT_MAX_TOKENS, "ollama_url": OLLAMA_BASE_URL},
-            "metric_implementation": "Exploratory local BLEU/ROUGE-L and unigram SARI, token-overlap, weighted-overlap, medical-lexical proxies; not official ARCHER scores",
+            "metric_implementation": {
+                "official": "SacreBLEU, rouge-score, EASSE SARI, BERTScore, AlignScore, and MEDCON when configured",
+                "proxy": "Legacy local BLEU/ROUGE-L, unigram SARI, token-overlap, weighted-overlap, and medical-lexical proxies",
+                "official_metric_environment": {
+                    "alignscore_checkpoint": "ALIGNSCORE_CKPT_PATH",
+                    "medcon_scorer_module": "MEDCON_SCORER_MODULE",
+                },
+            },
             "similarity_retries": False,
         }
         # Capture the actual source, including uncommitted changes, without clinical data.

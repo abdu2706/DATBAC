@@ -10,6 +10,7 @@ import main
 from config import HOFSTEDE_PROFILES, get_all_system_prompts
 from config.hofsted import HOFSTEDE_DIMENSIONS, SHARED_ANSWER_RULES, build_hofstede_system_prompt
 from evaluator import compute_subtask3_metrics
+from evaluator.subtask3 import OFFICIAL_METRIC_KEYS
 from quality_checks import validate_single_answer
 from subtasks.subtask3 import build_prompt
 
@@ -50,12 +51,20 @@ class DesignTests(unittest.TestCase):
 
     def test_metric_names_are_explicit(self):
         metrics = compute_subtask3_metrics('Treatment improved symptoms.', 'Treatment improved symptoms.', '', '', 'Treatment improved symptoms.')
-        self.assertEqual(len(metrics), 12)
-        for key, value in metrics.items():
-            self.assertTrue('_local' in key or '_proxy' in key)
-            self.assertFalse(any(name in key for name in ['bertscore', 'alignscore', 'medcon']))
-            self.assertGreaterEqual(value, 0)
-            self.assertLessEqual(value, 100 if key.endswith('_pct') else 1)
+        self.assertEqual(len(metrics), 24)
+        for key in (
+            "st3_bleu_local",
+            "st3_rouge_l_local",
+            "st3_sari_unigram_proxy",
+            "st3_token_overlap_f1_proxy",
+            "st3_weighted_overlap_proxy",
+            "st3_medical_lexical_f1_proxy",
+        ):
+            self.assertGreaterEqual(metrics[key], 0)
+            self.assertLessEqual(metrics[key], 1)
+        for key in OFFICIAL_METRIC_KEYS:
+            self.assertIn(key, metrics)
+            self.assertIn(f"{key}_pct", metrics)
 
     def test_five_cases_archive_seventy_answers_and_renamed_exports(self):
         class FakeLLM:
@@ -72,16 +81,16 @@ class DesignTests(unittest.TestCase):
             run = next((Path(tmp)/'runs').iterdir())
             manifest = json.loads((run/'manifest.json').read_text())
             self.assertEqual(manifest['status'], 'completed')
-            self.assertEqual(manifest['schema_version'], 3)
+            self.assertEqual(manifest['schema_version'], 4)
             self.assertEqual(len((run/'attempts.jsonl').read_text().splitlines()), 70)
             self.assertEqual(len(manifest['profiles']), 14)
             for file in (run/'exports').glob('*.csv'):
                 text = file.read_text()
                 self.assertIn('st3_token_overlap_f1_proxy', text)
-                self.assertNotIn('st3_bertscore', text)
+                self.assertIn('st3_bertscore', text)
             results = json.loads((run/'results.json').read_text())
             for profiles in results.values():
                 for models in profiles.values():
                     for result in models.values():
                         self.assertEqual(len(result['attempts']), 1)
-                        self.assertEqual(len(result['metrics']), 12)
+                        self.assertEqual(len(result['metrics']), 24)
