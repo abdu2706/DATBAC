@@ -37,28 +37,42 @@ Metrikkene beregnes på de første 75 ordene av hvert svar, i tråd med den offi
 scoreren, selv om `--processing none` brukes. Det originale svaret lagres fortsatt
 i `results.json`.
 
-Installer evalueringsavhengighetene før kjøring. MEDCON krever også en lokalt
-forberedt QuickUMLS-database:
+## Enkel installasjon (Windows + Python 3.11)
+
+Bruk prosjektets skript i stedet for å installere pakker manuelt:
 
 ```powershell
-py -3.11 -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip setuptools wheel
-python -m pip install -r requirements.txt
-python -m spacy download en_core_web_sm
-python main.py --quickumls-path quickumls --max-cases 5 --csv-dir exports_test_5 --skip-plot
+.\setup_metrics.ps1
 ```
 
-Python 3.11 is required for the pinned Torch 1.13.1/AlignScore stack.
+Dette lager `.venv311`, installerer alle metrikkene og bruker eksplisitt Python
+3.11. AlignScore installeres separat med `--no-deps` fordi pakken har utdatert
+metadata som feilaktig krever Torch under versjon 2; Torch 2.0.1 er nødvendig
+for Windows/Python 3.11.
 
 Hvis `--quickumls-path` ikke peker på en gyldig QuickUMLS-database, stopper
 evalueringen med en tydelig feil i stedet for å falle tilbake til en proxy.
 
-## Kjoring (eksempel)
+## Enkel kjøring
+
+MEDCON krever at QuickUMLS-databasen er klargjort i mappen `quickumls`.
+Start med fem cases:
+
 ```powershell
-$env:ARCHEHR_SPLIT="test"
-python main.py --max-cases 5 --out results_test_5.json --csv-dir exports_test_5 --skip-plot
+.\run_evaluation.ps1 -MaxCases 5
 ```
+
+Dette kjører med én modell og nøytral profil, slik at du ikke starter en stor
+56-kombinasjonskjøring ved et uhell. For å velge en annen modell/profil:
+
+```powershell
+.\run_evaluation.ps1 -MaxCases 5 -Model "llama3.1:8b" -Profile "P0_neutral"
+```
+
+Kjør først en liten pilot. Åpne den nyeste mappen under `results\runs\` og
+kontroller at `manifest.json` har `status: "completed"` og at CSV-filene har
+numeriske verdier for alle seks feltene. `completed_with_errors` betyr at en
+eller flere cases feilet og at resultatene ikke er komplette.
 
 
 ## Reproducible experiments
