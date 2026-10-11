@@ -10,6 +10,7 @@ import main
 from config import HOFSTEDE_PROFILES, get_all_system_prompts
 from config.hofsted import HOFSTEDE_DIMENSIONS, SHARED_ANSWER_RULES, build_hofstede_system_prompt
 from evaluator import compute_subtask3_metrics
+from evaluator.subtask3 import METRIC_KEYS
 from quality_checks import validate_single_answer
 from subtasks.subtask3 import build_prompt
 
@@ -49,13 +50,22 @@ class DesignTests(unittest.TestCase):
             self.assertEqual(validate_single_answer('Treatment improved symptoms.', case, pid), [])
 
     def test_metric_names_are_explicit(self):
-        metrics = compute_subtask3_metrics('Treatment improved symptoms.', 'Treatment improved symptoms.', '', '', 'Treatment improved symptoms.')
-        self.assertEqual(len(metrics), 12)
+        with patch(
+            "evaluator.subtask3._official_scores",
+            return_value={key: 50.0 for key in METRIC_KEYS},
+        ):
+            metrics = compute_subtask3_metrics(
+                "Treatment improved symptoms.",
+                "Treatment improved symptoms.",
+                "",
+                "",
+                "Treatment improved symptoms.",
+            )
+        self.assertEqual(set(metrics), set(METRIC_KEYS))
         for key, value in metrics.items():
-            self.assertTrue('_local' in key or '_proxy' in key)
-            self.assertFalse(any(name in key for name in ['bertscore', 'alignscore', 'medcon']))
+            self.assertTrue(key.startswith("st3_"))
             self.assertGreaterEqual(value, 0)
-            self.assertLessEqual(value, 100 if key.endswith('_pct') else 1)
+            self.assertLessEqual(value, 100)
 
     def test_five_cases_archive_seventy_answers_and_renamed_exports(self):
         class FakeLLM:
@@ -67,7 +77,9 @@ class DesignTests(unittest.TestCase):
              patch('sys.argv', ['main.py', '--max-cases', '5', '--skip-plot']), \
              patch.object(main, 'load_cases_from_xml', return_value=cases), \
              patch.object(main, 'load_gold_answers', return_value=gold), \
-             patch.object(main, 'OllamaRunner', return_value=FakeLLM()):
+             patch.object(main, 'OllamaRunner', return_value=FakeLLM()), \
+             patch.object(main, 'compute_subtask3_metrics',
+                          return_value={key: 50.0 for key in METRIC_KEYS}):
             main.main()
             run = next((Path(tmp)/'runs').iterdir())
             manifest = json.loads((run/'manifest.json').read_text())
@@ -77,11 +89,12 @@ class DesignTests(unittest.TestCase):
             self.assertEqual(len(manifest['profiles']), 14)
             for file in (run/'exports').glob('*.csv'):
                 text = file.read_text()
-                self.assertIn('st3_token_overlap_f1_proxy', text)
-                self.assertNotIn('st3_bertscore', text)
+                self.assertIn('st3_bertscore_pct', text)
+                self.assertIn('st3_alignscore_pct', text)
+                self.assertIn('st3_medcon_pct', text)
             results = json.loads((run/'results.json').read_text())
             for profiles in results.values():
                 for models in profiles.values():
                     for result in models.values():
                         self.assertEqual(len(result['attempts']), 1)
-                        self.assertEqual(len(result['metrics']), 12)
+                        self.assertEqual(set(result['metrics']), set(METRIC_KEYS))

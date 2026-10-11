@@ -18,16 +18,33 @@ Evaluator sammenligner modellens svar mot gull-svar ("clinician_answer") i
 
 ## Hvordan sammenlignes Llama-svar
 Llama genererer ett svar per case og profil. Evaluatoren sammenligner dette
-svaret ord for ord og sekvensvis mot gull-svaret, og bruker notat-teksten som
-ekstra signal i AlignScore. Ingen ekstern kunnskap brukes i selve evalueringen.
+svaret med gull-svaret med de offisielle scorerne. SARI bruker pasientnarrativet
+som kilde, og AlignScore bruker referansesvaret som context, i tråd med den
+offisielle ArchEHR-QA 2026-scoreren.
 
-## Metrikker (kort forklart)
-- BLEU: N-gram-overlapp mellom generert svar og gull-svar (presisjon).
-- ROUGE-L: Lengste felles delsekvens mellom svar og gull-svar (dekning).
-- SARI: Måler kvalitet i omskriving ved å se hva som beholdes, legges til og fjernes.
-- BERTScore: Semantisk likhet mellom svar og gull-svar (her som token-overlapp-proxy).
-- AlignScore: Kombinerer likhet med gull-svar og støtte i notat-teksten.
-- MedCon: Overlapp av medisinske/tekniske termer mellom svar og gull-svar.
+## Metrikker (offisiell ArchEHR-QA 2026-implementasjon)
+- BLEU: `evaluate` sin BLEU-score.
+- ROUGE: `evaluate` sin `rougeLsum`-score (den samme ROUGE-varianten som brukes i leaderboardets totalscore).
+- SARI: `evaluate` sin SARI-score med `patient_narrative` som kilde.
+- BERTScore: `bert-score` med `distilbert-base-uncased`, lag 4 og baseline-reskalering.
+- AlignScore: `AlignScore` med `roberta-base`, `nli_sp` og referansesvaret som context, slik den offisielle scoreren gjør.
+- MEDCON: QuickUMLS-konseptmatch med scispaCy-modellen `en_ner_bc5cdr_md`.
+
+CSV-feltene heter nå `st3_bleu_pct`, `st3_rouge_pct`, `st3_sari_pct`,
+`st3_bertscore_pct`, `st3_alignscore_pct` og `st3_medcon_pct`. De er prosentverdier,
+ikke proxyer. De offisielle modellene lastes først når en evaluering faktisk kjøres.
+
+Installer evalueringsavhengighetene før kjøring. MEDCON krever også en lokalt
+forberedt QuickUMLS-database:
+
+```powershell
+python -m pip install -r requirements.txt
+python -m spacy download en_core_web_sm
+python main.py --quickumls-path quickumls --max-cases 5 --csv-dir exports_test_5 --skip-plot
+```
+
+Hvis `--quickumls-path` ikke peker på en gyldig QuickUMLS-database, stopper
+evalueringen med en tydelig feil i stedet for å falle tilbake til en proxy.
 
 ## Kjoring (eksempel)
 ```powershell
@@ -107,8 +124,7 @@ checkpoints remain available. `completed_with_errors` means the batch finished b
 some individual results failed. No resume behavior is implemented.
 
 Model tags are recorded, but immutable Ollama model digests are not yet captured.
-Current custom scoring approximations are unchanged; run tracking does not make
-these official BERTScore, AlignScore or MEDCON measurements. New run folders contain
+The run manifest records the official metric implementation and settings. New run folders contain
 clinical inputs/outputs and are excluded from Git by `.gitignore`.
 
 Run synthetic regression checks without a model server:
