@@ -62,7 +62,7 @@ class RunArchive:
             "git_commit": git("rev-parse", "HEAD"), "git_status": git("status", "--porcelain"),
             "generation": {"seed": DEFAULT_SEED, "temperature": DEFAULT_TEMPERATURE,
                            "max_tokens": DEFAULT_MAX_TOKENS, "ollama_url": OLLAMA_BASE_URL},
-            "metric_implementation": "Exploratory local BLEU/ROUGE-L and unigram SARI, token-overlap, weighted-overlap, medical-lexical proxies; not official ARCHER scores",
+            "metric_implementation": "Official ArchEHR-QA 2026 Subtask 3 scorer settings: evaluate BLEU/ROUGE/SARI, BERTScore, AlignScore, and MEDCON",
             "similarity_retries": False,
         }
         # Capture the actual source, including uncommitted changes, without clinical data.

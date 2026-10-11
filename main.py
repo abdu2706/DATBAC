@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import traceback
 from pathlib import Path
 
@@ -92,13 +93,19 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--plot-metric",
         type=str,
-        default="st3_bleu_local_pct",
+        default="st3_bleu_pct",
         help="Metric to visualize in profile-vs-model plot",
     )
     parser.add_argument(
         "--skip-plot",
         action="store_true",
         help="Skip generation of plot image",
+    )
+    parser.add_argument(
+        "--quickumls-path",
+        type=Path,
+        default=Path("quickumls"),
+        help="QuickUMLS database directory used by the official MEDCON scorer",
     )
     parser.add_argument(
         "--model",
@@ -150,6 +157,15 @@ def _build_answers_only(all_results: dict) -> dict:
                 model: data.get("subtask3", "") for model, data in models.items()
             }
     return answers
+
+
+def _reference_answer(gold_case: dict) -> str:
+    """Use the citation-free key field expected by the official scorer."""
+    answer = gold_case.get("clinician_answer_without_citations")
+    if not answer:
+        answer = gold_case.get("clinician_answer", "")
+        answer = re.sub(r"\s*\[\d+\]", "", answer)
+    return answer.strip()
 
 
 def run_interactive(
@@ -345,9 +361,10 @@ def run_batch(
                             break
                     if "error" not in result and gold_case:
                         result["metrics"] = compute_subtask3_metrics(
-                            result["subtask3"], gold_case.get("clinician_answer", ""),
-                            case.get("patient_question", ""),
+                            result["subtask3"], _reference_answer(gold_case),
+                            case.get("patient_narrative", ""),
                             case.get("clinician_question", ""), case.get("note_excerpt", ""),
+                            quickumls_path=str(args.quickumls_path),
                         )
                 except Exception as exc:
                     result["error"] = str(exc)

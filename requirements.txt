@@ -1,3 +1,15 @@
 requests
 matplotlib
 rank-bm25
+evaluate==0.4.0
+rouge_score==0.1.2
+sacrebleu==2.5.1
+nltk==3.8.1
+bert-score==0.3.12
+torch
+transformers
+spacy
+scispacy
+quickumls==1.4.2
+alignscore @ git+https://github.com/yuh-zha/AlignScore@a0936d5afee642a46b22f6c02a163478447aa493
+https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.5.1/en_ner_bc5cdr_md-0.5.1.tar.gz#
