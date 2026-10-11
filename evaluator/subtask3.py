@@ -23,6 +23,16 @@ METRIC_KEYS = (
 )
 
 
+class OfficialMetricError(RuntimeError):
+    """A metric failed after zero or more official metrics were computed."""
+
+    def __init__(self, metric: str, partial_scores: dict[str, float], cause: Exception) -> None:
+        super().__init__(f"{metric} failed: {cause}")
+        self.metric = metric
+        self.partial_scores = partial_scores
+        self.__cause__ = cause
+
+
 def _load_evaluate_metric(name: str) -> Any:
     try:
         from evaluate import load
@@ -166,45 +176,68 @@ def _official_scores(
     source: str,
     quickumls_path: str,
 ) -> dict[str, float]:
+    scores: dict[str, float] = {}
+
+    def run(metric: str, calculate: Any) -> None:
+        try:
+            scores[metric] = float(calculate())
+        except Exception as exc:
+            raise OfficialMetricError(metric, scores.copy(), exc) from exc
+
     bleu, rouge, sari = _text_metrics()
-    bleu_score = bleu.compute(references=[[reference]], predictions=[generated])["bleu"]
-    rouge_scores = rouge.compute(references=[reference], predictions=[generated])
-    sari_score = sari.compute(
-        sources=[source], predictions=[generated], references=[[reference]]
-    )["sari"]
+    run(
+        "st3_bleu_pct",
+        lambda: bleu.compute(
+            references=[[reference]], predictions=[generated]
+        )["bleu"] * 100,
+    )
+    run(
+        "st3_rouge_pct",
+        lambda: rouge.compute(
+            references=[reference], predictions=[generated]
+        )["rougeLsum"] * 100,
+    )
+    run(
+        "st3_sari_pct",
+        lambda: sari.compute(
+            sources=[source], predictions=[generated], references=[[reference]]
+        )["sari"],
+    )
 
     device = _device_name()
-    _, _, bert_f1 = _bert_scorer(device)(
-        [generated],
-        [reference],
-        model_type="distilbert-base-uncased",
-        device=device,
-        num_layers=4,
-        batch_size=8,
-        nthreads=4,
-        all_layers=False,
-        idf=False,
-        lang="en",
-        rescale_with_baseline=True,
-        baseline_path=None,
-        verbose=False,
+    run(
+        "st3_bertscore_pct",
+        lambda: float(
+            _bert_scorer(device)(
+                [generated],
+                [reference],
+                model_type="distilbert-base-uncased",
+                device=device,
+                num_layers=4,
+                batch_size=8,
+                nthreads=4,
+                all_layers=False,
+                idf=False,
+                lang="en",
+                rescale_with_baseline=True,
+                baseline_path=None,
+                verbose=False,
+            )[2].item()
+        ) * 100,
     )
-    align_score = _align_scorer(device).score(
-        contexts=[reference],
-        claims=[generated],
-    )[0]
-    medcon_score = _medcon_scorer(str(Path(quickumls_path).resolve())).score(
-        reference, generated
+    run(
+        "st3_alignscore_pct",
+        lambda: _align_scorer(device).score(
+            contexts=[reference], claims=[generated]
+        )[0] * 100,
     )
-
-    return {
-        "st3_bleu_pct": float(bleu_score) * 100,
-        "st3_rouge_pct": float(rouge_scores["rougeLsum"]) * 100,
-        "st3_sari_pct": float(sari_score),
-        "st3_bertscore_pct": float(bert_f1.item()) * 100,
-        "st3_alignscore_pct": float(align_score) * 100,
-        "st3_medcon_pct": float(medcon_score) * 100,
-    }
+    run(
+        "st3_medcon_pct",
+        lambda: _medcon_scorer(str(Path(quickumls_path).resolve())).score(
+            reference, generated
+        ) * 100,
+    )
+    return scores
 
 
 def compute_subtask3_metrics(

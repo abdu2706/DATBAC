@@ -23,7 +23,7 @@ from config import (
     get_all_system_prompts,
 )
 from data_loader import load_cases_from_xml, load_gold_answers
-from evaluator import compute_subtask3_metrics
+from evaluator import OfficialMetricError, compute_subtask3_metrics
 from llm_runner import OllamaRunner
 from profile_prompt_cache import prepare_profile_prompts, resolve_prompt
 from quality_checks import (
@@ -372,6 +372,13 @@ def run_batch(
                             case.get("clinician_question", ""), case.get("note_excerpt", ""),
                             quickumls_path=str(args.quickumls_path),
                         )
+                except OfficialMetricError as exc:
+                    if exc.partial_scores:
+                        result["metrics"] = exc.partial_scores
+                    result["error"] = str(exc)
+                    result["failed_metric"] = exc.metric
+                    result["failed_stage"] = "scoring"
+                    result["traceback"] = traceback.format_exc()
                 except Exception as exc:
                     result["error"] = str(exc)
                     result["failed_stage"] = "generation_validation_or_scoring"

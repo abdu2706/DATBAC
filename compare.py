@@ -203,6 +203,7 @@ def build_subtask3_case_profile_metrics_table(results: dict) -> list[dict]:
                 for key in metric_keys:
                     value = metrics.get(key)
                     row[key] = value if value is not None else ""
+                row["score_error"] = data.get("error", "")
                 row["answer"] = data.get("subtask3", "")
                 rows.append(row)
 
@@ -290,7 +291,9 @@ def export_subtask3_case_profile_metrics(results: dict, output_dir: Path) -> Pat
     rows = build_subtask3_case_profile_metrics_table(results)
     path = output_dir / "subtask3_case_profile_metrics.csv"
 
-    fieldnames = ["case_id", "profile_id", "model", *METRIC_KEYS, "answer"]
+    fieldnames = [
+        "case_id", "profile_id", "model", *METRIC_KEYS, "score_error", "answer"
+    ]
     with path.open("w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()

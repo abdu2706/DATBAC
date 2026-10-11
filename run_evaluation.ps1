@@ -11,6 +11,9 @@ $python = Join-Path $PSScriptRoot ".venv311\Scripts\python.exe"
 if (-not (Test-Path $python)) {
     throw "Missing .venv311. Run .\setup_metrics.ps1 first."
 }
+if (-not (Test-Path (Join-Path $QuickUmlsPath "umls-simstring.db"))) {
+    throw "QuickUMLS database is incomplete: missing $QuickUmlsPath\umls-simstring.db. Build the database from licensed UMLS data, then rerun with -QuickUmlsPath."
+}
 
 & $python -c "import sys; assert sys.version_info[:2] == (3, 11), sys.version"
 $env:ARCHEHR_SPLIT = $Split

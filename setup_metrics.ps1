@@ -40,6 +40,8 @@ if ($LASTEXITCODE -ne 0) { throw "AlignScore failed to install." }
 if ($LASTEXITCODE -ne 0) { throw "AlignScore runtime dependencies failed to install." }
 & $venvPython -m pip install "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.4.1/en_core_web_sm-3.4.1.tar.gz"
 if ($LASTEXITCODE -ne 0) { throw "The spaCy English model failed to install." }
+& $venvPython -c "import nltk; nltk.download('punkt', quiet=True)"
+if ($LASTEXITCODE -ne 0) { throw "NLTK punkt data failed to install." }
 
 & $venvPython -c "import sys, alignscore, bert_score, evaluate, spacy, torch; print('Ready:', torch.__version__, sys.version.split()[0])"
 if ($LASTEXITCODE -ne 0) { throw "Metric import verification failed." }

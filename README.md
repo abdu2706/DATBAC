@@ -49,6 +49,9 @@ Dette lager `.venv311`, installerer alle metrikkene og bruker eksplisitt Python
 3.11. AlignScore installeres separat med `--no-deps` fordi pakken har utdatert
 metadata som feilaktig krever Torch under versjon 2; Torch 2.0.1 er nødvendig
 for Windows/Python 3.11.
+SARI krever også `sacremoses`; den installeres automatisk fra
+`requirements.txt`.
+Setup-skriptet laster også ned NLTK-dataene `punkt` som AlignScore trenger.
 
 Hvis `--quickumls-path` ikke peker på en gyldig QuickUMLS-database, stopper
 evalueringen med en tydelig feil i stedet for å falle tilbake til en proxy.
@@ -56,6 +59,9 @@ evalueringen med en tydelig feil i stedet for å falle tilbake til en proxy.
 ## Enkel kjøring
 
 MEDCON krever at QuickUMLS-databasen er klargjort i mappen `quickumls`.
+Mappen må minst inneholde `umls-simstring.db`; installasjon av Python-pakken
+alene oppretter ikke denne databasen. Hvis databasen mangler, stopper
+`run_evaluation.ps1` før en kjøring som ellers ville gitt tomme MEDCON-felt.
 Start med fem cases:
 
 ```powershell
